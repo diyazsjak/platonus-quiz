@@ -9,6 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  docx_to_text: ^1.0.1
+  doc_text: ^0.0.1
+  shared_preferences: ^2.3.2
+  file_picker: ^8.1.3
 
 dev_dependencies:
   flutter_test:
