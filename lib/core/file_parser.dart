@@ -49,13 +49,21 @@ class FileParser {
 
       final variantMatches = variantRE.allMatches(wholeQuestionText);
 
-      final Map<int, String> variants = {};
+      Map<int, String> variants = {};
       for (int i = 0; i < variantMatches.length; i++) {
         final variantMatch = variantMatches.elementAt(i);
         variants.addAll({i + 1: variantMatch.group(1)!.trim()});
       }
 
-      questions.add(QuestionModel(question: questionText, variants: variants));
+      final shuffledVariants = variants.entries.toList()..shuffle();
+      final shuffledVariantsMap = {
+        for (final variant in shuffledVariants) variant.key: variant.value
+      };
+
+      questions.add(QuestionModel(
+        question: questionText,
+        variants: shuffledVariantsMap,
+      ));
     }
 
     return questions;
