@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/quiz_bloc.dart';
+import '../widgets/question_card.dart';
 
 class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});
@@ -18,34 +19,7 @@ class QuizScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: state.questions.length,
             itemBuilder: (BuildContext context, int index) {
-              final question = state.questions[index];
-
-              return Card(
-                margin: const EdgeInsets.all(12),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 16.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        question.question,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(height: 16),
-                      for (final variant in question.variants)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Text(
-                            '${variant[0].toUpperCase()}${variant.substring(1)}',
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              );
+              return QuestionCard(question: state.questions[index]);
             },
           );
         },

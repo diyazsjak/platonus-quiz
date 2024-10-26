@@ -1,6 +1,6 @@
 class QuestionModel {
   final String question;
-  final List<String> variants;
+  final Map<int, String> variants;
 
   QuestionModel({
     required this.question,
