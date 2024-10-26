@@ -27,9 +27,12 @@ class FileParser {
     final String? fileContent = await _extractString(filePath);
     final List<QuestionModel> questions = [];
 
-    final questionRegExp = RegExp(r'<question>(.*?)<variant>', dotAll: true);
-    final variantRegExp =
-        RegExp(r'<variant>(.*?)((?=<question>)|\$)', dotAll: true);
+    final wholeQuestionRE = RegExp(
+      r'<question>(.*?)((?=<question>)|$)',
+      dotAll: true,
+    );
+    final questionRE = RegExp(r'<question>(.*?)(?=<variant>)', dotAll: true);
+    final variantRE = RegExp(r'<variant>(.*?)((?=<variant>)|$)', dotAll: true);
 
     if (fileContent == null) throw Exception('File type is not doc or docx');
 
@@ -37,16 +40,16 @@ class FileParser {
       throw Exception('Quiz should be in <question>, <variant> format');
     }
 
-    final Iterable<RegExpMatch> questionMatches =
-        questionRegExp.allMatches(fileContent);
+    final questionMatches = wholeQuestionRE.allMatches(fileContent);
 
     for (final questionMatch in questionMatches) {
-      String questionText = questionMatch.group(1)!.trim();
+      final wholeQuestionText = questionMatch.group(0)!.trim();
+      final questionText =
+          questionRE.firstMatch(wholeQuestionText)!.group(1)!.trim();
 
-      List<String> variants = [];
-      final Iterable<RegExpMatch> variantMatches =
-          variantRegExp.allMatches(questionMatch.group(0)!);
+      final variantMatches = variantRE.allMatches(wholeQuestionText);
 
+      final List<String> variants = [];
       for (final variantMatch in variantMatches) {
         variants.add(variantMatch.group(1)!.trim());
       }
