@@ -14,8 +14,7 @@ class QuestionCard extends StatefulWidget {
 }
 
 class _QuestionCardState extends State<QuestionCard> {
-  late final variants = widget.question.variants.entries.toList()..shuffle();
-  int? _selectedVariant;
+  late int? _selectedVariant = widget.question.selectedVariant;
 
   String _capitalizeVariant(String variant) {
     return '${variant[0].toUpperCase()}${variant.substring(1)}';
@@ -26,6 +25,7 @@ class _QuestionCardState extends State<QuestionCard> {
       onTap: () {
         setState(() {
           _selectedVariant = variant.key;
+          widget.question.selectedVariant = variant.key;
           log(_selectedVariant.toString());
         });
       },
@@ -39,6 +39,7 @@ class _QuestionCardState extends State<QuestionCard> {
               onChanged: (int? value) {
                 setState(() {
                   _selectedVariant = value;
+                  widget.question.selectedVariant = variant.key;
                   log(_selectedVariant.toString());
                 });
               },
@@ -69,7 +70,8 @@ class _QuestionCardState extends State<QuestionCard> {
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 16),
-            for (final variant in variants) _buildVariant(variant)
+            for (final variant in widget.question.variants.entries)
+              _buildVariant(variant)
           ],
         ),
       ),
