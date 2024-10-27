@@ -48,10 +48,10 @@ class _QuestionCardState extends State<QuestionCard> {
       }
     }
 
-    return GestureDetector(
+    return InkWell(
       onTap: () => _onVariantSelected(variant.key),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8),
+      child: Ink(
+        padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
           children: [
             Radio<int>(
