@@ -14,10 +14,6 @@ class QuestionCard extends StatefulWidget {
 class _QuestionCardState extends State<QuestionCard> {
   late int? _selectedVariant = widget.question.selectedVariant;
 
-  String _capitalizeVariant(String variant) {
-    return '${variant[0].toUpperCase()}${variant.substring(1)}';
-  }
-
   void _onVariantSelected(int variant) {
     setState(() {
       _selectedVariant = variant;
@@ -26,6 +22,9 @@ class _QuestionCardState extends State<QuestionCard> {
   }
 
   Widget _buildVariant(MapEntry<int, String> variant) {
+    final variantText =
+        '${variant.value[0].toUpperCase()}${variant.value.substring(1)}';
+
     return GestureDetector(
       onTap: () => _onVariantSelected(variant.key),
       child: Padding(
@@ -37,9 +36,7 @@ class _QuestionCardState extends State<QuestionCard> {
               groupValue: _selectedVariant,
               onChanged: (int? value) => _onVariantSelected(variant.key),
             ),
-            Flexible(
-              child: Text(_capitalizeVariant(variant.value)),
-            ),
+            Flexible(child: Text(variantText)),
           ],
         ),
       ),
