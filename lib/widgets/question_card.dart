@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:platonus_quiz/bloc/quiz/quiz_bloc.dart';
 
 import '../models/question_model.dart';
 
@@ -29,6 +31,7 @@ class _QuestionCardState extends State<QuestionCard> {
       _isQuestionAnswered = true;
       widget.question.isQuestionAnswered = true;
     });
+    context.read<QuizBloc>().add(QuizQuestionAnswered());
   }
 
   Widget _buildVariant(MapEntry<int, String> variant) {

@@ -26,9 +26,37 @@ class QuizScreen extends StatelessWidget {
     );
   }
 
+  void _showQuizCompletedModal(BuildContext context, int rightQuestionsCount) {
+    final quizLength = context.read<QuizBloc>().currentQuiz!.questions.length;
+    final answerRatio = '$rightQuestionsCount/$quizLength';
+    final grade = ((rightQuestionsCount * 100) / quizLength).round();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Quiz completed"),
+          content: Text(
+              "You got right $answerRatio questions. Your grade is $grade."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<QuizBloc, QuizState>(
+    return BlocConsumer<QuizBloc, QuizState>(
+      listener: (BuildContext context, QuizState state) {
+        if (state is QuizCompleteSuccess) {
+          _showQuizCompletedModal(context, state.rightQuestionsCount);
+        }
+      },
       buildWhen: (previous, current) => current is QuizLoadSuccess,
       builder: (BuildContext context, QuizState state) {
         if (state is! QuizLoadSuccess) return const SizedBox();
