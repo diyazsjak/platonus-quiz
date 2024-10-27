@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/quiz_bloc.dart';
 import '../core/constants.dart';
 import '../util/loading.dart';
+import '../util/show_setting_bottom_sheet.dart';
 import '../util/show_snackbar.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -39,7 +40,15 @@ class HomeScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Home')),
+        appBar: AppBar(
+          title: const Text('Home'),
+          actions: [
+            IconButton(
+              onPressed: () => showSettingsBottomSheet(context),
+              icon: const Icon(Icons.settings),
+            )
+          ],
+        ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _selectFile(context),
           icon: const Icon(Icons.file_open_outlined),
