@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import '../models/question_model.dart';
@@ -20,15 +18,16 @@ class _QuestionCardState extends State<QuestionCard> {
     return '${variant[0].toUpperCase()}${variant.substring(1)}';
   }
 
+  void _onVariantSelected(int variant) {
+    setState(() {
+      _selectedVariant = variant;
+      widget.question.selectedVariant = variant;
+    });
+  }
+
   Widget _buildVariant(MapEntry<int, String> variant) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedVariant = variant.key;
-          widget.question.selectedVariant = variant.key;
-          log(_selectedVariant.toString());
-        });
-      },
+      onTap: () => _onVariantSelected(variant.key),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Row(
@@ -36,13 +35,7 @@ class _QuestionCardState extends State<QuestionCard> {
             Radio<int>(
               value: variant.key,
               groupValue: _selectedVariant,
-              onChanged: (int? value) {
-                setState(() {
-                  _selectedVariant = value;
-                  widget.question.selectedVariant = variant.key;
-                  log(_selectedVariant.toString());
-                });
-              },
+              onChanged: (int? value) => _onVariantSelected(variant.key),
             ),
             Flexible(
               child: Text(_capitalizeVariant(variant.value)),
@@ -71,7 +64,7 @@ class _QuestionCardState extends State<QuestionCard> {
             ),
             const SizedBox(height: 16),
             for (final variant in widget.question.variants.entries)
-              _buildVariant(variant)
+              _buildVariant(variant),
           ],
         ),
       ),
