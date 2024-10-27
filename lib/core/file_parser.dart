@@ -5,6 +5,7 @@ import 'package:docx_to_text/docx_to_text.dart';
 import 'package:path/path.dart' as path;
 
 import '../models/question_model.dart';
+import '../models/quiz_model.dart';
 
 class FileParser {
   static Future<String?> _extractString(String filePath) async {
@@ -23,7 +24,7 @@ class FileParser {
     return content;
   }
 
-  static Future<List<QuestionModel>> parseFileToQuiz(String filePath) async {
+  static Future<QuizModel> parseFileToQuiz(String filePath) async {
     final String? fileContent = await _extractString(filePath);
     final List<QuestionModel> questions = [];
 
@@ -66,7 +67,10 @@ class FileParser {
       ));
     }
 
-    return questions;
+    return QuizModel(
+      quizName: getBasenameWithoutExt(filePath),
+      questions: questions,
+    );
   }
 
   static String getBasename(String filePath) => path.basename(filePath);

@@ -7,9 +7,9 @@ final class QuizInitial extends QuizState {}
 final class QuizLoadInProgress extends QuizState {}
 
 final class QuizLoadSuccess extends QuizState {
-  final List<QuestionModel> questions;
+  final QuizModel quiz;
 
-  QuizLoadSuccess({required this.questions});
+  QuizLoadSuccess({required this.quiz});
 }
 
 final class QuizLoadFailure extends QuizState {

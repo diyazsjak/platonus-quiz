@@ -9,21 +9,41 @@ class QuizScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Quiz')),
-      body: BlocBuilder<QuizBloc, QuizState>(
-        buildWhen: (previous, current) => current is QuizLoadSuccess,
-        builder: (BuildContext context, QuizState state) {
-          if (state is! QuizLoadSuccess) return const SizedBox();
+    return BlocBuilder<QuizBloc, QuizState>(
+      buildWhen: (previous, current) => current is QuizLoadSuccess,
+      builder: (BuildContext context, QuizState state) {
+        if (state is! QuizLoadSuccess) return const SizedBox();
 
-          return ListView.builder(
-            itemCount: state.questions.length,
+        final length = state.quiz.questions.length;
+        return Scaffold(
+          appBar: AppBar(title: const Text('Quiz')),
+          body: ListView.builder(
+            itemCount: length + 1,
             itemBuilder: (BuildContext context, int index) {
-              return QuestionCard(question: state.questions[index]);
+              if (index == 0) {
+                return Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Quiz name: ${state.quiz.quizName}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'Questions: $length',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return QuestionCard(question: state.quiz.questions[index - 1]);
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
