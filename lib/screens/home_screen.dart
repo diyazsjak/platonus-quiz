@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/quiz/quiz_bloc.dart';
 import '../core/constants.dart';
 import '../util/loading.dart';
-import '../util/show_setting_bottom_sheet.dart';
 import '../util/show_snackbar.dart';
+import '../widgets/settings.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -23,6 +23,15 @@ class HomeScreen extends StatelessWidget {
       final filePath = result.files.first.path!;
       context.read<QuizBloc>().add(QuizSelected(filePath: filePath));
     }
+  }
+
+  void _showSettingsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return const Settings();
+      },
+    );
   }
 
   @override
@@ -44,7 +53,7 @@ class HomeScreen extends StatelessWidget {
           title: const Text('Home'),
           actions: [
             IconButton(
-              onPressed: () => showSettingsBottomSheet(context),
+              onPressed: () => _showSettingsBottomSheet(context),
               icon: const Icon(Icons.settings),
             )
           ],
