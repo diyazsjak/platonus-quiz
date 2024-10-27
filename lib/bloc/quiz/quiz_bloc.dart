@@ -10,28 +10,40 @@ part 'quiz_state.dart';
 
 class QuizBloc extends Bloc<QuizEvent, QuizState> {
   final _settingsService = SettingsService();
+  late QuizModel? currentQuiz;
+  int _currentlyAnsweredQuestions = 0;
 
   QuizBloc() : super(QuizInitial()) {
     on<QuizSelected>(
       (event, map) async {
         try {
           map(QuizLoadInProgress());
-          final quiz = await FileParser.parseFileToQuiz(event.filePath);
+          final wholeQuiz = await FileParser.parseFileToQuiz(event.filePath);
 
           final questionLimit = _settingsService.questionLimit.toInt();
-          final shuffledQuestions = quiz.questions..shuffle();
+          final shuffledQuestions = wholeQuiz.questions..shuffle();
           final questions = shuffledQuestions.getRange(0, questionLimit);
 
-          map(
-            QuizLoadSuccess(
-              quiz: QuizModel(
-                quizName: quiz.quizName,
-                questions: questions.toList(),
-              ),
-            ),
+          final quiz = QuizModel(
+            quizName: wholeQuiz.quizName,
+            questions: questions.toList(),
           );
+
+          currentQuiz = quiz;
+          map(QuizLoadSuccess(quiz: quiz));
         } catch (e) {
           map(QuizLoadFailure(failure: WrongQuizFormatFailure()));
+        }
+      },
+    );
+
+    on<QuizQuestionAnswered>(
+      (event, map) {
+        _currentlyAnsweredQuestions++;
+        if (_currentlyAnsweredQuestions == currentQuiz!.questions.length) {
+          final rightQuestionsCount = currentQuiz!.getRightAnsweredQuestions();
+          map(QuizCompleteSuccess(rightQuestionsCount: rightQuestionsCount));
+          _currentlyAnsweredQuestions = 0;
         }
       },
     );
