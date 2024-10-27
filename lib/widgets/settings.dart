@@ -17,6 +17,9 @@ class _SettingsState extends State<Settings> {
     setState(() {
       _questionLimitValue = value;
     });
+  }
+
+  void _saveQuestionLimit(double value) async {
     await settingsService.setQuestionLimit(value);
   }
 
@@ -53,6 +56,7 @@ class _SettingsState extends State<Settings> {
             max: 100,
             divisions: 18,
             onChanged: (value) => _onQuestionLimitChanged(value),
+            onChangeEnd: (value) => _saveQuestionLimit(value),
           ),
         ],
       ),
