@@ -11,7 +11,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   final settingsService = SettingsService();
-  late double _questionLimitValue = settingsService.getQuestionLimit();
+  late double _questionLimitValue = settingsService.questionLimit;
 
   void _onQuestionLimitChanged(double value) async {
     setState(() {

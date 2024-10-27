@@ -17,7 +17,7 @@ class SettingsService {
     );
   }
 
-  double getQuestionLimit() {
+  double get questionLimit {
     return _prefs.getDouble(Constants.questionLimitKey) ?? 25;
   }
 
