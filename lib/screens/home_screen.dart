@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/quiz_bloc.dart';
 import '../core/constants.dart';
 import '../util/loading.dart';
+import '../util/show_snackbar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -23,17 +24,6 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
-  void _showSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.redAccent,
-        duration: const Duration(seconds: 1),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<QuizBloc, QuizState>(
@@ -42,7 +32,7 @@ class HomeScreen extends StatelessWidget {
           Loading.show(context);
         } else if (state is QuizLoadFailure) {
           Loading.remove(context);
-          _showSnackbar(context, 'Wrong quiz format');
+          showSnackbar(context, 'Wrong quiz format');
         } else if (state is QuizLoadSuccess) {
           Loading.remove(context);
           Navigator.of(context).pushNamed(Constants.quizRoute);
