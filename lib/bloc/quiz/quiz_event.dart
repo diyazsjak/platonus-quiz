@@ -7,3 +7,5 @@ final class QuizSelected extends QuizEvent {
 
   QuizSelected({required this.filePath});
 }
+
+final class QuizQuestionAnswered extends QuizEvent {}
