@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../services/settings_service.dart';
+
 class Settings extends StatefulWidget {
   const Settings({super.key});
 
@@ -8,7 +10,15 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  double _questionLimitValue = 25;
+  final settingsService = SettingsService();
+  late double _questionLimitValue = settingsService.getQuestionLimit();
+
+  void _onQuestionLimitChanged(double value) async {
+    setState(() {
+      _questionLimitValue = value;
+    });
+    await settingsService.setQuestionLimit(value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +52,7 @@ class _SettingsState extends State<Settings> {
             min: 10,
             max: 100,
             divisions: 18,
-            onChanged: (value) {
-              setState(() {
-                _questionLimitValue = value;
-              });
-            },
+            onChanged: (value) => _onQuestionLimitChanged(value),
           ),
         ],
       ),
