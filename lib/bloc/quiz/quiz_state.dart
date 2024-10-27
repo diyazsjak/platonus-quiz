@@ -17,3 +17,9 @@ final class QuizLoadFailure extends QuizState {
 
   QuizLoadFailure({required this.failure});
 }
+
+final class QuizCompleteSuccess extends QuizState {
+  final int rightQuestionsCount;
+
+  QuizCompleteSuccess({required this.rightQuestionsCount});
+}
