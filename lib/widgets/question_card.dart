@@ -13,17 +13,40 @@ class QuestionCard extends StatefulWidget {
 
 class _QuestionCardState extends State<QuestionCard> {
   late int? _selectedVariant = widget.question.selectedVariant;
+  late bool _isQuestionAnswered = widget.question.isQuestionAnswered;
 
   void _onVariantSelected(int variant) {
+    if (_isQuestionAnswered) return;
+
     setState(() {
       _selectedVariant = variant;
       widget.question.selectedVariant = variant;
     });
   }
 
+  void _onQuestionAnswered() {
+    setState(() {
+      _isQuestionAnswered = true;
+      widget.question.isQuestionAnswered = true;
+    });
+  }
+
   Widget _buildVariant(MapEntry<int, String> variant) {
     final variantText =
         '${variant.value[0].toUpperCase()}${variant.value.substring(1)}';
+
+    Color radioColor = Theme.of(context).colorScheme.secondary;
+    int? groupValue = _selectedVariant;
+
+    if (_isQuestionAnswered) {
+      if (variant.key == 1) {
+        groupValue = 1;
+        radioColor = Colors.green;
+      }
+      if (variant.key == _selectedVariant) {
+        radioColor = (variant.key == 1) ? Colors.green : Colors.redAccent;
+      }
+    }
 
     return GestureDetector(
       onTap: () => _onVariantSelected(variant.key),
@@ -33,7 +56,8 @@ class _QuestionCardState extends State<QuestionCard> {
           children: [
             Radio<int>(
               value: variant.key,
-              groupValue: _selectedVariant,
+              groupValue: groupValue,
+              activeColor: radioColor,
               onChanged: (int? value) => _onVariantSelected(variant.key),
             ),
             Flexible(child: Text(variantText)),
@@ -41,6 +65,18 @@ class _QuestionCardState extends State<QuestionCard> {
         ),
       ),
     );
+  }
+
+  Widget _buildVerifyVariantButton() {
+    return (_selectedVariant != null)
+        ? FilledButton(
+            onPressed: _onQuestionAnswered,
+            child: const Text('Check answer'),
+          )
+        : FilledButton.tonal(
+            onPressed: () {},
+            child: const Text('Check answer'),
+          );
   }
 
   @override
@@ -53,7 +89,7 @@ class _QuestionCardState extends State<QuestionCard> {
           vertical: 16.0,
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               widget.question.question,
@@ -62,6 +98,8 @@ class _QuestionCardState extends State<QuestionCard> {
             const SizedBox(height: 16),
             for (final variant in widget.question.variants.entries)
               _buildVariant(variant),
+            const SizedBox(height: 16),
+            _buildVerifyVariantButton(),
           ],
         ),
       ),
