@@ -9,7 +9,7 @@ part 'quiz_event.dart';
 part 'quiz_state.dart';
 
 class QuizBloc extends Bloc<QuizEvent, QuizState> {
-  final settingsService = SettingsService();
+  final _settingsService = SettingsService();
 
   QuizBloc() : super(QuizInitial()) {
     on<QuizSelected>(
@@ -18,7 +18,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
           map(QuizLoadInProgress());
           final quiz = await FileParser.parseFileToQuiz(event.filePath);
 
-          final questionLimit = settingsService.questionLimit.toInt();
+          final questionLimit = _settingsService.questionLimit.toInt();
           final shuffledQuestions = quiz.questions..shuffle();
           final questions = shuffledQuestions.getRange(0, questionLimit);
 
