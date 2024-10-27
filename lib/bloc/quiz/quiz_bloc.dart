@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../core/failure.dart';
-import '../core/file_parser.dart';
-import '../models/quiz_model.dart';
+import '../../core/failure.dart';
+import '../../core/file_parser.dart';
+import '../../models/quiz_model.dart';
 
 part 'quiz_event.dart';
 part 'quiz_state.dart';

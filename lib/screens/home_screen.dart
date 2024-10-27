@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/quiz_bloc.dart';
+import '../bloc/quiz/quiz_bloc.dart';
 import '../core/constants.dart';
 import '../util/loading.dart';
 import '../util/show_setting_bottom_sheet.dart';

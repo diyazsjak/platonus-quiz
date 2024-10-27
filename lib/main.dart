@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'bloc/quiz_bloc.dart';
+import 'bloc/quiz/quiz_bloc.dart';
 import 'core/constants.dart';
 import 'screens/home_screen.dart';
 import 'screens/quiz_screen.dart';
