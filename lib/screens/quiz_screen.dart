@@ -7,6 +7,25 @@ import '../widgets/question_card.dart';
 class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});
 
+  Widget _buildHeader(String quizName, int length) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            quizName,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          ),
+          Text(
+            '$length questions',
+            style: const TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<QuizBloc, QuizState>(
@@ -21,22 +40,7 @@ class QuizScreen extends StatelessWidget {
             itemCount: length + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
-                return Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Quiz name: ${state.quiz.quizName}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        'Questions: $length',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                );
+                return _buildHeader(state.quiz.quizName, length);
               }
 
               return QuestionCard(question: state.quiz.questions[index - 1]);
