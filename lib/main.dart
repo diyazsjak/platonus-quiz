@@ -5,8 +5,11 @@ import 'bloc/quiz/quiz_bloc.dart';
 import 'core/constants.dart';
 import 'screens/home_screen.dart';
 import 'screens/quiz_screen.dart';
+import 'services/settings_service.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SettingsService().init();
   runApp(const MainApp());
 }
 
