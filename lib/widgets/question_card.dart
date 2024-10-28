@@ -27,11 +27,8 @@ class _QuestionCardState extends State<QuestionCard> {
   }
 
   void _onQuestionAnswered() {
-    setState(() {
-      _isQuestionAnswered = true;
-      widget.question.isQuestionAnswered = true;
-    });
-    context.read<QuizBloc>().add(QuizQuestionAnswered());
+    setState(() => _isQuestionAnswered = true);
+    context.read<QuizBloc>().add(QuizQuestionAnswered(widget.question));
   }
 
   Widget _buildVariant(MapEntry<int, String> variant) {

@@ -8,4 +8,8 @@ final class QuizSelected extends QuizEvent {
   QuizSelected({required this.filePath});
 }
 
-final class QuizQuestionAnswered extends QuizEvent {}
+final class QuizQuestionAnswered extends QuizEvent {
+  final QuestionModel question;
+
+  QuizQuestionAnswered(this.question);
+}

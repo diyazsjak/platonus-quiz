@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/failure.dart';
 import '../../core/file_parser.dart';
+import '../../models/question_model.dart';
 import '../../models/quiz_model.dart';
 import '../../services/settings_service.dart';
 
@@ -40,6 +41,8 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
     on<QuizQuestionAnswered>(
       (event, map) {
         _currentlyAnsweredQuestions++;
+        event.question.isQuestionAnswered = true;
+
         if (_currentlyAnsweredQuestions == currentQuiz!.questions.length) {
           final rightQuestionsCount = currentQuiz!.getRightAnsweredQuestions();
           map(QuizCompleteSuccess(rightQuestionsCount: rightQuestionsCount));
