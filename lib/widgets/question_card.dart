@@ -20,11 +20,8 @@ class _QuestionCardState extends State<QuestionCard> {
 
   void _onVariantSelected(int variant) {
     if (_isQuestionAnswered) return;
-
-    setState(() {
-      _selectedVariant = variant;
-      widget.question.selectedVariant = variant;
-    });
+    setState(() => _selectedVariant = variant);
+    context.read<QuizBloc>().add(QuizVariantSelected(widget.question, variant));
   }
 
   void _onQuestionAnswered() {
@@ -86,10 +83,7 @@ class _QuestionCardState extends State<QuestionCard> {
     return Card(
       margin: const EdgeInsets.all(12),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8.0,
-          vertical: 16.0,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

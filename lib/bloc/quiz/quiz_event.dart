@@ -13,3 +13,10 @@ final class QuizQuestionAnswered extends QuizEvent {
 
   QuizQuestionAnswered(this.question);
 }
+
+final class QuizVariantSelected extends QuizEvent {
+  final QuestionModel question;
+  final int variantPos;
+
+  QuizVariantSelected(this.question, this.variantPos);
+}

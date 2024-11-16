@@ -50,5 +50,9 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
         }
       },
     );
+
+    on<QuizVariantSelected>(
+      (event, map) => event.question.selectedVariant = event.variantPos,
+    );
   }
 }
