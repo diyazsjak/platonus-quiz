@@ -71,7 +71,10 @@ class QuizScreen extends StatelessWidget {
                 return _buildHeader(state.quiz.quizName, length);
               }
 
-              return QuestionCard(question: state.quiz.questions[index - 1]);
+              return QuestionCard(
+                question: state.quiz.questions[index - 1],
+                count: index,
+              );
             },
           ),
         );

@@ -5,9 +5,10 @@ import 'package:platonus_quiz/bloc/quiz/quiz_bloc.dart';
 import '../models/question_model.dart';
 
 class QuestionCard extends StatefulWidget {
+  final int count;
   final QuestionModel question;
 
-  const QuestionCard({super.key, required this.question});
+  const QuestionCard({super.key, required this.question, required this.count});
 
   @override
   State<QuestionCard> createState() => _QuestionCardState();
@@ -93,7 +94,7 @@ class _QuestionCardState extends State<QuestionCard> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              widget.question.question,
+              '${widget.count}) ${widget.question.question}',
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 16),
