@@ -27,6 +27,7 @@ class _QuestionCardState extends State<QuestionCard> {
   }
 
   void _onQuestionAnswered() {
+    if (_isQuestionAnswered) return;
     setState(() => _isQuestionAnswered = true);
     context.read<QuizBloc>().add(QuizQuestionAnswered(widget.question));
   }
