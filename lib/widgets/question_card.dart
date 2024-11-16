@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:platonus_quiz/bloc/quiz/quiz_bloc.dart';
 
+import '../bloc/quiz/quiz_bloc.dart';
 import '../models/question_model.dart';
 
 class QuestionCard extends StatefulWidget {
