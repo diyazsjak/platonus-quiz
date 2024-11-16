@@ -7,7 +7,7 @@ import 'package:path/path.dart' as path;
 import '../models/question_model.dart';
 import '../models/quiz_model.dart';
 
-class FileParser {
+class QuizParserService {
   static Future<String?> _extractString(String filePath) async {
     final String extension = path.extension(filePath);
     final String? content;

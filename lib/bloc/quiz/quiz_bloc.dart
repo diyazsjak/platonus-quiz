@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/failure.dart';
-import '../../core/file_parser.dart';
+import '../../services/quiz_parser_service.dart';
 import '../../models/question_model.dart';
 import '../../models/quiz_model.dart';
 import '../../services/settings_service.dart';
@@ -19,7 +19,8 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       (event, map) async {
         try {
           map(QuizLoadInProgress());
-          final wholeQuiz = await FileParser.parseFileToQuiz(event.filePath);
+          final wholeQuiz =
+              await QuizParserService.parseFileToQuiz(event.filePath);
 
           final questionLimit = _settingsService.questionLimit.toInt();
           final shuffledQuestions = wholeQuiz.questions..shuffle();
