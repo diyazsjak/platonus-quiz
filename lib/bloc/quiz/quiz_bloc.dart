@@ -17,7 +17,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
   int _currentlyAnsweredQuestions = 0;
 
   QuizBloc() : super(QuizInitial()) {
-    on<QuizSelected>(
+    on<QuizFileSelected>(
       (event, map) async {
         try {
           map(QuizLoadInProgress());

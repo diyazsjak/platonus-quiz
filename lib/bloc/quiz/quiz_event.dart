@@ -2,10 +2,10 @@ part of 'quiz_bloc.dart';
 
 sealed class QuizEvent {}
 
-final class QuizSelected extends QuizEvent {
+final class QuizFileSelected extends QuizEvent {
   final String filePath;
 
-  QuizSelected({required this.filePath});
+  QuizFileSelected({required this.filePath});
 }
 
 final class QuizLocalSelected extends QuizEvent {

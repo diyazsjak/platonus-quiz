@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
     if (result != null) {
       if (!context.mounted) return;
       final filePath = result.files.first.path!;
-      context.read<QuizBloc>().add(QuizSelected(filePath: filePath));
+      context.read<QuizBloc>().add(QuizFileSelected(filePath: filePath));
     }
   }
 
