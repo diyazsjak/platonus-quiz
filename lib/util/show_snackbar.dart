@@ -10,3 +10,14 @@ void showSnackbar(BuildContext context, String message) {
     ),
   );
 }
+
+void showSuccessSnackbar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).clearSnackBars();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message, style: const TextStyle(color: Colors.black)),
+      backgroundColor: Colors.greenAccent,
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
