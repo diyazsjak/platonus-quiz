@@ -6,6 +6,7 @@ import '../bloc/quiz/quiz_bloc.dart';
 import '../core/constants.dart';
 import '../util/loading.dart';
 import '../util/show_snackbar.dart';
+import '../widgets/quizes_list.dart';
 import '../widgets/settings.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -58,6 +59,7 @@ class HomeScreen extends StatelessWidget {
             )
           ],
         ),
+        body: const QuizesList(),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _selectFile(context),
           icon: const Icon(Icons.file_open_outlined),
