@@ -37,9 +37,9 @@ class _QuizesListState extends State<QuizesList> {
             4,
             QuizCardModel(id: -1, name: BoneMock.words(4), length: 100),
           );
-          return Skeletonizer(child: Quizes(quizes: fakeQuizes));
+          return Skeletonizer(child: _Quizes(quizes: fakeQuizes));
         } else if (state is QuizesLoadSuccess) {
-          return Quizes(quizes: state.quizes);
+          return _Quizes(quizes: state.quizes);
         } else {
           return const Center(child: Text("Couldn't load saved quizes"));
         }
@@ -48,16 +48,16 @@ class _QuizesListState extends State<QuizesList> {
   }
 }
 
-class Quizes extends StatefulWidget {
+class _Quizes extends StatefulWidget {
   final List<QuizCardModel> quizes;
 
-  const Quizes({super.key, required this.quizes});
+  const _Quizes({required this.quizes});
 
   @override
-  State<Quizes> createState() => _QuizesState();
+  State<_Quizes> createState() => _QuizesState();
 }
 
-class _QuizesState extends State<Quizes> {
+class _QuizesState extends State<_Quizes> {
   late List<QuizCardModel> quizes = widget.quizes;
 
   void _onDeleteTap(int quizId, int index) {
