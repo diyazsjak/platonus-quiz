@@ -15,7 +15,11 @@ class QuizManager {
   }
 
   Future updateQuestionAmount(int id, int length) async {
-    await _database.managers.quiz.update((f) => f(length: Value(length)));
+    await (_database.update(_database.quiz)
+          ..where(
+            (f) => f.id.equals(id),
+          ))
+        .write(QuizCompanion(length: Value(length)));
   }
 
   Future<List<QuizData>> getAll() async {
