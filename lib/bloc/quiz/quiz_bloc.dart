@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/failure.dart';
+import '../../database/question_manager.dart';
+import '../../database/quiz_manager.dart';
 import '../../services/quiz_parser_service.dart';
 import '../../models/question_model.dart';
 import '../../models/quiz_model.dart';
@@ -33,6 +35,29 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
 
           currentQuiz = quiz;
           map(QuizLoadSuccess(quiz: quiz));
+        } catch (e) {
+          map(QuizLoadFailure(failure: WrongQuizFormatFailure()));
+        }
+      },
+    );
+
+    on<QuizLocalSelected>(
+      (event, map) async {
+        try {
+          map(QuizLoadInProgress());
+          final quizManagar = QuizManager();
+          final questionManager = QuestionManager();
+          final quiz = await quizManagar.getSingle(event.quizId);
+          final shuffledQuestions = await questionManager.getAll(event.quizId)
+            ..shuffle();
+
+          final questionLimit = _settingsService.questionLimit.toInt();
+          final questions = shuffledQuestions.getRange(0, questionLimit);
+
+          final quizModel = QuizModel.fromDatabase(quiz, questions.toList());
+
+          currentQuiz = quizModel;
+          map(QuizLoadSuccess(quiz: quizModel));
         } catch (e) {
           map(QuizLoadFailure(failure: WrongQuizFormatFailure()));
         }
