@@ -17,3 +17,7 @@ final class QuizesLoadFailure extends QuizesState {
 
   QuizesLoadFailure({required this.failure});
 }
+
+final class QuizesQuizDeleteSuccess extends QuizesState {}
+
+final class QuizesQuizDeleteFailure extends QuizesState {}

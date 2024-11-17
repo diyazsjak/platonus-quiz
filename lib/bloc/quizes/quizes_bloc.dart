@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/failure.dart';
@@ -26,7 +28,20 @@ class QuizesBloc extends Bloc<QuizesEvent, QuizesState> {
 
           map(QuizesLoadSuccess(quizCardModels));
         } catch (e) {
+          log(e.toString());
           map(QuizesLoadFailure(failure: UnknownDatabaseFailure()));
+        }
+      },
+    );
+
+    on<QuizesQuizDeletePressed>(
+      (event, map) async {
+        try {
+          await _quizManager.delete(event.id);
+          map(QuizesQuizDeleteSuccess());
+        } catch (e) {
+          log(e.toString());
+          map(QuizesQuizDeleteFailure());
         }
       },
     );
