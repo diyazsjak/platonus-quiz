@@ -35,4 +35,9 @@ class QuizManager {
           QuizCompanion.insert(name: quizName),
         );
   }
+
+  Future<void> delete(int id) async {
+    await _database.managers.quiz.filter((f) => f.id(id)).delete();
+    await _database.managers.question.filter((f) => f.quizId.id(id)).delete();
+  }
 }
