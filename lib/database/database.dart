@@ -11,7 +11,12 @@ class Quiz extends Table {
 
 class Question extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get quizId => integer().references(Quiz, #id)();
+  IntColumn get quizId => integer().references(
+        Quiz,
+        #id,
+        onDelete: KeyAction.cascade,
+        onUpdate: KeyAction.cascade,
+      )();
   TextColumn get question => text()();
   TextColumn get variants => text()();
 }

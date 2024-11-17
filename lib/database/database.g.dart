@@ -238,8 +238,8 @@ class $QuestionTable extends Question
       'quiz_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES quiz (id)'));
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES quiz (id) ON UPDATE CASCADE ON DELETE CASCADE'));
   static const VerificationMeta _questionMeta =
       const VerificationMeta('question');
   @override
@@ -487,6 +487,25 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [quiz, question];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
+        [
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('quiz',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('question', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('quiz',
+                limitUpdateKind: UpdateKind.update),
+            result: [
+              TableUpdate('question', kind: UpdateKind.update),
+            ],
+          ),
+        ],
+      );
 }
 
 typedef $$QuizTableCreateCompanionBuilder = QuizCompanion Function({
