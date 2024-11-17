@@ -51,6 +51,10 @@ class QuizParserService {
     if (!isExists) id = await quizManager.insert(quizName);
     final questions = await _parseQuestions(fileContent, id);
 
+    if (id != null) {
+      await quizManager.updateQuestionAmount(id, questions.length);
+    }
+
     return QuizModel(quizName: quizName, questions: questions);
   }
 
