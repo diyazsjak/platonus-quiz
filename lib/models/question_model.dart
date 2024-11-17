@@ -1,3 +1,6 @@
+import '../database/database.dart';
+import '../services/quiz_parser_service.dart';
+
 class QuestionModel {
   final String question;
   final Map<int, String> variants;
@@ -10,4 +13,13 @@ class QuestionModel {
     this.selectedVariant,
     this.isQuestionAnswered = false,
   });
+
+  factory QuestionModel.fromDatabase(QuestionData questionData) {
+    return QuestionModel(
+      question: questionData.question,
+      variants: QuizParserService.getShuffledVariantsMapFromString(
+        questionData.variants,
+      ),
+    );
+  }
 }
