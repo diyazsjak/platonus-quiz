@@ -1,9 +1,10 @@
 import 'package:drift/drift.dart';
 
 import 'database.dart';
+import 'database_singleton.dart';
 
 class QuizManager {
-  final _database = AppDatabase();
+  final _database = DatabaseSingleton().database;
 
   Future<bool> isExists(String quizName) async {
     final quiz = await _database.managers.quiz
