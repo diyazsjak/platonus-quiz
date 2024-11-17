@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:doc_text/doc_text.dart';
@@ -43,11 +42,9 @@ class QuizParserService {
       throw Exception('Quiz should be in <question>, <variant> format');
     }
 
+    int? id;
     final quizName = getBasenameWithoutExt(filePath);
     final isExists = await quizManager.isExists(quizName);
-    log(isExists ? 'Has quiz with this name' : 'No quiz with this name');
-
-    int? id;
     if (!isExists) id = await quizManager.insert(quizName);
     final questions = await _parseQuestions(fileContent, id);
 
