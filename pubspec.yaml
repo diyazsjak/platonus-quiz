@@ -17,6 +17,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   drift: ^2.21.0
   drift_flutter: ^0.2.1
+  skeletonizer: ^1.4.2
 
 dev_dependencies:
   flutter_test:
