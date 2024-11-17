@@ -1,3 +1,5 @@
+import 'package:drift/drift.dart';
+
 import 'database.dart';
 
 class QuizManager {
@@ -9,6 +11,10 @@ class QuizManager {
         .getSingleOrNull();
 
     return quiz != null;
+  }
+
+  Future updateQuestionAmount(int id, int length) async {
+    await _database.managers.quiz.update((f) => f(length: Value(length)));
   }
 
   Future<List<QuizData>> getAll() async {
