@@ -7,7 +7,7 @@ final class QuizesInitial extends QuizesState {}
 final class QuizesLoadInProgress extends QuizesState {}
 
 final class QuizesLoadSuccess extends QuizesState {
-  final Map<int, String> quizes;
+  final List<QuizCardModel> quizes;
 
   QuizesLoadSuccess(this.quizes);
 }
