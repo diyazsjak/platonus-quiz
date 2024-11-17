@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../bloc/quiz/quiz_bloc.dart';
 import '../bloc/quizes/quizes_bloc.dart';
@@ -32,7 +33,11 @@ class _QuizesListState extends State<QuizesList> {
       },
       builder: (BuildContext context, QuizesState state) {
         if (state is QuizesLoadInProgress) {
-          return const Center(child: CircularProgressIndicator());
+          final fakeQuizes = List.filled(
+            4,
+            QuizCardModel(id: -1, name: BoneMock.words(4), length: 100),
+          );
+          return Skeletonizer(child: Quizes(quizes: fakeQuizes));
         } else if (state is QuizesLoadSuccess) {
           return Quizes(quizes: state.quizes);
         } else {
@@ -88,9 +93,11 @@ class _QuizesState extends State<Quizes> {
             ),
             title: Text(quizName),
             subtitle: Text('Questions: $quizLength'),
-            trailing: IconButton(
-              onPressed: () => _onDeleteTap(quizId, index),
-              icon: const Icon(Icons.delete_outline),
+            trailing: Skeleton.shade(
+              child: IconButton(
+                onPressed: () => _onDeleteTap(quizId, index),
+                icon: const Icon(Icons.delete_outline),
+              ),
             ),
           ),
         );
