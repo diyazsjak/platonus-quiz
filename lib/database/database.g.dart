@@ -22,8 +22,13 @@ class $QuizTable extends Quiz with TableInfo<$QuizTable, QuizData> {
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _lengthMeta = const VerificationMeta('length');
   @override
-  List<GeneratedColumn> get $columns => [id, name];
+  late final GeneratedColumn<int> length = GeneratedColumn<int>(
+      'length', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [id, name, length];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -43,6 +48,10 @@ class $QuizTable extends Quiz with TableInfo<$QuizTable, QuizData> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
+    if (data.containsKey('length')) {
+      context.handle(_lengthMeta,
+          length.isAcceptableOrUnknown(data['length']!, _lengthMeta));
+    }
     return context;
   }
 
@@ -56,6 +65,8 @@ class $QuizTable extends Quiz with TableInfo<$QuizTable, QuizData> {
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      length: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}length']),
     );
   }
 
@@ -68,12 +79,16 @@ class $QuizTable extends Quiz with TableInfo<$QuizTable, QuizData> {
 class QuizData extends DataClass implements Insertable<QuizData> {
   final int id;
   final String name;
-  const QuizData({required this.id, required this.name});
+  final int? length;
+  const QuizData({required this.id, required this.name, this.length});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || length != null) {
+      map['length'] = Variable<int>(length);
+    }
     return map;
   }
 
@@ -81,6 +96,8 @@ class QuizData extends DataClass implements Insertable<QuizData> {
     return QuizCompanion(
       id: Value(id),
       name: Value(name),
+      length:
+          length == null && nullToAbsent ? const Value.absent() : Value(length),
     );
   }
 
@@ -90,6 +107,7 @@ class QuizData extends DataClass implements Insertable<QuizData> {
     return QuizData(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      length: serializer.fromJson<int?>(json['length']),
     );
   }
   @override
@@ -98,17 +116,22 @@ class QuizData extends DataClass implements Insertable<QuizData> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
+      'length': serializer.toJson<int?>(length),
     };
   }
 
-  QuizData copyWith({int? id, String? name}) => QuizData(
+  QuizData copyWith(
+          {int? id, String? name, Value<int?> length = const Value.absent()}) =>
+      QuizData(
         id: id ?? this.id,
         name: name ?? this.name,
+        length: length.present ? length.value : this.length,
       );
   QuizData copyWithCompanion(QuizCompanion data) {
     return QuizData(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
+      length: data.length.present ? data.length.value : this.length,
     );
   }
 
@@ -116,44 +139,55 @@ class QuizData extends DataClass implements Insertable<QuizData> {
   String toString() {
     return (StringBuffer('QuizData(')
           ..write('id: $id, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('length: $length')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name);
+  int get hashCode => Object.hash(id, name, length);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is QuizData && other.id == this.id && other.name == this.name);
+      (other is QuizData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.length == this.length);
 }
 
 class QuizCompanion extends UpdateCompanion<QuizData> {
   final Value<int> id;
   final Value<String> name;
+  final Value<int?> length;
   const QuizCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.length = const Value.absent(),
   });
   QuizCompanion.insert({
     this.id = const Value.absent(),
     required String name,
+    this.length = const Value.absent(),
   }) : name = Value(name);
   static Insertable<QuizData> custom({
     Expression<int>? id,
     Expression<String>? name,
+    Expression<int>? length,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
+      if (length != null) 'length': length,
     });
   }
 
-  QuizCompanion copyWith({Value<int>? id, Value<String>? name}) {
+  QuizCompanion copyWith(
+      {Value<int>? id, Value<String>? name, Value<int?>? length}) {
     return QuizCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      length: length ?? this.length,
     );
   }
 
@@ -166,6 +200,9 @@ class QuizCompanion extends UpdateCompanion<QuizData> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (length.present) {
+      map['length'] = Variable<int>(length.value);
+    }
     return map;
   }
 
@@ -173,7 +210,8 @@ class QuizCompanion extends UpdateCompanion<QuizData> {
   String toString() {
     return (StringBuffer('QuizCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('length: $length')
           ..write(')'))
         .toString();
   }
@@ -454,10 +492,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 typedef $$QuizTableCreateCompanionBuilder = QuizCompanion Function({
   Value<int> id,
   required String name,
+  Value<int?> length,
 });
 typedef $$QuizTableUpdateCompanionBuilder = QuizCompanion Function({
   Value<int> id,
   Value<String> name,
+  Value<int?> length,
 });
 
 final class $$QuizTableReferences
@@ -492,6 +532,9 @@ class $$QuizTableFilterComposer extends Composer<_$AppDatabase, $QuizTable> {
 
   ColumnFilters<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get length => $composableBuilder(
+      column: $table.length, builder: (column) => ColumnFilters(column));
 
   Expression<bool> questionRefs(
       Expression<bool> Function($$QuestionTableFilterComposer f) f) {
@@ -528,6 +571,9 @@ class $$QuizTableOrderingComposer extends Composer<_$AppDatabase, $QuizTable> {
 
   ColumnOrderings<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get length => $composableBuilder(
+      column: $table.length, builder: (column) => ColumnOrderings(column));
 }
 
 class $$QuizTableAnnotationComposer
@@ -544,6 +590,9 @@ class $$QuizTableAnnotationComposer
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get length =>
+      $composableBuilder(column: $table.length, builder: (column) => column);
 
   Expression<T> questionRefs<T extends Object>(
       Expression<T> Function($$QuestionTableAnnotationComposer a) f) {
@@ -592,18 +641,22 @@ class $$QuizTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> name = const Value.absent(),
+            Value<int?> length = const Value.absent(),
           }) =>
               QuizCompanion(
             id: id,
             name: name,
+            length: length,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String name,
+            Value<int?> length = const Value.absent(),
           }) =>
               QuizCompanion.insert(
             id: id,
             name: name,
+            length: length,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) =>
