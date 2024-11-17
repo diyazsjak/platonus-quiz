@@ -59,7 +59,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
           currentQuiz = quizModel;
           map(QuizLoadSuccess(quiz: quizModel, isQuizSaved: false));
         } catch (e) {
-          map(QuizLoadFailure(failure: WrongQuizFormatFailure()));
+          map(QuizLoadFailure(failure: UnknownDatabaseFailure()));
         }
       },
     );
