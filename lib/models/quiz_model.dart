@@ -1,3 +1,4 @@
+import '../database/database.dart';
 import 'question_model.dart';
 
 class QuizModel {
@@ -16,5 +17,15 @@ class QuizModel {
     }
 
     return rightAnsweredQuestions;
+  }
+
+  factory QuizModel.fromDatabase(QuizData quiz, List<QuestionData> questions) {
+    final questionModels = <QuestionModel>[];
+    for (final question in questions) {
+      final questionModel = QuestionModel.fromDatabase(question);
+      questionModels.add(questionModel);
+    }
+
+    return QuizModel(quizName: quiz.name, questions: questionModels);
   }
 }
