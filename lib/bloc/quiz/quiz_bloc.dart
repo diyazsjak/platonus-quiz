@@ -34,7 +34,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
           );
 
           currentQuiz = quiz;
-          map(QuizLoadSuccess(quiz: quiz));
+          map(QuizLoadSuccess(quiz: quiz, isQuizSaved: true));
         } catch (e) {
           map(QuizLoadFailure(failure: WrongQuizFormatFailure()));
         }
@@ -57,7 +57,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
           final quizModel = QuizModel.fromDatabase(quiz, questions.toList());
 
           currentQuiz = quizModel;
-          map(QuizLoadSuccess(quiz: quizModel));
+          map(QuizLoadSuccess(quiz: quizModel, isQuizSaved: false));
         } catch (e) {
           map(QuizLoadFailure(failure: WrongQuizFormatFailure()));
         }

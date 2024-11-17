@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/quiz/quiz_bloc.dart';
+import '../bloc/quizes/quizes_bloc.dart';
 import '../core/constants.dart';
 import '../util/loading.dart';
 import '../util/show_snackbar.dart';
@@ -45,6 +46,9 @@ class HomeScreen extends StatelessWidget {
           Loading.remove(context);
           showSnackbar(context, 'Wrong quiz format');
         } else if (state is QuizLoadSuccess) {
+          if (state.isQuizSaved) {
+            context.read<QuizesBloc>().add(QuizesStarted());
+          }
           Loading.remove(context);
           Navigator.of(context).pushNamed(Constants.quizRoute);
         }
