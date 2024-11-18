@@ -17,9 +17,7 @@ class Loading {
               child: const SizedBox(
                 height: 24,
                 width: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                ),
+                child: CircularProgressIndicator(strokeWidth: 3),
               ),
             ),
           ),
