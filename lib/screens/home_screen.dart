@@ -45,8 +45,8 @@ class HomeScreen extends StatelessWidget {
         } else if (state is QuizLoadFailure) {
           Navigator.pop(context);
           (state.failure is WrongQuizFormatFailure)
-              ? showSnackbar(context, 'Wrong quiz format')
-              : showSnackbar(context, 'Couldn\'t load quiz');
+              ? showErrorSnackbar(context, 'Wrong quiz format')
+              : showErrorSnackbar(context, 'Couldn\'t load quiz');
         } else if (state is QuizLoadSuccess) {
           if (state.isQuizSaved) {
             context.read<QuizesBloc>().add(QuizesStarted());

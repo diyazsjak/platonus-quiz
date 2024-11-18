@@ -22,7 +22,7 @@ class _QuizesListState extends State<QuizesList> {
         if (state is QuizesQuizDeleteSuccess) {
           showSuccessSnackbar(context, 'You\'ve successfully deleted quiz');
         } else if (state is QuizesQuizDeleteFailure) {
-          showSnackbar(context, 'Couldn\'t delete quiz');
+          showErrorSnackbar(context, 'Couldn\'t delete quiz');
           context.read<QuizesBloc>().add(QuizesStarted());
         }
       },
