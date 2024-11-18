@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../bloc/quiz/quiz_bloc.dart';
+import '../core/constants.dart';
 import '../models/question_model.dart';
 import '../models/quiz_model.dart';
 import '../widgets/question_card.dart';
@@ -24,8 +25,11 @@ class QuizScreen extends StatelessWidget {
               "You got right $answerRatio questions. Your grade is $grade."),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Ok'),
+              onPressed: () => Navigator.popUntil(
+                context,
+                ModalRoute.withName(Constants.homeRoute),
+              ),
+              child: const Text('Exit quiz'),
             ),
           ],
         );
@@ -109,10 +113,7 @@ class _Quiz extends StatelessWidget {
           return _buildHeader(quiz.quizName, length);
         }
 
-        return QuestionCard(
-          question: quiz.questions[index - 1],
-          count: index,
-        );
+        return QuestionCard(question: quiz.questions[index - 1], count: index);
       },
     );
   }
