@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/quiz/quiz_bloc.dart';
 import '../bloc/quizes/quizes_bloc.dart';
 import '../core/constants.dart';
-import '../util/loading.dart';
+import '../core/failure.dart';
 import '../util/show_snackbar.dart';
 import '../widgets/quizes_list.dart';
 import '../widgets/settings.dart';
@@ -41,16 +41,16 @@ class HomeScreen extends StatelessWidget {
     return BlocListener<QuizBloc, QuizState>(
       listener: (BuildContext context, state) async {
         if (state is QuizLoadInProgress) {
-          Loading.show(context);
+          Navigator.of(context).pushNamed(Constants.quizRoute);
         } else if (state is QuizLoadFailure) {
-          Loading.remove(context);
-          showSnackbar(context, 'Wrong quiz format');
+          Navigator.pop(context);
+          (state.failure is WrongQuizFormatFailure)
+              ? showSnackbar(context, 'Wrong quiz format')
+              : showSnackbar(context, 'Couldn\'t load quiz');
         } else if (state is QuizLoadSuccess) {
           if (state.isQuizSaved) {
             context.read<QuizesBloc>().add(QuizesStarted());
           }
-          Loading.remove(context);
-          Navigator.of(context).pushNamed(Constants.quizRoute);
         }
       },
       child: Scaffold(

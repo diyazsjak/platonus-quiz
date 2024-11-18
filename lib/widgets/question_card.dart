@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../bloc/quiz/quiz_bloc.dart';
 import '../models/question_model.dart';
@@ -53,11 +54,13 @@ class _QuestionCardState extends State<QuestionCard> {
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
           children: [
-            Radio<int>(
-              value: variant.key,
-              groupValue: groupValue,
-              activeColor: radioColor,
-              onChanged: (int? value) => _onVariantSelected(variant.key),
+            Skeleton.shade(
+              child: Radio<int>(
+                value: variant.key,
+                groupValue: groupValue,
+                activeColor: radioColor,
+                onChanged: (int? value) => _onVariantSelected(variant.key),
+              ),
             ),
             Flexible(child: Text(variantText)),
           ],
