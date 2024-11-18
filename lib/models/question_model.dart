@@ -1,4 +1,4 @@
-import '../database/database.dart';
+import '../core/database.dart';
 import '../services/quiz_parser_service.dart';
 
 class QuestionModel {

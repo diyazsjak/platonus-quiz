@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 
-import '../database/database.dart';
-import '../database/database_singleton.dart';
+import '../core/database.dart';
+import '../core/database_singleton.dart';
 
 class QuizDatabaseService {
   final _database = DatabaseSingleton().database;
