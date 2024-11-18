@@ -1,7 +1,7 @@
-import 'database.dart';
-import 'database_singleton.dart';
+import '../database/database.dart';
+import '../database/database_singleton.dart';
 
-class QuestionManager {
+class QuestionDatabaseService {
   final _database = DatabaseSingleton().database;
 
   Future<List<QuestionData>> getAll(int quizId) async {

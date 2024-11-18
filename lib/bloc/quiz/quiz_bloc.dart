@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/failure.dart';
-import '../../database/question_manager.dart';
-import '../../database/quiz_manager.dart';
+import '../../services/question_database_service.dart';
+import '../../services/quiz_database_service.dart';
 import '../../services/quiz_parser_service.dart';
 import '../../models/question_model.dart';
 import '../../models/quiz_model.dart';
@@ -45,8 +45,8 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       (event, map) async {
         try {
           map(QuizLoadInProgress());
-          final quizManagar = QuizManager();
-          final questionManager = QuestionManager();
+          final quizManagar = QuizDatabaseService();
+          final questionManager = QuestionDatabaseService();
           final quiz = await quizManagar.getSingle(event.quizId);
           final shuffledQuestions = await questionManager.getAll(event.quizId)
             ..shuffle();

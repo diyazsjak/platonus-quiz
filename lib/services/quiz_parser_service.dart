@@ -4,8 +4,8 @@ import 'package:doc_text/doc_text.dart';
 import 'package:docx_to_text/docx_to_text.dart';
 import 'package:path/path.dart' as path;
 
-import '../database/question_manager.dart';
-import '../database/quiz_manager.dart';
+import 'question_database_service.dart';
+import 'quiz_database_service.dart';
 import '../models/question_model.dart';
 import '../models/quiz_model.dart';
 
@@ -34,7 +34,7 @@ class QuizParserService {
   }
 
   static Future<QuizModel> parseFileToQuiz(String filePath) async {
-    final quizManager = QuizManager();
+    final quizManager = QuizDatabaseService();
     final String? fileContent = await _extractString(filePath);
 
     if (fileContent == null) throw Exception('File type is not doc or docx');
@@ -59,7 +59,7 @@ class QuizParserService {
     String fileContent,
     int? quizId,
   ) async {
-    final questionManager = QuestionManager();
+    final questionManager = QuestionDatabaseService();
     final questionMatches = _wholeQuestionRE.allMatches(fileContent);
     final List<QuestionModel> questions = [];
 

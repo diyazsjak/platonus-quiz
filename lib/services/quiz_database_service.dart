@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
 
-import 'database.dart';
-import 'database_singleton.dart';
+import '../database/database.dart';
+import '../database/database_singleton.dart';
 
-class QuizManager {
+class QuizDatabaseService {
   final _database = DatabaseSingleton().database;
 
   Future<bool> isExists(String quizName) async {

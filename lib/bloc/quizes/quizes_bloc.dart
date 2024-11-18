@@ -3,14 +3,14 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/failure.dart';
-import '../../database/quiz_manager.dart';
+import '../../services/quiz_database_service.dart';
 import '../../models/quiz_card_model.dart';
 
 part 'quizes_event.dart';
 part 'quizes_state.dart';
 
 class QuizesBloc extends Bloc<QuizesEvent, QuizesState> {
-  final _quizManager = QuizManager();
+  final _quizManager = QuizDatabaseService();
 
   QuizesBloc() : super(QuizesInitial()) {
     on<QuizesStarted>(
