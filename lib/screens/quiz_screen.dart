@@ -94,10 +94,7 @@ class _Quiz extends StatelessWidget {
             quizName,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
-          Text(
-            '$length questions',
-            style: const TextStyle(fontSize: 16),
-          ),
+          Text('$length questions', style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
