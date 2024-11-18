@@ -84,7 +84,7 @@ class _QuizesState extends State<_Quizes> {
         final quizLength = quizes[index].length;
 
         return Card(
-          key: UniqueKey(),
+          key: ValueKey(index),
           margin: EdgeInsets.zero,
           child: ListTile(
             onTap: () => _onCardTap(context, quizId),
@@ -96,7 +96,10 @@ class _QuizesState extends State<_Quizes> {
             trailing: Skeleton.shade(
               child: IconButton(
                 onPressed: () => _onDeleteTap(quizId, index),
-                icon: const Icon(Icons.delete_outline),
+                icon: const Icon(
+                  Icons.delete_outline_rounded,
+                  color: Colors.red,
+                ),
               ),
             ),
           ),
