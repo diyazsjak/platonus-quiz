@@ -96,9 +96,9 @@ class _QuizesState extends State<_Quizes> {
             trailing: Skeleton.shade(
               child: IconButton(
                 onPressed: () => _onDeleteTap(quizId, index),
-                icon: const Icon(
+                icon: Icon(
                   Icons.delete_outline_rounded,
-                  color: Colors.red,
+                  color: Theme.of(context).colorScheme.error,
                 ),
               ),
             ),
