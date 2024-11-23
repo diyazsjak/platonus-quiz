@@ -17,13 +17,13 @@ class QuizesList extends StatefulWidget {
 class _QuizesListState extends State<QuizesList> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<QuizesBloc, QuizesState>(
+    return BlocConsumer<QuizesListBloc, QuizesState>(
       listener: (BuildContext context, QuizesState state) {
         if (state is QuizesQuizDeleteSuccess) {
           showSuccessSnackbar(context, 'You\'ve successfully deleted quiz');
         } else if (state is QuizesQuizDeleteFailure) {
           showErrorSnackbar(context, 'Couldn\'t delete quiz');
-          context.read<QuizesBloc>().add(QuizesStarted());
+          context.read<QuizesListBloc>().add(QuizesStarted());
         }
       },
       buildWhen: (previous, current) {
@@ -61,7 +61,7 @@ class _QuizesState extends State<_Quizes> {
   late List<QuizCardModel> quizes = widget.quizes;
 
   void _onDeleteTap(int quizId, int index) {
-    context.read<QuizesBloc>().add(QuizesQuizDeletePressed(quizId));
+    context.read<QuizesListBloc>().add(QuizesQuizDeletePressed(quizId));
     setState(() => quizes.removeAt(index));
   }
 

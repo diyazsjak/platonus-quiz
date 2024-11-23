@@ -9,10 +9,10 @@ import '../../models/quiz_card_model.dart';
 part 'quizes_event.dart';
 part 'quizes_state.dart';
 
-class QuizesBloc extends Bloc<QuizesEvent, QuizesState> {
+class QuizesListBloc extends Bloc<QuizesEvent, QuizesState> {
   final _quizManager = QuizDatabaseService();
 
-  QuizesBloc() : super(QuizesInitial()) {
+  QuizesListBloc() : super(QuizesInitial()) {
     on<QuizesStarted>(
       (event, map) async {
         try {

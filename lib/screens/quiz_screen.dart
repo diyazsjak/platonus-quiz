@@ -25,10 +25,12 @@ class QuizScreen extends StatelessWidget {
               "You got right $answerRatio questions. Your grade is $grade."),
           actions: [
             TextButton(
-              onPressed: () => Navigator.popUntil(
-                context,
-                ModalRoute.withName(Constants.homeRoute),
-              ),
+              onPressed: () {
+                Navigator.popUntil(
+                  context,
+                  ModalRoute.withName(Constants.homeRoute),
+                );
+              },
               child: const Text('Exit quiz'),
             ),
           ],
