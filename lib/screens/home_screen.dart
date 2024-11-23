@@ -28,12 +28,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _showSettingsBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return const Settings();
-      },
-    );
+    showModalBottomSheet(context: context, builder: (_) => const Settings());
   }
 
   @override
