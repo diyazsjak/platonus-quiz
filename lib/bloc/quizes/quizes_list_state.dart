@@ -1,23 +1,23 @@
 part of 'quizes_list_bloc.dart';
 
-sealed class QuizesState {}
+sealed class QuizesListState {}
 
-final class QuizesInitial extends QuizesState {}
+final class QuizesListInitial extends QuizesListState {}
 
-final class QuizesLoadInProgress extends QuizesState {}
+final class QuizesListLoadInProgress extends QuizesListState {}
 
-final class QuizesLoadSuccess extends QuizesState {
+final class QuizesListLoadSuccess extends QuizesListState {
   final List<QuizCardModel> quizes;
 
-  QuizesLoadSuccess(this.quizes);
+  QuizesListLoadSuccess(this.quizes);
 }
 
-final class QuizesLoadFailure extends QuizesState {
+final class QuizesListLoadFailure extends QuizesListState {
   final Failure failure;
 
-  QuizesLoadFailure({required this.failure});
+  QuizesListLoadFailure({required this.failure});
 }
 
-final class QuizesQuizDeleteSuccess extends QuizesState {}
+final class QuizesListQuizDeleteSuccess extends QuizesListState {}
 
-final class QuizesQuizDeleteFailure extends QuizesState {}
+final class QuizesListQuizDeleteFailure extends QuizesListState {}

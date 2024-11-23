@@ -17,28 +17,28 @@ class QuizesList extends StatefulWidget {
 class _QuizesListState extends State<QuizesList> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<QuizesListBloc, QuizesState>(
-      listener: (BuildContext context, QuizesState state) {
-        if (state is QuizesQuizDeleteSuccess) {
+    return BlocConsumer<QuizesListBloc, QuizesListState>(
+      listener: (BuildContext context, QuizesListState state) {
+        if (state is QuizesListQuizDeleteSuccess) {
           showSuccessSnackbar(context, 'You\'ve successfully deleted quiz');
-        } else if (state is QuizesQuizDeleteFailure) {
+        } else if (state is QuizesListQuizDeleteFailure) {
           showErrorSnackbar(context, 'Couldn\'t delete quiz');
-          context.read<QuizesListBloc>().add(QuizesStarted());
+          context.read<QuizesListBloc>().add(QuizesListStarted());
         }
       },
       buildWhen: (previous, current) {
-        return (current is QuizesLoadInProgress ||
-            current is QuizesLoadFailure ||
-            current is QuizesLoadSuccess);
+        return (current is QuizesListLoadInProgress ||
+            current is QuizesListLoadFailure ||
+            current is QuizesListLoadSuccess);
       },
-      builder: (BuildContext context, QuizesState state) {
-        if (state is QuizesLoadInProgress) {
+      builder: (BuildContext context, QuizesListState state) {
+        if (state is QuizesListLoadInProgress) {
           final fakeQuizes = List.filled(
             4,
             QuizCardModel(id: -1, name: BoneMock.words(4), length: 100),
           );
           return Skeletonizer(child: _Quizes(quizes: fakeQuizes));
-        } else if (state is QuizesLoadSuccess) {
+        } else if (state is QuizesListLoadSuccess) {
           return _Quizes(quizes: state.quizes);
         } else {
           return const Center(child: Text("Couldn't load saved quizes"));
@@ -61,7 +61,7 @@ class _QuizesState extends State<_Quizes> {
   late List<QuizCardModel> quizes = widget.quizes;
 
   void _onDeleteTap(int quizId, int index) {
-    context.read<QuizesListBloc>().add(QuizesQuizDeletePressed(quizId));
+    context.read<QuizesListBloc>().add(QuizesListQuizDeletePressed(quizId));
     setState(() => quizes.removeAt(index));
   }
 

@@ -31,7 +31,7 @@ class MainApp extends StatelessWidget {
           providers: [
             BlocProvider(create: (context) => OngoingQuizBloc()),
             BlocProvider(
-              create: (context) => QuizesListBloc()..add(QuizesStarted()),
+              create: (context) => QuizesListBloc()..add(QuizesListStarted()),
             ),
           ],
           child: child!,

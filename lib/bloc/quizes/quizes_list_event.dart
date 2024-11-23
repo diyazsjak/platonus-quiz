@@ -1,11 +1,11 @@
 part of 'quizes_list_bloc.dart';
 
-sealed class QuizesEvent {}
+sealed class QuizesListEvent {}
 
-final class QuizesStarted extends QuizesEvent {}
+final class QuizesListStarted extends QuizesListEvent {}
 
-final class QuizesQuizDeletePressed extends QuizesEvent {
+final class QuizesListQuizDeletePressed extends QuizesListEvent {
   final int id;
 
-  QuizesQuizDeletePressed(this.id);
+  QuizesListQuizDeletePressed(this.id);
 }

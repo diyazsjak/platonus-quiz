@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
               : showErrorSnackbar(context, 'Couldn\'t load quiz');
         } else if (state is QuizLoadSuccess) {
           if (state.isQuizSaved) {
-            context.read<QuizesListBloc>().add(QuizesStarted());
+            context.read<QuizesListBloc>().add(QuizesListStarted());
           }
         }
       },

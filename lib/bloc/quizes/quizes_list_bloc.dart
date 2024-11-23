@@ -9,14 +9,14 @@ import '../../models/quiz_card_model.dart';
 part 'quizes_list_event.dart';
 part 'quizes_list_state.dart';
 
-class QuizesListBloc extends Bloc<QuizesEvent, QuizesState> {
+class QuizesListBloc extends Bloc<QuizesListEvent, QuizesListState> {
   final _quizManager = QuizDatabaseService();
 
-  QuizesListBloc() : super(QuizesInitial()) {
-    on<QuizesStarted>(
+  QuizesListBloc() : super(QuizesListInitial()) {
+    on<QuizesListStarted>(
       (event, map) async {
         try {
-          map(QuizesLoadInProgress());
+          map(QuizesListLoadInProgress());
           final quizes = await _quizManager.getAll();
           final quizCardModels = quizes
               .map((quiz) => QuizCardModel(
@@ -26,22 +26,22 @@ class QuizesListBloc extends Bloc<QuizesEvent, QuizesState> {
                   ))
               .toList();
 
-          map(QuizesLoadSuccess(quizCardModels));
+          map(QuizesListLoadSuccess(quizCardModels));
         } catch (e) {
           log(e.toString());
-          map(QuizesLoadFailure(failure: UnknownDatabaseFailure()));
+          map(QuizesListLoadFailure(failure: UnknownDatabaseFailure()));
         }
       },
     );
 
-    on<QuizesQuizDeletePressed>(
+    on<QuizesListQuizDeletePressed>(
       (event, map) async {
         try {
           await _quizManager.delete(event.id);
-          map(QuizesQuizDeleteSuccess());
+          map(QuizesListQuizDeleteSuccess());
         } catch (e) {
           log(e.toString());
-          map(QuizesQuizDeleteFailure());
+          map(QuizesListQuizDeleteFailure());
         }
       },
     );
