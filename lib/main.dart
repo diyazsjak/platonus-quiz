@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'bloc/quiz/quiz_bloc.dart';
+import 'bloc/quiz/ongoing_quiz_bloc.dart';
 import 'bloc/quizes/quizes_list_bloc.dart';
 import 'core/constants.dart';
 import 'screens/home_screen.dart';
@@ -29,7 +29,7 @@ class MainApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => QuizBloc()),
+            BlocProvider(create: (context) => OngoingQuizBloc()),
             BlocProvider(
               create: (context) => QuizesListBloc()..add(QuizesStarted()),
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/quiz/quiz_bloc.dart';
+import '../bloc/quiz/ongoing_quiz_bloc.dart';
 import '../models/question_model.dart';
 import 'quesiton_card_variant.dart';
 
@@ -22,13 +22,15 @@ class _QuestionCardState extends State<QuestionCard> {
   void _onVariantSelected(int variant) {
     if (_isQuestionAnswered) return;
     setState(() => _selectedVariant = variant);
-    context.read<QuizBloc>().add(QuizVariantSelected(widget.question, variant));
+    context
+        .read<OngoingQuizBloc>()
+        .add(QuizVariantSelected(widget.question, variant));
   }
 
   void _onQuestionAnswered() {
     if (_isQuestionAnswered) return;
     setState(() => _isQuestionAnswered = true);
-    context.read<QuizBloc>().add(QuizQuestionAnswered(widget.question));
+    context.read<OngoingQuizBloc>().add(QuizQuestionAnswered(widget.question));
   }
 
   @override

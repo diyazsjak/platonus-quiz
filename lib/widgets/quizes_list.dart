@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../bloc/quiz/quiz_bloc.dart';
+import '../bloc/quiz/ongoing_quiz_bloc.dart';
 import '../bloc/quizes/quizes_list_bloc.dart';
 import '../models/quiz_card_model.dart';
 import '../util/show_snackbar.dart';
@@ -66,7 +66,7 @@ class _QuizesState extends State<_Quizes> {
   }
 
   void _onCardTap(BuildContext context, int id) {
-    context.read<QuizBloc>().add(QuizLocalSelected(quizId: id));
+    context.read<OngoingQuizBloc>().add(QuizLocalSelected(quizId: id));
   }
 
   @override

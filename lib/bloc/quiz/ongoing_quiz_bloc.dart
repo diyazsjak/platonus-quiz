@@ -8,15 +8,15 @@ import '../../models/question_model.dart';
 import '../../models/quiz_model.dart';
 import '../../services/settings_service.dart';
 
-part 'quiz_event.dart';
-part 'quiz_state.dart';
+part 'ongoing_quiz_event.dart';
+part 'ongoing_quiz_state.dart';
 
-class QuizBloc extends Bloc<QuizEvent, QuizState> {
+class OngoingQuizBloc extends Bloc<QuizEvent, QuizState> {
   final _settingsService = SettingsService();
   late QuizModel? currentQuiz;
   int _currentlyAnsweredQuestions = 0;
 
-  QuizBloc() : super(QuizInitial()) {
+  OngoingQuizBloc() : super(QuizInitial()) {
     on<QuizFileSelected>(
       (event, map) async {
         try {

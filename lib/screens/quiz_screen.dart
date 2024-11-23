@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../bloc/quiz/quiz_bloc.dart';
+import '../bloc/quiz/ongoing_quiz_bloc.dart';
 import '../core/constants.dart';
 import '../models/question_model.dart';
 import '../models/quiz_model.dart';
@@ -12,7 +12,8 @@ class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});
 
   void _showQuizCompletedModal(BuildContext context, int rightQuestionsCount) {
-    final quizLength = context.read<QuizBloc>().currentQuiz!.questions.length;
+    final quizLength =
+        context.read<OngoingQuizBloc>().currentQuiz!.questions.length;
     final answerRatio = '$rightQuestionsCount/$quizLength';
     final grade = ((rightQuestionsCount * 100) / quizLength).round();
 
@@ -43,7 +44,7 @@ class QuizScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Skeleton.keep(child: Text('Quiz'))),
-      body: BlocConsumer<QuizBloc, QuizState>(
+      body: BlocConsumer<OngoingQuizBloc, QuizState>(
         listener: (BuildContext context, QuizState state) {
           if (state is QuizCompleteSuccess) {
             _showQuizCompletedModal(context, state.rightQuestionsCount);

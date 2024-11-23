@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/quiz/quiz_bloc.dart';
+import '../bloc/quiz/ongoing_quiz_bloc.dart';
 import '../bloc/quizes/quizes_list_bloc.dart';
 import '../core/constants.dart';
 import '../core/failure.dart';
@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
     if (result != null) {
       if (!context.mounted) return;
       final filePath = result.files.first.path!;
-      context.read<QuizBloc>().add(QuizFileSelected(filePath: filePath));
+      context.read<OngoingQuizBloc>().add(QuizFileSelected(filePath: filePath));
     }
   }
 
@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<QuizBloc, QuizState>(
+    return BlocListener<OngoingQuizBloc, QuizState>(
       listener: (BuildContext context, state) async {
         if (state is QuizLoadInProgress) {
           Navigator.of(context).pushNamed(Constants.quizRoute);

@@ -1,4 +1,4 @@
-part of 'quiz_bloc.dart';
+part of 'ongoing_quiz_bloc.dart';
 
 sealed class QuizEvent {}
 
