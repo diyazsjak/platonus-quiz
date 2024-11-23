@@ -84,6 +84,5 @@ class _CheckVariantButton extends StatelessWidget {
             onPressed: () {},
             child: const Text('Check answer'),
           );
-    ;
   }
 }
