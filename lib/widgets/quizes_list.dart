@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../bloc/quiz/quiz_bloc.dart';
-import '../bloc/quizes/quizes_bloc.dart';
+import '../bloc/quizes/quizes_list_bloc.dart';
 import '../models/quiz_card_model.dart';
 import '../util/show_snackbar.dart';
 

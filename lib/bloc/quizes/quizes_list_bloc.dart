@@ -6,8 +6,8 @@ import '../../core/failure.dart';
 import '../../services/quiz_database_service.dart';
 import '../../models/quiz_card_model.dart';
 
-part 'quizes_event.dart';
-part 'quizes_state.dart';
+part 'quizes_list_event.dart';
+part 'quizes_list_state.dart';
 
 class QuizesListBloc extends Bloc<QuizesEvent, QuizesState> {
   final _quizManager = QuizDatabaseService();

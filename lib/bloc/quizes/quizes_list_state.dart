@@ -1,4 +1,4 @@
-part of 'quizes_bloc.dart';
+part of 'quizes_list_bloc.dart';
 
 sealed class QuizesState {}
 
