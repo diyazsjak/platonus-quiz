@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 import '../bloc/quiz/quiz_bloc.dart';
 import '../models/question_model.dart';
+import 'quesiton_card_variant.dart';
 
 class QuestionCard extends StatefulWidget {
   final int count;
@@ -31,56 +31,6 @@ class _QuestionCardState extends State<QuestionCard> {
     context.read<QuizBloc>().add(QuizQuestionAnswered(widget.question));
   }
 
-  Widget _buildVariant(MapEntry<int, String> variant) {
-    final variantText =
-        '${variant.value[0].toUpperCase()}${variant.value.substring(1)}';
-
-    Color radioColor = Theme.of(context).colorScheme.secondary;
-    int? groupValue = _selectedVariant;
-
-    if (_isQuestionAnswered) {
-      if (variant.key == 1) {
-        groupValue = 1;
-        radioColor = Colors.green;
-      }
-      if (variant.key == _selectedVariant) {
-        radioColor = (variant.key == 1) ? Colors.green : Colors.redAccent;
-      }
-    }
-
-    return InkWell(
-      onTap: () => _onVariantSelected(variant.key),
-      child: Ink(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          children: [
-            Skeleton.shade(
-              child: Radio<int>(
-                value: variant.key,
-                groupValue: groupValue,
-                activeColor: radioColor,
-                onChanged: (int? value) => _onVariantSelected(variant.key),
-              ),
-            ),
-            Flexible(child: Text(variantText)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildVerifyVariantButton() {
-    return (_selectedVariant != null)
-        ? FilledButton(
-            onPressed: _onQuestionAnswered,
-            child: const Text('Check answer'),
-          )
-        : FilledButton.tonal(
-            onPressed: () {},
-            child: const Text('Check answer'),
-          );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -96,12 +46,44 @@ class _QuestionCardState extends State<QuestionCard> {
             ),
             const SizedBox(height: 16),
             for (final variant in widget.question.variants.entries)
-              _buildVariant(variant),
+              QuestionCardVariant(
+                onSelected: _onVariantSelected,
+                variant: variant,
+                groupValue: _selectedVariant,
+                isQuestionAnswered: _isQuestionAnswered,
+              ),
             const SizedBox(height: 16),
-            _buildVerifyVariantButton(),
+            _CheckVariantButton(
+              isVariantSelected: _selectedVariant != null,
+              onQuestionAnswered: _onQuestionAnswered,
+            ),
           ],
         ),
       ),
     );
+  }
+}
+
+class _CheckVariantButton extends StatelessWidget {
+  final bool isVariantSelected;
+  final VoidCallback onQuestionAnswered;
+
+  const _CheckVariantButton({
+    required this.isVariantSelected,
+    required this.onQuestionAnswered,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return (isVariantSelected)
+        ? FilledButton(
+            onPressed: onQuestionAnswered,
+            child: const Text('Check answer'),
+          )
+        : FilledButton.tonal(
+            onPressed: () {},
+            child: const Text('Check answer'),
+          );
+    ;
   }
 }
