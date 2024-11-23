@@ -57,16 +57,17 @@ class QuizScreen extends StatelessWidget {
         builder: (BuildContext context, OngoingQuizState state) {
           if (state is OngoingQuizLoadInProgress) {
             final fakeQuestions = List.filled(
-                3,
-                QuestionModel(
-                  question: BoneMock.paragraph,
-                  variants: {
-                    1: BoneMock.words(6),
-                    2: BoneMock.words(10),
-                    3: BoneMock.words(12),
-                    4: BoneMock.words(9),
-                  },
-                ));
+              3,
+              QuestionModel(
+                question: BoneMock.paragraph,
+                variants: {
+                  1: BoneMock.words(6),
+                  2: BoneMock.words(10),
+                  3: BoneMock.words(12),
+                  4: BoneMock.words(9),
+                },
+              ),
+            );
             final fakeQuiz = QuizModel(
               quizName: BoneMock.fullName,
               questions: fakeQuestions,
