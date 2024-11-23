@@ -49,7 +49,7 @@ class _QuestionCardState extends State<QuestionCard> {
               QuestionCardVariant(
                 onSelected: _onVariantSelected,
                 variant: variant,
-                groupValue: _selectedVariant,
+                selectedVariant: _selectedVariant,
                 isQuestionAnswered: _isQuestionAnswered,
               ),
             const SizedBox(height: 16),

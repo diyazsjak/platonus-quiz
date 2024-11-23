@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class QuestionCardVariant extends StatefulWidget {
+class QuestionCardVariant extends StatelessWidget {
   final Function(int) onSelected;
   final MapEntry<int, String> variant;
-  final int? groupValue;
+  final int? selectedVariant;
   final bool isQuestionAnswered;
 
   const QuestionCardVariant({
     super.key,
     required this.onSelected,
     required this.variant,
-    required this.groupValue,
+    required this.selectedVariant,
     required this.isQuestionAnswered,
   });
 
-  @override
-  State<QuestionCardVariant> createState() => _QuestionCardVariantState();
-}
-
-class _QuestionCardVariantState extends State<QuestionCardVariant> {
   String capitalizeVariant(String variant) {
     return '${variant[0].toUpperCase()}${variant.substring(1)}';
   }
@@ -27,34 +22,32 @@ class _QuestionCardVariantState extends State<QuestionCardVariant> {
   @override
   Widget build(BuildContext context) {
     Color radioColor = Theme.of(context).colorScheme.secondary;
-    int? groupValue = widget.groupValue;
+    int? groupValue = selectedVariant;
 
-    if (widget.isQuestionAnswered) {
-      if (widget.variant.key == 1) {
+    if (isQuestionAnswered) {
+      if (variant.key == 1) {
         groupValue = 1;
         radioColor = Colors.green;
-      }
-      if (widget.variant.key == widget.groupValue) {
-        radioColor =
-            (widget.variant.key == 1) ? Colors.green : Colors.redAccent;
+      } else {
+        radioColor = Colors.redAccent;
       }
     }
 
     return InkWell(
-      onTap: () => widget.onSelected(widget.variant.key),
+      onTap: () => onSelected(variant.key),
       child: Ink(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
           children: [
             Skeleton.shade(
               child: Radio<int>(
-                value: widget.variant.key,
+                value: variant.key,
                 groupValue: groupValue,
                 activeColor: radioColor,
-                onChanged: (_) => widget.onSelected(widget.variant.key),
+                onChanged: (_) => onSelected(variant.key),
               ),
             ),
-            Flexible(child: Text(capitalizeVariant(widget.variant.value))),
+            Flexible(child: Text(capitalizeVariant(variant.value))),
           ],
         ),
       ),
