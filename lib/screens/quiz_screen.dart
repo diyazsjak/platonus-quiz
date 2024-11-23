@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:platonus_quiz/util/show_snackbar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../bloc/quiz/ongoing_quiz_bloc.dart';
-import '../core/constants.dart';
 import '../models/question_model.dart';
 import '../models/quiz_model.dart';
 import '../widgets/question_card.dart';
+import '../widgets/quiz_result_dialog.dart';
 
 class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});
@@ -14,27 +15,13 @@ class QuizScreen extends StatelessWidget {
   void _showQuizCompletedModal(BuildContext context, int rightQuestionsCount) {
     final quizLength =
         context.read<OngoingQuizBloc>().currentQuiz!.questions.length;
-    final answerRatio = '$rightQuestionsCount/$quizLength';
-    final grade = ((rightQuestionsCount * 100) / quizLength).round();
 
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("Quiz completed"),
-          content: Text(
-              "You got right $answerRatio questions. Your grade is $grade."),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.popUntil(
-                  context,
-                  ModalRoute.withName(Constants.homeRoute),
-                );
-              },
-              child: const Text('Exit quiz'),
-            ),
-          ],
+        return QuizResult(
+          quizLength: quizLength,
+          rightQuestions: rightQuestionsCount,
         );
       },
     );
@@ -44,10 +31,25 @@ class QuizScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Skeleton.keep(child: Text('Quiz'))),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: BlocBuilder<OngoingQuizBloc, OngoingQuizState>(
+        buildWhen: (previous, current) => current is OngoingQuizComplete,
+        builder: (BuildContext context, OngoingQuizState state) {
+          return (state is OngoingQuizComplete)
+              ? FloatingActionButton.extended(
+                  onPressed: () {
+                    _showQuizCompletedModal(context, state.rightQuestionsCount);
+                  },
+                  label: const Text('See results'),
+                  icon: const Icon(Icons.done_all_rounded),
+                )
+              : const SizedBox();
+        },
+      ),
       body: BlocConsumer<OngoingQuizBloc, OngoingQuizState>(
         listener: (BuildContext context, OngoingQuizState state) {
           if (state is OngoingQuizComplete) {
-            _showQuizCompletedModal(context, state.rightQuestionsCount);
+            showSuccessSnackbar(context, 'You\'ve completed this quiz');
           }
         },
         buildWhen: (previous, current) {
