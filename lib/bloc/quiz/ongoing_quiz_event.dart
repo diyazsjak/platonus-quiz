@@ -1,28 +1,28 @@
 part of 'ongoing_quiz_bloc.dart';
 
-sealed class QuizEvent {}
+sealed class OngoingQuizEvent {}
 
-final class QuizFileSelected extends QuizEvent {
+final class OngoingQuizFileSelected extends OngoingQuizEvent {
   final String filePath;
 
-  QuizFileSelected({required this.filePath});
+  OngoingQuizFileSelected({required this.filePath});
 }
 
-final class QuizLocalSelected extends QuizEvent {
+final class OngoingQuizLocalSelected extends OngoingQuizEvent {
   final int quizId;
 
-  QuizLocalSelected({required this.quizId});
+  OngoingQuizLocalSelected({required this.quizId});
 }
 
-final class QuizQuestionAnswered extends QuizEvent {
+final class OngoingQuizQuestionAnswered extends OngoingQuizEvent {
   final QuestionModel question;
 
-  QuizQuestionAnswered(this.question);
+  OngoingQuizQuestionAnswered(this.question);
 }
 
-final class QuizVariantSelected extends QuizEvent {
+final class OngoingQuizVariantSelected extends OngoingQuizEvent {
   final QuestionModel question;
   final int variantPos;
 
-  QuizVariantSelected(this.question, this.variantPos);
+  OngoingQuizVariantSelected(this.question, this.variantPos);
 }

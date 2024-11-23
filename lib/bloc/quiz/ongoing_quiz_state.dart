@@ -1,26 +1,26 @@
 part of 'ongoing_quiz_bloc.dart';
 
-sealed class QuizState {}
+sealed class OngoingQuizState {}
 
-final class QuizInitial extends QuizState {}
+final class OngoingQuizInitial extends OngoingQuizState {}
 
-final class QuizLoadInProgress extends QuizState {}
+final class OngoingQuizLoadInProgress extends OngoingQuizState {}
 
-final class QuizLoadSuccess extends QuizState {
+final class OngoingQuizLoadSuccess extends OngoingQuizState {
   final bool isQuizSaved;
   final QuizModel quiz;
 
-  QuizLoadSuccess({required this.quiz, required this.isQuizSaved});
+  OngoingQuizLoadSuccess({required this.quiz, required this.isQuizSaved});
 }
 
-final class QuizLoadFailure extends QuizState {
+final class OngoingQuizLoadFailure extends OngoingQuizState {
   final Failure failure;
 
-  QuizLoadFailure({required this.failure});
+  OngoingQuizLoadFailure({required this.failure});
 }
 
-final class QuizCompleteSuccess extends QuizState {
+final class OngoingQuizComplete extends OngoingQuizState {
   final int rightQuestionsCount;
 
-  QuizCompleteSuccess({required this.rightQuestionsCount});
+  OngoingQuizComplete({required this.rightQuestionsCount});
 }

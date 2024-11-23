@@ -23,7 +23,9 @@ class HomeScreen extends StatelessWidget {
     if (result != null) {
       if (!context.mounted) return;
       final filePath = result.files.first.path!;
-      context.read<OngoingQuizBloc>().add(QuizFileSelected(filePath: filePath));
+      context
+          .read<OngoingQuizBloc>()
+          .add(OngoingQuizFileSelected(filePath: filePath));
     }
   }
 
@@ -33,16 +35,16 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<OngoingQuizBloc, QuizState>(
+    return BlocListener<OngoingQuizBloc, OngoingQuizState>(
       listener: (BuildContext context, state) async {
-        if (state is QuizLoadInProgress) {
+        if (state is OngoingQuizLoadInProgress) {
           Navigator.of(context).pushNamed(Constants.quizRoute);
-        } else if (state is QuizLoadFailure) {
+        } else if (state is OngoingQuizLoadFailure) {
           Navigator.pop(context);
           (state.failure is WrongQuizFormatFailure)
               ? showErrorSnackbar(context, 'Wrong quiz format')
               : showErrorSnackbar(context, 'Couldn\'t load quiz');
-        } else if (state is QuizLoadSuccess) {
+        } else if (state is OngoingQuizLoadSuccess) {
           if (state.isQuizSaved) {
             context.read<QuizesListBloc>().add(QuizesListStarted());
           }

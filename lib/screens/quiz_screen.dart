@@ -44,17 +44,18 @@ class QuizScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Skeleton.keep(child: Text('Quiz'))),
-      body: BlocConsumer<OngoingQuizBloc, QuizState>(
-        listener: (BuildContext context, QuizState state) {
-          if (state is QuizCompleteSuccess) {
+      body: BlocConsumer<OngoingQuizBloc, OngoingQuizState>(
+        listener: (BuildContext context, OngoingQuizState state) {
+          if (state is OngoingQuizComplete) {
             _showQuizCompletedModal(context, state.rightQuestionsCount);
           }
         },
         buildWhen: (previous, current) {
-          return (current is QuizLoadInProgress || current is QuizLoadSuccess);
+          return (current is OngoingQuizLoadInProgress ||
+              current is OngoingQuizLoadSuccess);
         },
-        builder: (BuildContext context, QuizState state) {
-          if (state is QuizLoadInProgress) {
+        builder: (BuildContext context, OngoingQuizState state) {
+          if (state is OngoingQuizLoadInProgress) {
             final fakeQuestions = List.filled(
                 3,
                 QuestionModel(
@@ -71,7 +72,7 @@ class QuizScreen extends StatelessWidget {
               questions: fakeQuestions,
             );
             return Skeletonizer(child: _Quiz(fakeQuiz));
-          } else if (state is QuizLoadSuccess) {
+          } else if (state is OngoingQuizLoadSuccess) {
             return _Quiz(state.quiz);
           } else {
             return const SizedBox();

@@ -11,16 +11,16 @@ import '../../services/settings_service.dart';
 part 'ongoing_quiz_event.dart';
 part 'ongoing_quiz_state.dart';
 
-class OngoingQuizBloc extends Bloc<QuizEvent, QuizState> {
+class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
   final _settingsService = SettingsService();
   late QuizModel? currentQuiz;
   int _currentlyAnsweredQuestions = 0;
 
-  OngoingQuizBloc() : super(QuizInitial()) {
-    on<QuizFileSelected>(
+  OngoingQuizBloc() : super(OngoingQuizInitial()) {
+    on<OngoingQuizFileSelected>(
       (event, map) async {
         try {
-          map(QuizLoadInProgress());
+          map(OngoingQuizLoadInProgress());
           final wholeQuiz =
               await QuizParserService.parseFileToQuiz(event.filePath);
 
@@ -34,17 +34,17 @@ class OngoingQuizBloc extends Bloc<QuizEvent, QuizState> {
           );
 
           currentQuiz = quiz;
-          map(QuizLoadSuccess(quiz: quiz, isQuizSaved: true));
+          map(OngoingQuizLoadSuccess(quiz: quiz, isQuizSaved: true));
         } catch (e) {
-          map(QuizLoadFailure(failure: WrongQuizFormatFailure()));
+          map(OngoingQuizLoadFailure(failure: WrongQuizFormatFailure()));
         }
       },
     );
 
-    on<QuizLocalSelected>(
+    on<OngoingQuizLocalSelected>(
       (event, map) async {
         try {
-          map(QuizLoadInProgress());
+          map(OngoingQuizLoadInProgress());
           final quizManagar = QuizDatabaseService();
           final questionManager = QuestionDatabaseService();
           final quiz = await quizManagar.getSingle(event.quizId);
@@ -57,27 +57,27 @@ class OngoingQuizBloc extends Bloc<QuizEvent, QuizState> {
           final quizModel = QuizModel.fromDatabase(quiz, questions.toList());
 
           currentQuiz = quizModel;
-          map(QuizLoadSuccess(quiz: quizModel, isQuizSaved: false));
+          map(OngoingQuizLoadSuccess(quiz: quizModel, isQuizSaved: false));
         } catch (e) {
-          map(QuizLoadFailure(failure: UnknownDatabaseFailure()));
+          map(OngoingQuizLoadFailure(failure: UnknownDatabaseFailure()));
         }
       },
     );
 
-    on<QuizQuestionAnswered>(
+    on<OngoingQuizQuestionAnswered>(
       (event, map) {
         _currentlyAnsweredQuestions++;
         event.question.isQuestionAnswered = true;
 
         if (_currentlyAnsweredQuestions == currentQuiz!.questions.length) {
           final rightQuestionsCount = currentQuiz!.getRightAnsweredQuestions();
-          map(QuizCompleteSuccess(rightQuestionsCount: rightQuestionsCount));
+          map(OngoingQuizComplete(rightQuestionsCount: rightQuestionsCount));
           _currentlyAnsweredQuestions = 0;
         }
       },
     );
 
-    on<QuizVariantSelected>(
+    on<OngoingQuizVariantSelected>(
       (event, map) => event.question.selectedVariant = event.variantPos,
     );
   }

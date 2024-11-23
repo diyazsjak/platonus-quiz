@@ -66,7 +66,7 @@ class _QuizesState extends State<_Quizes> {
   }
 
   void _onCardTap(BuildContext context, int id) {
-    context.read<OngoingQuizBloc>().add(QuizLocalSelected(quizId: id));
+    context.read<OngoingQuizBloc>().add(OngoingQuizLocalSelected(quizId: id));
   }
 
   @override

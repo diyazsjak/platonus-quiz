@@ -24,13 +24,15 @@ class _QuestionCardState extends State<QuestionCard> {
     setState(() => _selectedVariant = variant);
     context
         .read<OngoingQuizBloc>()
-        .add(QuizVariantSelected(widget.question, variant));
+        .add(OngoingQuizVariantSelected(widget.question, variant));
   }
 
   void _onQuestionAnswered() {
     if (_isQuestionAnswered) return;
     setState(() => _isQuestionAnswered = true);
-    context.read<OngoingQuizBloc>().add(QuizQuestionAnswered(widget.question));
+    context
+        .read<OngoingQuizBloc>()
+        .add(OngoingQuizQuestionAnswered(widget.question));
   }
 
   @override
