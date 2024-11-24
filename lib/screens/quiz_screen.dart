@@ -4,6 +4,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../bloc/quiz/ongoing_quiz_bloc.dart';
+import '../core/constants.dart';
 import '../models/question_model.dart';
 import '../models/quiz_model.dart';
 import '../util/show_snackbar.dart';
@@ -99,82 +100,114 @@ class _QuizState extends State<_Quiz> {
     );
   }
 
+  void _showExitDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Exit quiz'),
+          content: const Text('You won\'t be able to continue this quiz'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.popUntil(
+                  context,
+                  ModalRoute.withName(Constants.homeRoute),
+                );
+              },
+              child: const Text('Exit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final questions = widget.quiz.questions;
     final systemBarHeight = MediaQuery.viewPaddingOf(context).top;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Skeleton.keep(child: Text('Quiz')),
-        leading: IconButton(
-          onPressed: () {
-            _overlayController.hide();
-            Navigator.pop(context);
-          },
-          icon: const Skeleton.keep(child: Icon(Icons.arrow_back)),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: IconButton(
-              onPressed: () => _overlayController.toggle(),
-              icon: const Skeleton.keep(
-                child: Icon(Icons.format_list_bulleted),
-              ),
-            ),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _showExitDialog();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Skeleton.keep(child: Text('Quiz')),
+          leading: IconButton(
+            onPressed: () => _showExitDialog(),
+            icon: const Skeleton.keep(child: Icon(Icons.arrow_back)),
           ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: BlocBuilder<OngoingQuizBloc, OngoingQuizState>(
-        buildWhen: (previous, current) => current is OngoingQuizComplete,
-        builder: (BuildContext context, OngoingQuizState state) {
-          return (state is OngoingQuizComplete)
-              ? FloatingActionButton.extended(
-                  onPressed: () {
-                    _showQuizCompletedModal(context, state.rightQuestionsCount);
-                  },
-                  heroTag: 'Result',
-                  label: const Text('See results'),
-                  icon: const Icon(Icons.done_all_rounded),
-                )
-              : const SizedBox();
-        },
-      ),
-      body: OverlayPortal(
-        controller: _overlayController,
-        overlayChildBuilder: (BuildContext context) {
-          final topPosition = kToolbarHeight + systemBarHeight;
-
-          return Positioned(
-            top: topPosition,
-            left: 2,
-            right: 2,
-            child: TapRegion(
-              onTapOutside: (event) {
-                if (event.localPosition.dy < topPosition) return;
-                _overlayController.hide();
-              },
-              child: QuizQuestionsGrid(
-                onQuestionTap: (int index) {
-                  _overlayController.hide();
-                  _itemScrollController.jumpTo(index: index + 1);
-                },
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: IconButton(
+                onPressed: () => _overlayController.toggle(),
+                icon: const Skeleton.keep(
+                  child: Icon(Icons.format_list_bulleted),
+                ),
               ),
             ),
-          );
-        },
-        child: ScrollablePositionedList.builder(
-          itemCount: questions.length + 1,
-          itemScrollController: _itemScrollController,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return _buildHeader(widget.quiz.quizName, questions.length);
-            }
-
-            return QuestionCard(question: questions[index - 1], count: index);
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: BlocBuilder<OngoingQuizBloc, OngoingQuizState>(
+          buildWhen: (previous, current) => current is OngoingQuizComplete,
+          builder: (BuildContext context, OngoingQuizState state) {
+            return (state is OngoingQuizComplete)
+                ? FloatingActionButton.extended(
+                    onPressed: () {
+                      _showQuizCompletedModal(
+                          context, state.rightQuestionsCount);
+                    },
+                    heroTag: 'Result',
+                    label: const Text('See results'),
+                    icon: const Icon(Icons.done_all_rounded),
+                  )
+                : const SizedBox();
           },
+        ),
+        body: OverlayPortal(
+          controller: _overlayController,
+          overlayChildBuilder: (BuildContext context) {
+            final topPosition = kToolbarHeight + systemBarHeight;
+
+            return Positioned(
+              top: topPosition,
+              left: 2,
+              right: 2,
+              child: TapRegion(
+                onTapOutside: (event) {
+                  if (event.localPosition.dy < topPosition) return;
+                  _overlayController.hide();
+                },
+                child: QuizQuestionsGrid(
+                  onQuestionTap: (int index) {
+                    _overlayController.hide();
+                    _itemScrollController.jumpTo(index: index + 1);
+                  },
+                ),
+              ),
+            );
+          },
+          child: ScrollablePositionedList.builder(
+            itemCount: questions.length + 1,
+            itemScrollController: _itemScrollController,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                return _buildHeader(widget.quiz.quizName, questions.length);
+              }
+
+              return QuestionCard(question: questions[index - 1], count: index);
+            },
+          ),
         ),
       ),
     );
