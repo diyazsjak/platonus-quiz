@@ -34,6 +34,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
           );
 
           currentQuiz = quiz;
+          _currentlyAnsweredQuestions = 0;
           map(OngoingQuizLoadSuccess(quiz: quiz, isQuizSaved: true));
         } catch (e) {
           map(OngoingQuizLoadFailure(failure: WrongQuizFormatFailure()));
@@ -57,6 +58,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
           final quizModel = QuizModel.fromDatabase(quiz, questions.toList());
 
           currentQuiz = quizModel;
+          _currentlyAnsweredQuestions = 0;
           map(OngoingQuizLoadSuccess(quiz: quizModel, isQuizSaved: false));
         } catch (e) {
           map(OngoingQuizLoadFailure(failure: UnknownDatabaseFailure()));
