@@ -21,6 +21,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
       (event, map) async {
         try {
           map(OngoingQuizLoadInProgress());
+          await Future.delayed(const Duration(milliseconds: 200));
           final wholeQuiz =
               await QuizParserService.parseFileToQuiz(event.filePath);
 
