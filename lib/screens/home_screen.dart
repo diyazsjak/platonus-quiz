@@ -36,11 +36,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<OngoingQuizBloc, OngoingQuizState>(
-      listener: (BuildContext context, state) async {
+      listener: (BuildContext context, state) {
         if (state is OngoingQuizLoadInProgress) {
           Navigator.of(context).pushNamed(Constants.quizRoute);
         } else if (state is OngoingQuizLoadFailure) {
-          Navigator.pop(context);
+          Navigator.popUntil(context, ModalRoute.withName(Constants.homeRoute));
           (state.failure is WrongQuizFormatFailure)
               ? showErrorSnackbar(context, 'Wrong quiz format')
               : showErrorSnackbar(context, 'Couldn\'t load quiz');
