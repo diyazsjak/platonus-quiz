@@ -14,6 +14,8 @@ final class OngoingQuizLocalSelected extends OngoingQuizEvent {
   OngoingQuizLocalSelected({required this.quizId});
 }
 
+final class OngoingQuizRestarted extends OngoingQuizEvent {}
+
 final class OngoingQuizQuestionAnswered extends OngoingQuizEvent {
   final QuestionModel question;
 
