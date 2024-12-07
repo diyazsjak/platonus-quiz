@@ -13,7 +13,11 @@ part 'ongoing_quiz_state.dart';
 
 class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
   final _settingsService = SettingsService();
+  final quizManager = QuizDatabaseService();
+  final questionManager = QuestionDatabaseService();
+
   late QuizModel? currentQuiz;
+  late int? currentQuizId;
   int _currentlyAnsweredQuestions = 0;
 
   OngoingQuizBloc() : super(OngoingQuizInitial()) {
@@ -34,7 +38,10 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
             questions: questions.toList(),
           );
 
+          final savedQuizId = await quizManager.getIdByName(wholeQuiz.quizName);
+
           currentQuiz = quiz;
+          currentQuizId = savedQuizId!;
           _currentlyAnsweredQuestions = 0;
           map(OngoingQuizLoadSuccess(quiz: quiz, isQuizSaved: true));
         } catch (e) {
@@ -47,10 +54,31 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
       (event, map) async {
         try {
           map(OngoingQuizLoadInProgress());
-          final quizManagar = QuizDatabaseService();
-          final questionManager = QuestionDatabaseService();
-          final quiz = await quizManagar.getSingle(event.quizId);
+          final quiz = await quizManager.getSingle(event.quizId);
           final shuffledQuestions = await questionManager.getAll(event.quizId)
+            ..shuffle();
+
+          final questionLimit = _settingsService.questionLimit.toInt();
+          final questions = shuffledQuestions.getRange(0, questionLimit);
+
+          final quizModel = QuizModel.fromDatabase(quiz, questions.toList());
+
+          currentQuiz = quizModel;
+          currentQuizId = event.quizId;
+          _currentlyAnsweredQuestions = 0;
+          map(OngoingQuizLoadSuccess(quiz: quizModel, isQuizSaved: false));
+        } catch (e) {
+          map(OngoingQuizLoadFailure(failure: UnknownDatabaseFailure()));
+        }
+      },
+    );
+
+    on<OngoingQuizRestarted>(
+      (event, map) async {
+        try {
+          map(OngoingQuizLoadInProgress(isRestarted: true));
+          final quiz = await quizManager.getSingle(currentQuizId!);
+          final shuffledQuestions = await questionManager.getAll(currentQuizId!)
             ..shuffle();
 
           final questionLimit = _settingsService.questionLimit.toInt();
