@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/quiz/ongoing_quiz_bloc.dart';
 import '../core/constants.dart';
 
 class QuizResult extends StatelessWidget {
@@ -68,13 +70,9 @@ class QuizResult extends StatelessWidget {
           ],
         ),
       ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Stay here'),
-        ),
-        const SizedBox(width: 12),
-        FilledButton(
           onPressed: () {
             Navigator.popUntil(
               context,
@@ -82,6 +80,13 @@ class QuizResult extends StatelessWidget {
             );
           },
           child: const Text('Close quiz'),
+        ),
+        FilledButton(
+          onPressed: () {
+            context.read<OngoingQuizBloc>().add(OngoingQuizRestarted());
+            Navigator.pop(context);
+          },
+          child: const Text('Try again'),
         ),
       ],
     );

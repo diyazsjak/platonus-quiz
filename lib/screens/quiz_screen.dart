@@ -146,6 +146,22 @@ class _QuizState extends State<_Quiz> {
             icon: const Skeleton.keep(child: Icon(Icons.arrow_back)),
           ),
           actions: [
+            BlocBuilder<OngoingQuizBloc, OngoingQuizState>(
+              buildWhen: (previous, current) => current is OngoingQuizComplete,
+              builder: (BuildContext context, state) {
+                return Visibility(
+                  visible: state is OngoingQuizComplete,
+                  child: IconButton(
+                    onPressed: () {
+                      context
+                          .read<OngoingQuizBloc>()
+                          .add(OngoingQuizRestarted());
+                    },
+                    icon: const Icon(Icons.restart_alt_outlined),
+                  ),
+                );
+              },
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: IconButton(
@@ -165,7 +181,9 @@ class _QuizState extends State<_Quiz> {
                 ? FloatingActionButton.extended(
                     onPressed: () {
                       _showQuizCompletedModal(
-                          context, state.rightQuestionsCount);
+                        context,
+                        state.rightQuestionsCount,
+                      );
                     },
                     heroTag: 'Result',
                     label: const Text('See results'),
