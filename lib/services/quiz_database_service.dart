@@ -6,6 +6,14 @@ import '../core/database_singleton.dart';
 class QuizDatabaseService {
   final _database = DatabaseSingleton().database;
 
+  Future<int?> getIdByName(String quizName) async {
+    final quiz = await _database.managers.quiz
+        .filter((f) => f.name.equals(quizName))
+        .getSingleOrNull();
+
+    return quiz?.id;
+  }
+
   Future<bool> isExists(String quizName) async {
     final quiz = await _database.managers.quiz
         .filter((f) => f.name.equals(quizName))
