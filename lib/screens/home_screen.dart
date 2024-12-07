@@ -38,7 +38,9 @@ class HomeScreen extends StatelessWidget {
     return BlocListener<OngoingQuizBloc, OngoingQuizState>(
       listener: (BuildContext context, state) {
         if (state is OngoingQuizLoadInProgress) {
-          Navigator.of(context).pushNamed(Constants.quizRoute);
+          if (!state.isRestarted) {
+            Navigator.of(context).pushNamed(Constants.quizRoute);
+          }
         } else if (state is OngoingQuizLoadFailure) {
           Navigator.popUntil(context, ModalRoute.withName(Constants.homeRoute));
           (state.failure is WrongQuizFormatFailure)
