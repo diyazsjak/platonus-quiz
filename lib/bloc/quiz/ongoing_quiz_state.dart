@@ -4,7 +4,11 @@ sealed class OngoingQuizState {}
 
 final class OngoingQuizInitial extends OngoingQuizState {}
 
-final class OngoingQuizLoadInProgress extends OngoingQuizState {}
+final class OngoingQuizLoadInProgress extends OngoingQuizState {
+  final bool isRestarted;
+
+  OngoingQuizLoadInProgress({this.isRestarted = false});
+}
 
 final class OngoingQuizLoadSuccess extends OngoingQuizState {
   final bool isQuizSaved;
