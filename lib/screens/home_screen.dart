@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
-import '../bloc/quizes/quizes_list_bloc.dart';
+import '../bloc/quizes_list/quizes_list_bloc.dart';
 import '../core/constants.dart';
 import '../core/failure.dart';
 import '../util/show_snackbar.dart';
