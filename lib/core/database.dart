@@ -21,12 +21,39 @@ class Question extends Table {
   TextColumn get variants => text()();
 }
 
-@DriftDatabase(tables: [Quiz, Question])
+class Statistic extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get quizId => integer().references(
+        Quiz,
+        #id,
+        onDelete: KeyAction.cascade,
+        onUpdate: KeyAction.cascade,
+      )();
+  IntColumn get playCount => integer()();
+  IntColumn get highestScore => integer()();
+  IntColumn get lowestScore => integer()();
+  RealColumn get avgScore => real()();
+}
+
+class CompletedQuiz extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get quizId => integer().references(
+        Quiz,
+        #id,
+        onDelete: KeyAction.cascade,
+        onUpdate: KeyAction.cascade,
+      )();
+  IntColumn get questionCount => integer()();
+  IntColumn get rightQuestions => integer()();
+  DateTimeColumn get playedAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+@DriftDatabase(tables: [Quiz, Question, Statistic, CompletedQuiz])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'database');
