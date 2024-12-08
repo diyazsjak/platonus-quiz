@@ -11,9 +11,18 @@ import '../models/quiz_model.dart';
 final _wholeQuestionRE = RegExp(
   r'<question>(.*?)((?=<question>)|$)',
   dotAll: true,
+  caseSensitive: false,
 );
-final _questionRE = RegExp(r'<question>(.*?)(?=<variant>)', dotAll: true);
-final _variantRE = RegExp(r'<variant>(.*?)((?=<variant>)|$)', dotAll: true);
+final _questionRE = RegExp(
+  r'<question>(.*?)(?=<variant>)',
+  dotAll: true,
+  caseSensitive: false,
+);
+final _variantRE = RegExp(
+  r'<variant>(.*?)((?=<variant>)|$)',
+  dotAll: true,
+  caseSensitive: false,
+);
 
 class QuizParserService {
   static Future<String?> _extractString(String filePath) async {
