@@ -70,6 +70,14 @@ class _QuizesState extends State<_Quizes> {
   }
 
   @override
+  void didUpdateWidget(covariant _Quizes oldWidget) {
+    if (oldWidget.quizes != widget.quizes) {
+      quizes = widget.quizes;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (quizes.isEmpty) {
       return const Center(child: Text('You have no saved quizes yet'));
