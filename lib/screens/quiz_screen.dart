@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../bloc/quiz/ongoing_quiz_bloc.dart';
+import '../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
 import '../core/constants.dart';
 import '../models/question_model.dart';
 import '../models/quiz_model.dart';
