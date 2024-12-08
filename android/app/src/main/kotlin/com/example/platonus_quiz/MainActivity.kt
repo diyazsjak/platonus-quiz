@@ -1,4 +1,4 @@
-package com.example.platonus_quiz
+package com.platonus_quiz
 
 import io.flutter.embedding.android.FlutterActivity
 
