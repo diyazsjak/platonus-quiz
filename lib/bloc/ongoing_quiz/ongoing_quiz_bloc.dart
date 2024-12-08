@@ -1,12 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/failure.dart';
+import '../../services/completed_quiz_database_service.dart';
 import '../../services/question_database_service.dart';
 import '../../services/quiz_database_service.dart';
 import '../../services/quiz_parser_service.dart';
 import '../../models/question_model.dart';
 import '../../models/quiz_model.dart';
 import '../../services/settings_service.dart';
+import '../../services/statistic_database_service.dart';
 
 part 'ongoing_quiz_event.dart';
 part 'ongoing_quiz_state.dart';
@@ -15,6 +17,8 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
   final _settingsService = SettingsService();
   final quizManager = QuizDatabaseService();
   final questionManager = QuestionDatabaseService();
+  final completedQuizDatabaseService = CompletedQuizDatabaseService();
+  final statisticDatabaseService = StatisticDatabaseService();
 
   late QuizModel? currentQuiz;
   late int? currentQuizId;
@@ -101,7 +105,17 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
         event.question.isQuestionAnswered = true;
 
         if (_currentlyAnsweredQuestions == currentQuiz!.questions.length) {
+          final quizLength = currentQuiz!.questions.length;
           final rightQuestionsCount = currentQuiz!.getRightAnsweredQuestions();
+          final score = ((rightQuestionsCount * 100) / quizLength).round();
+
+          completedQuizDatabaseService.insert(
+            currentQuizId!,
+            quizLength,
+            rightQuestionsCount,
+          );
+          statisticDatabaseService.update(currentQuizId!, score);
+
           map(OngoingQuizComplete(rightQuestionsCount: rightQuestionsCount));
           _currentlyAnsweredQuestions = 0;
         }

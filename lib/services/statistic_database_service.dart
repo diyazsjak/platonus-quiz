@@ -12,12 +12,26 @@ class StatisticDatabaseService {
         .getSingleOrNull();
   }
 
-  Future<int> insert(int quizId, int score) async {
+  Future<int> update(int quizId, int score) async {
     final StatisticData? statistic = await get(quizId);
-    final playCount = statistic?.playCount ?? 1;
-    final highestScore = statistic?.highestScore ?? score;
-    final lowestScore = statistic?.lowestScore ?? score;
-    final avgScore = statistic?.avgScore ?? score;
+
+    if (statistic == null) {
+      await _database.into(_database.statistic).insert(
+            StatisticCompanion.insert(
+              quizId: quizId,
+              playCount: 1,
+              highestScore: score,
+              lowestScore: score,
+              avgScore: score.toDouble(),
+            ),
+          );
+      return 1;
+    }
+
+    final playCount = statistic.playCount;
+    final highestScore = statistic.highestScore;
+    final lowestScore = statistic.lowestScore;
+    final avgScore = statistic.avgScore;
 
     final updatedPlayCount = playCount + 1;
     final updatedHighestScore = (highestScore > score) ? highestScore : score;
@@ -25,7 +39,7 @@ class StatisticDatabaseService {
     final updatedAvgScore = ((avgScore * playCount) + score) / updatedPlayCount;
 
     final statisticCompanion = StatisticCompanion(
-      playCount: Value(playCount + 1),
+      playCount: Value(updatedPlayCount),
       highestScore: Value(updatedHighestScore),
       lowestScore: Value(updatedLowestScore),
       avgScore: Value(updatedAvgScore),

@@ -4,7 +4,7 @@ import '../core/database_singleton.dart';
 class CompletedQuizDatabaseService {
   final _database = DatabaseSingleton().database;
 
-  Future getAll(int quizId) async {
+  Future<List<CompletedQuizData>> getAll(int quizId) async {
     return await _database.managers.completedQuiz
         .filter((f) => f.quizId.id(quizId))
         .get();
