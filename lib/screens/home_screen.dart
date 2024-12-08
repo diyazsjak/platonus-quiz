@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowMultiple: false,
-      allowedExtensions: ['doc', 'docx'],
+      allowedExtensions: ['docx'],
     );
 
     if (result != null) {

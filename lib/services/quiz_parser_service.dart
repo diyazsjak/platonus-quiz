@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:doc_text/doc_text.dart';
 import 'package:docx_to_text/docx_to_text.dart';
 import 'package:path/path.dart' as path;
 
@@ -21,9 +20,7 @@ class QuizParserService {
     final String extension = path.extension(filePath);
     final String? content;
 
-    if (extension == '.doc') {
-      content = await DocText().extractTextFromDoc(filePath);
-    } else if (extension == '.docx') {
+    if (extension == '.docx') {
       final bytes = await File(filePath).readAsBytes();
       content = docxToText(bytes);
     } else {
