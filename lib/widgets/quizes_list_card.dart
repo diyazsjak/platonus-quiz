@@ -28,8 +28,13 @@ class QuizesListCard extends StatefulWidget {
 }
 
 class _QuizesListCardState extends State<QuizesListCard> {
-  final _tileController = ExpansionTileController();
   bool _hasStatisticLoaded = false;
+
+  void _getStatistic() {
+    context
+        .read<QuizStatisticBloc>()
+        .add(QuizStatisticLoadPressed(widget.quizId));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +46,12 @@ class _QuizesListCardState extends State<QuizesListCard> {
     return BlocListener<OngoingQuizBloc, OngoingQuizState>(
       listener: (BuildContext context, OngoingQuizState state) {
         if (state is OngoingQuizComplete) {
-          _hasStatisticLoaded = false;
-          _tileController.collapse();
+          if (state.quizId == widget.quizId) _getStatistic();
         }
       },
       child: ExpansionTile(
-        controller: _tileController,
         onExpansionChanged: (value) {
-          if (value && !_hasStatisticLoaded) {
-            context
-                .read<QuizStatisticBloc>()
-                .add(QuizStatisticLoadPressed(widget.quizId));
-          }
+          if (value && !_hasStatisticLoaded) _getStatistic();
         },
         expandedAlignment: Alignment.centerLeft,
         childrenPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -72,7 +71,6 @@ class _QuizesListCardState extends State<QuizesListCard> {
             ),
           ),
         ),
-        maintainState: true,
         children: [
           BlocBuilder<QuizStatisticBloc, QuizStatisticState>(
             builder: (context, state) {

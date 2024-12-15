@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
+import '../bloc/quiz_statistic/quiz_statistic_bloc.dart';
 import '../bloc/quizes_list/quizes_list_bloc.dart';
 import '../models/quiz_card_model.dart';
 import '../util/show_snackbar.dart';
@@ -92,12 +93,15 @@ class _QuizesState extends State<_Quizes> {
         final quizName = quizes[index].name;
         final quizLength = quizes[index].length;
 
-        return QuizesListCard(
-          quizId: quizId,
-          quizName: quizName,
-          quizLength: quizLength,
-          index: index,
-          onDeleteTap: _onDeleteTap,
+        return BlocProvider(
+          create: (context) => QuizStatisticBloc(),
+          child: QuizesListCard(
+            quizId: quizId,
+            quizName: quizName,
+            quizLength: quizLength,
+            index: index,
+            onDeleteTap: _onDeleteTap,
+          ),
         );
       },
       separatorBuilder: (BuildContext context, int index) {
