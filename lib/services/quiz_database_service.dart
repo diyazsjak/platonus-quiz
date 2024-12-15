@@ -45,7 +45,15 @@ class QuizDatabaseService {
   }
 
   Future<void> delete(int id) async {
-    await _database.managers.quiz.filter((f) => f.id(id)).delete();
-    await _database.managers.question.filter((f) => f.quizId.id(id)).delete();
+    await _database.transaction(() async {
+      await _database.managers.quiz.filter((f) => f.id(id)).delete();
+      await _database.managers.question.filter((f) => f.quizId.id(id)).delete();
+      await _database.managers.statistic
+          .filter((f) => f.quizId.id(id))
+          .delete();
+      await _database.managers.completedQuiz
+          .filter((f) => f.quizId.id(id))
+          .delete();
+    });
   }
 }
