@@ -6,6 +6,7 @@ import '../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
 import '../bloc/quizes_list/quizes_list_bloc.dart';
 import '../models/quiz_card_model.dart';
 import '../util/show_snackbar.dart';
+import 'quizes_list_card.dart';
 
 class QuizesList extends StatefulWidget {
   const QuizesList({super.key});
@@ -91,26 +92,12 @@ class _QuizesState extends State<_Quizes> {
         final quizName = quizes[index].name;
         final quizLength = quizes[index].length;
 
-        return Card(
-          key: ValueKey(index),
-          margin: EdgeInsets.zero,
-          child: ListTile(
-            onTap: () => _onCardTap(context, quizId),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            title: Text(quizName),
-            subtitle: Text('Questions: $quizLength'),
-            trailing: Skeleton.shade(
-              child: IconButton(
-                onPressed: () => _onDeleteTap(quizId, index),
-                icon: Icon(
-                  Icons.delete_outline_rounded,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              ),
-            ),
-          ),
+        return QuizesListCard(
+          quizId: quizId,
+          quizName: quizName,
+          quizLength: quizLength,
+          index: index,
+          onDeleteTap: _onDeleteTap,
         );
       },
       separatorBuilder: (BuildContext context, int index) {
