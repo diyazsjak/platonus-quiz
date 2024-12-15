@@ -116,7 +116,10 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
           );
           statisticDatabaseService.update(currentQuizId!, score);
 
-          map(OngoingQuizComplete(rightQuestionsCount: rightQuestionsCount));
+          map(OngoingQuizComplete(
+            quizId: currentQuizId!,
+            rightQuestionsCount: rightQuestionsCount,
+          ));
           _currentlyAnsweredQuestions = 0;
         }
       },
