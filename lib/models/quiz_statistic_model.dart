@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../core/database.dart';
 import 'completed_quiz_model.dart';
 
@@ -28,6 +30,23 @@ class QuizStatisticModel {
       quizes: completedQuizes
           .map((quiz) => CompletedQuizModel.fromDatabase(quiz))
           .toList(),
+    );
+  }
+
+  factory QuizStatisticModel.fake() {
+    return QuizStatisticModel(
+      playCount: 10,
+      highestScore: 80,
+      lowestScore: 80,
+      avgScore: 80,
+      quizes: List.generate(
+        8,
+        (index) => CompletedQuizModel(
+          questionCount: 30,
+          rightQuestionCount: Random().nextInt(20) + 10,
+          playedAt: DateTime.now(),
+        ),
+      ),
     );
   }
 }
