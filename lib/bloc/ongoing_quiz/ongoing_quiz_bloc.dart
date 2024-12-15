@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/failure.dart';
-import '../../services/completed_quiz_database_service.dart';
 import '../../services/question_database_service.dart';
 import '../../services/quiz_database_service.dart';
 import '../../services/quiz_parser_service.dart';
@@ -17,7 +16,6 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
   final _settingsService = SettingsService();
   final quizManager = QuizDatabaseService();
   final questionManager = QuestionDatabaseService();
-  final completedQuizDatabaseService = CompletedQuizDatabaseService();
   final statisticDatabaseService = StatisticDatabaseService();
 
   late QuizModel? currentQuiz;
@@ -100,7 +98,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
     );
 
     on<OngoingQuizQuestionAnswered>(
-      (event, map) {
+      (event, map) async {
         _currentlyAnsweredQuestions++;
         event.question.isQuestionAnswered = true;
 
@@ -109,12 +107,12 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
           final rightQuestionsCount = currentQuiz!.getRightAnsweredQuestions();
           final score = ((rightQuestionsCount * 100) / quizLength).round();
 
-          completedQuizDatabaseService.insert(
+          await statisticDatabaseService.update(
             currentQuizId!,
+            score,
             quizLength,
             rightQuestionsCount,
           );
-          statisticDatabaseService.update(currentQuizId!, score);
 
           map(OngoingQuizComplete(
             quizId: currentQuizId!,

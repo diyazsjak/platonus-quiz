@@ -6,16 +6,37 @@ import '../core/database_singleton.dart';
 class StatisticDatabaseService {
   final _database = DatabaseSingleton().database;
 
-  Future<StatisticData?> get(int quizId) async {
-    return await _database.managers.statistic
-        .filter((f) => f.quizId.id(quizId))
-        .getSingleOrNull();
+  Future<(StatisticData?, List<CompletedQuizData>)> get(int quizId) async {
+    return await _database.transaction(() async {
+      final statisticData = await _database.managers.statistic
+          .filter((f) => f.quizId.id(quizId))
+          .getSingleOrNull();
+      final quizesData = await _database.managers.completedQuiz
+          .filter((f) => f.quizId.id(quizId))
+          .get();
+
+      return (statisticData, quizesData);
+    });
   }
 
-  Future<int> update(int quizId, int score) async {
-    final StatisticData? statistic = await get(quizId);
+  Future<void> update(
+    int quizId,
+    int score,
+    int questionCount,
+    int rightQuestions,
+  ) async {
+    return await _database.transaction(() async {
+      await _insertCompletedQuiz(quizId, questionCount, rightQuestions);
 
-    if (statistic == null) {
+      final statistic = await _database.managers.statistic
+          .filter((f) => f.quizId.id(quizId))
+          .getSingleOrNull();
+
+      if (statistic != null) {
+        await _updateStatistic(statistic, score, quizId);
+        return;
+      }
+
       await _database.into(_database.statistic).insert(
             StatisticCompanion.insert(
               quizId: quizId,
@@ -25,9 +46,14 @@ class StatisticDatabaseService {
               avgScore: score.toDouble(),
             ),
           );
-      return 1;
-    }
+    });
+  }
 
+  Future<void> _updateStatistic(
+    StatisticData statistic,
+    int score,
+    int quizId,
+  ) async {
     final playCount = statistic.playCount;
     final highestScore = statistic.highestScore;
     final lowestScore = statistic.lowestScore;
@@ -45,8 +71,22 @@ class StatisticDatabaseService {
       avgScore: Value(updatedAvgScore),
     );
 
-    return await (_database.update(_database.statistic)
+    await (_database.update(_database.statistic)
           ..where((f) => f.quizId.equals(quizId)))
         .write(statisticCompanion);
+  }
+
+  Future<int> _insertCompletedQuiz(
+    int quizId,
+    int questionCount,
+    int rightQuestions,
+  ) async {
+    return await _database.into(_database.completedQuiz).insert(
+          CompletedQuizCompanion.insert(
+            quizId: quizId,
+            questionCount: questionCount,
+            rightQuestions: rightQuestions,
+          ),
+        );
   }
 }
