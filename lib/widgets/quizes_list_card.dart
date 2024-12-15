@@ -76,16 +76,28 @@ class _QuizesListCardState extends State<QuizesListCard> {
             builder: (context, state) {
               if (state is QuizStatisticLoadInProgress) {
                 return Skeletonizer(
-                  child: _Statistic(QuizStatisticModel.fake()),
+                  child: _Statistic(QuizStatisticModel.fake(), -1),
                 );
               }
               if (state is QuizStatisticLoadSuccess) {
                 _hasStatisticLoaded = true;
                 if (state.statistic == null) {
-                  return Text('No statistics yet');
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('No statistics yet'),
+                      FilledButton.tonal(
+                        onPressed: () {
+                          context.read<OngoingQuizBloc>().add(
+                              OngoingQuizLocalSelected(quizId: widget.quizId));
+                        },
+                        child: Text('Start quiz'),
+                      ),
+                    ],
+                  );
                 }
 
-                return _Statistic(state.statistic!);
+                return _Statistic(state.statistic!, widget.quizId);
               } else {
                 return Text('Failure');
               }
@@ -98,9 +110,10 @@ class _QuizesListCardState extends State<QuizesListCard> {
 }
 
 class _Statistic extends StatelessWidget {
+  final int quizId;
   final QuizStatisticModel statistic;
 
-  const _Statistic(this.statistic);
+  const _Statistic(this.statistic, this.quizId);
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +142,18 @@ class _Statistic extends StatelessWidget {
             separatorBuilder: (BuildContext context, int index) {
               return SizedBox(width: 16);
             },
+          ),
+        ),
+        SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerRight,
+          child: FilledButton.tonal(
+            onPressed: () {
+              context
+                  .read<OngoingQuizBloc>()
+                  .add(OngoingQuizLocalSelected(quizId: quizId));
+            },
+            child: Text('Start quiz'),
           ),
         ),
       ],

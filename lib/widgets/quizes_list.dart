@@ -67,10 +67,6 @@ class _QuizesState extends State<_Quizes> {
     setState(() => quizes.removeAt(index));
   }
 
-  void _onCardTap(BuildContext context, int id) {
-    context.read<OngoingQuizBloc>().add(OngoingQuizLocalSelected(quizId: id));
-  }
-
   @override
   void didUpdateWidget(covariant _Quizes oldWidget) {
     if (oldWidget.quizes != widget.quizes) {
