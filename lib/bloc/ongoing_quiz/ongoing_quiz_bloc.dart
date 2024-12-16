@@ -103,6 +103,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
         event.question.isQuestionAnswered = true;
 
         if (_currentlyAnsweredQuestions == currentQuiz!.questions.length) {
+          map(OngoingQuizUpdateStatInProgress());
           final quizLength = currentQuiz!.questions.length;
           final rightQuestionsCount = currentQuiz!.getRightAnsweredQuestions();
           final score = ((rightQuestionsCount * 100) / quizLength).round();

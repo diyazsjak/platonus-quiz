@@ -23,6 +23,8 @@ final class OngoingQuizLoadFailure extends OngoingQuizState {
   OngoingQuizLoadFailure({required this.failure});
 }
 
+final class OngoingQuizUpdateStatInProgress extends OngoingQuizState {}
+
 final class OngoingQuizComplete extends OngoingQuizState {
   final int quizId;
   final int rightQuestionsCount;
