@@ -146,21 +146,13 @@ class _QuizState extends State<_Quiz> {
             icon: const Skeleton.keep(child: Icon(Icons.arrow_back)),
           ),
           actions: [
-            BlocBuilder<OngoingQuizBloc, OngoingQuizState>(
-              buildWhen: (previous, current) => current is OngoingQuizComplete,
-              builder: (BuildContext context, state) {
-                return Visibility(
-                  visible: state is OngoingQuizComplete,
-                  child: IconButton(
-                    onPressed: () {
-                      context
-                          .read<OngoingQuizBloc>()
-                          .add(OngoingQuizRestarted());
-                    },
-                    icon: const Icon(Icons.restart_alt_outlined),
-                  ),
-                );
+            IconButton(
+              onPressed: () {
+                context.read<OngoingQuizBloc>().add(OngoingQuizRestarted());
               },
+              icon: Skeleton.keep(
+                child: const Icon(Icons.restart_alt_rounded),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 8),
