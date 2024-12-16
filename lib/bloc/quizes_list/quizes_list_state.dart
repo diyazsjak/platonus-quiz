@@ -18,6 +18,16 @@ final class QuizesListLoadFailure extends QuizesListState {
   QuizesListLoadFailure({required this.failure});
 }
 
-final class QuizesListQuizDeleteSuccess extends QuizesListState {}
+final class QuizesListQuizDeleteInProgress extends QuizesListState {
+  final int quizId;
+
+  QuizesListQuizDeleteInProgress(this.quizId);
+}
+
+final class QuizesListQuizDeleteSuccess extends QuizesListState {
+  final int quizId;
+
+  QuizesListQuizDeleteSuccess(this.quizId);
+}
 
 final class QuizesListQuizDeleteFailure extends QuizesListState {}

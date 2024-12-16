@@ -37,8 +37,9 @@ class QuizesListBloc extends Bloc<QuizesListEvent, QuizesListState> {
     on<QuizesListQuizDeletePressed>(
       (event, map) async {
         try {
+          map(QuizesListQuizDeleteInProgress(event.id));
           await _quizManager.delete(event.id);
-          map(QuizesListQuizDeleteSuccess());
+          map(QuizesListQuizDeleteSuccess(event.id));
         } catch (e) {
           log(e.toString());
           map(QuizesListQuizDeleteFailure());
