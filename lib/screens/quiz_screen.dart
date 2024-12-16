@@ -11,6 +11,7 @@ import '../util/show_snackbar.dart';
 import '../widgets/question_card.dart';
 import '../widgets/quiz_questions_grid.dart';
 import '../widgets/quiz_result_dialog.dart';
+import '../widgets/restart_quiz_icon_button.dart';
 
 class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});
@@ -146,14 +147,7 @@ class _QuizState extends State<_Quiz> {
             icon: const Skeleton.keep(child: Icon(Icons.arrow_back)),
           ),
           actions: [
-            IconButton(
-              onPressed: () {
-                context.read<OngoingQuizBloc>().add(OngoingQuizRestarted());
-              },
-              icon: Skeleton.keep(
-                child: const Icon(Icons.restart_alt_rounded),
-              ),
-            ),
+            RestartQuizIconButton(),
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: IconButton(
