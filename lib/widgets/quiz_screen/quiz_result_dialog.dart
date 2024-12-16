@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
-import '../core/constants.dart';
+import '../../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
+import '../../core/constants.dart';
 
 class QuizResult extends StatelessWidget {
   final int quizLength;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
-import '../models/question_model.dart';
+import '../../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
+import '../../models/question_model.dart';
 import 'quesiton_card_variant.dart';
 
 class QuestionCard extends StatefulWidget {

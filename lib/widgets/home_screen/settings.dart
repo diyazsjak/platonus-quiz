@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../services/settings_service.dart';
+import '../../services/settings_service.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});

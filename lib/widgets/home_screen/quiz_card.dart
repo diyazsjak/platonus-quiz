@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
-import '../bloc/quiz_statistic/quiz_statistic_bloc.dart';
-import '../models/completed_quiz_model.dart';
-import '../models/quiz_statistic_model.dart';
+import '../../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
+import '../../bloc/quiz_statistic/quiz_statistic_bloc.dart';
+import '../../models/completed_quiz_model.dart';
+import '../../models/quiz_statistic_model.dart';
 import 'quiz_card_delete_icon.dart';
 
 class QuizesListCard extends StatefulWidget {
@@ -117,10 +117,10 @@ class _Statistic extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            _StatisticUnit('Attempts: ${statistic.playCount}'),
-            _StatisticUnit('Average: ${statistic.avgScore.toStringAsFixed(1)}'),
-            _StatisticUnit('Max: ${statistic.highestScore}'),
-            _StatisticUnit('Min: ${statistic.lowestScore}'),
+            _StatisticChip('Attempts: ${statistic.playCount}'),
+            _StatisticChip('Average: ${statistic.avgScore.toStringAsFixed(1)}'),
+            _StatisticChip('Max: ${statistic.highestScore}'),
+            _StatisticChip('Min: ${statistic.lowestScore}'),
           ],
         ),
         SizedBox(height: 8),
@@ -130,7 +130,7 @@ class _Statistic extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: statistic.quizes.length,
             itemBuilder: (BuildContext context, int index) {
-              return _StatisticQuizPlayBar(statistic.quizes[index]);
+              return _StatisticPlayBar(statistic.quizes[index]);
             },
             separatorBuilder: (BuildContext context, int index) {
               return SizedBox(width: 16);
@@ -147,10 +147,10 @@ class _Statistic extends StatelessWidget {
   }
 }
 
-class _StatisticUnit extends StatelessWidget {
+class _StatisticChip extends StatelessWidget {
   final String text;
 
-  const _StatisticUnit(this.text);
+  const _StatisticChip(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -167,10 +167,10 @@ class _StatisticUnit extends StatelessWidget {
   }
 }
 
-class _StatisticQuizPlayBar extends StatelessWidget {
+class _StatisticPlayBar extends StatelessWidget {
   final CompletedQuizModel quiz;
 
-  const _StatisticQuizPlayBar(this.quiz);
+  const _StatisticPlayBar(this.quiz);
 
   @override
   Widget build(BuildContext context) {

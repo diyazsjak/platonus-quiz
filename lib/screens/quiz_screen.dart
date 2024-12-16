@@ -8,10 +8,10 @@ import '../core/constants.dart';
 import '../models/question_model.dart';
 import '../models/quiz_model.dart';
 import '../util/show_snackbar.dart';
-import '../widgets/question_card.dart';
-import '../widgets/quiz_questions_grid.dart';
-import '../widgets/quiz_result_dialog.dart';
-import '../widgets/restart_quiz_icon_button.dart';
+import '../widgets/quiz_screen/question_card.dart';
+import '../widgets/quiz_screen/quiz_questions_grid.dart';
+import '../widgets/quiz_screen/quiz_result_dialog.dart';
+import '../widgets/home_screen/restart_quiz_icon_button.dart';
 
 class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});

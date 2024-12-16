@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../bloc/quizes_list/quizes_list_bloc.dart';
+import '../../bloc/quizes_list/quizes_list_bloc.dart';
 
 class QuizCardDeleteIcon extends StatelessWidget {
   final int quizId;
