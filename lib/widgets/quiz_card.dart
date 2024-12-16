@@ -6,21 +6,18 @@ import '../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
 import '../bloc/quiz_statistic/quiz_statistic_bloc.dart';
 import '../models/completed_quiz_model.dart';
 import '../models/quiz_statistic_model.dart';
+import 'quiz_card_delete_icon.dart';
 
 class QuizesListCard extends StatefulWidget {
   final int quizId;
   final String quizName;
   final int quizLength;
-  final int index;
-  final Function(int, int) onDeleteTap;
 
   const QuizesListCard({
     super.key,
     required this.quizId,
     required this.quizName,
     required this.quizLength,
-    required this.index,
-    required this.onDeleteTap,
   });
 
   @override
@@ -62,13 +59,15 @@ class _QuizesListCardState extends State<QuizesListCard> {
         collapsedShape: shape,
         title: Text(widget.quizName),
         subtitle: Text('Questions: ${widget.quizLength}'),
-        trailing: Skeleton.shade(
-          child: IconButton(
-            onPressed: () => widget.onDeleteTap(widget.quizId, widget.index),
-            icon: Icon(
-              Icons.delete_outline_rounded,
-              color: Theme.of(context).colorScheme.error,
-            ),
+        trailing: IconButton(
+          onPressed: () {
+            context
+                .read<OngoingQuizBloc>()
+                .add(OngoingQuizLocalSelected(quizId: widget.quizId));
+          },
+          icon: Icon(
+            Icons.start_rounded,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         children: [
@@ -86,13 +85,7 @@ class _QuizesListCardState extends State<QuizesListCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('No statistics yet'),
-                      FilledButton.tonal(
-                        onPressed: () {
-                          context.read<OngoingQuizBloc>().add(
-                              OngoingQuizLocalSelected(quizId: widget.quizId));
-                        },
-                        child: Text('Start quiz'),
-                      ),
+                      QuizCardDeleteIcon(quizId: widget.quizId),
                     ],
                   );
                 }
@@ -147,14 +140,7 @@ class _Statistic extends StatelessWidget {
         SizedBox(height: 8),
         Align(
           alignment: Alignment.centerRight,
-          child: FilledButton.tonal(
-            onPressed: () {
-              context
-                  .read<OngoingQuizBloc>()
-                  .add(OngoingQuizLocalSelected(quizId: quizId));
-            },
-            child: Text('Start quiz'),
-          ),
+          child: QuizCardDeleteIcon(quizId: quizId),
         ),
       ],
     );
