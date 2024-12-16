@@ -117,7 +117,7 @@ class _Statistic extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            _StatisticUnit('Times played: ${statistic.playCount}'),
+            _StatisticUnit('Attempts: ${statistic.playCount}'),
             _StatisticUnit('Average: ${statistic.avgScore.toStringAsFixed(1)}'),
             _StatisticUnit('Max: ${statistic.highestScore}'),
             _StatisticUnit('Min: ${statistic.lowestScore}'),
