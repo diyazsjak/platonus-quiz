@@ -36,26 +36,32 @@ class _QuizQuestionsGridState extends State<QuizQuestionsGrid> {
         padding: const EdgeInsets.all(8),
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
+            final size = constraints.maxWidth / 8;
+
             return Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              alignment: WrapAlignment.spaceEvenly,
               children: List.generate(
                 (questions.length),
                 (index) {
-                  return GestureDetector(
-                    onTap: () => widget.onQuestionTap(index),
-                    child: Container(
-                      height: constraints.maxWidth / 10,
-                      width: constraints.maxWidth / 10,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: getQuestionColor(context, questions[index]),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        '${index + 1}',
-                        style: TextStyle(color: getTextColor(questions[index])),
+                  return Container(
+                    height: size,
+                    width: size,
+                    padding: EdgeInsets.all(4),
+                    child: InkWell(
+                      onTap: () => widget.onQuestionTap(index),
+                      borderRadius: BorderRadius.circular(8),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          color: getQuestionColor(context, questions[index]),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${index + 1}',
+                            style: TextStyle(
+                              color: getTextColor(questions[index]),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   );
