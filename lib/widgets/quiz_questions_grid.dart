@@ -30,45 +30,39 @@ class _QuizQuestionsGridState extends State<QuizQuestionsGrid> {
 
   @override
   Widget build(BuildContext context) {
+    final borderRadius = BorderRadius.circular(8);
+
     return Card(
       elevation: 10,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            final size = constraints.maxWidth / 8;
-
-            return Wrap(
-              children: List.generate(
-                (questions.length),
-                (index) {
-                  return Container(
-                    height: size,
-                    width: size,
-                    padding: EdgeInsets.all(4),
-                    child: InkWell(
-                      onTap: () => widget.onQuestionTap(index),
-                      borderRadius: BorderRadius.circular(8),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                          color: getQuestionColor(context, questions[index]),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '${index + 1}',
-                            style: TextStyle(
-                              color: getTextColor(questions[index]),
-                            ),
-                          ),
-                        ),
-                      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: 240),
+        child: GridView.count(
+          shrinkWrap: true,
+          padding: EdgeInsets.all(8),
+          crossAxisCount: 8,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          children: List.generate(
+            (questions.length),
+            (index) {
+              return InkWell(
+                onTap: () => widget.onQuestionTap(index),
+                borderRadius: borderRadius,
+                child: Ink(
+                  decoration: BoxDecoration(
+                    color: getQuestionColor(context, questions[index]),
+                    borderRadius: borderRadius,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${index + 1}',
+                      style: TextStyle(color: getTextColor(questions[index])),
                     ),
-                  );
-                },
-              ),
-            );
-          },
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
