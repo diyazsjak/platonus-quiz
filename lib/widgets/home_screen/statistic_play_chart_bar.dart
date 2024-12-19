@@ -2,32 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../models/completed_quiz_model.dart';
+import 'attempt_info.dart';
 
 class StatisticPlayChartBar extends StatelessWidget {
   final CompletedQuizModel quiz;
 
   const StatisticPlayChartBar(this.quiz, {super.key});
 
+  void _openPlayInfoBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => AttemptInfo(quiz),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final score = (quiz.rightQuestionCount * 100) / quiz.questionCount;
     final width = 20.0;
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return Skeleton.shade(
-          child: CustomPaint(
-            size: Size(width, constraints.maxHeight),
-            painter: _BarChartWithoutBgPainter(
-              score: score.round(),
-              height: constraints.maxHeight,
-              width: width,
-              bgColor: Theme.of(context).colorScheme.primaryContainer,
-              fgColor: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        );
-      },
+    return InkWell(
+      onTap: () => _openPlayInfoBottomSheet(context),
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Skeleton.shade(
+              child: CustomPaint(
+                size: Size(width, constraints.maxHeight),
+                painter: _BarChartWithoutBgPainter(
+                  score: score.round(),
+                  height: constraints.maxHeight,
+                  width: width,
+                  bgColor: Theme.of(context).colorScheme.primaryContainer,
+                  fgColor: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

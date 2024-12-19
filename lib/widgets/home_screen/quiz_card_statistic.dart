@@ -33,14 +33,11 @@ class QuizCardStatistic extends StatelessWidget {
         SizedBox(height: 8),
         SizedBox(
           height: 120,
-          child: ListView.separated(
+          child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: statistic.quizes.length,
             itemBuilder: (BuildContext context, int index) {
               return StatisticPlayChartBar(statistic.quizes[index]);
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(width: 16);
             },
           ),
         ),
