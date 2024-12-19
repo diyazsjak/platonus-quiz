@@ -90,6 +90,7 @@ class _QuizesState extends State<_Quizes> {
           return BlocProvider(
             create: (context) => QuizStatisticBloc(),
             child: QuizesListCard(
+              key: ValueKey(quizId),
               quizId: quizId,
               quizName: quizName,
               quizLength: quizLength,
