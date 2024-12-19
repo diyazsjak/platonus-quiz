@@ -4,10 +4,10 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../models/completed_quiz_model.dart';
 import 'attempt_info.dart';
 
-class StatisticPlayChartBar extends StatelessWidget {
+class StatisticAttemptChartBar extends StatelessWidget {
   final CompletedQuizModel quiz;
 
-  const StatisticPlayChartBar(this.quiz, {super.key});
+  const StatisticAttemptChartBar(this.quiz, {super.key});
 
   void _openPlayInfoBottomSheet(BuildContext context) {
     showModalBottomSheet(

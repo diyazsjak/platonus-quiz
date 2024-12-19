@@ -3,7 +3,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../models/quiz_statistic_model.dart';
 import 'quiz_card_delete_icon.dart';
-import 'statistic_play_chart_bar.dart';
+import 'statistic_attempt_chart_bar.dart';
 
 class QuizCardStatistic extends StatelessWidget {
   final int quizId;
@@ -37,7 +37,7 @@ class QuizCardStatistic extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: statistic.quizes.length,
             itemBuilder: (BuildContext context, int index) {
-              return StatisticPlayChartBar(statistic.quizes[index]);
+              return StatisticAttemptChartBar(statistic.quizes[index]);
             },
           ),
         ),
