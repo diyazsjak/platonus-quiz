@@ -6,7 +6,7 @@ import '../../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
 import '../../bloc/quiz_statistic/quiz_statistic_bloc.dart';
 import '../../models/quiz_statistic_model.dart';
 import 'quiz_card_delete_icon.dart';
-import 'statistic_play_chart_bar.dart';
+import 'quiz_card_statistic.dart';
 
 class QuizesListCard extends StatefulWidget {
   final int quizId;
@@ -31,6 +31,12 @@ class _QuizesListCardState extends State<QuizesListCard> {
     context
         .read<QuizStatisticBloc>()
         .add(QuizStatisticLoadPressed(widget.quizId));
+  }
+
+  void _startQuiz() {
+    context
+        .read<OngoingQuizBloc>()
+        .add(OngoingQuizLocalSelected(quizId: widget.quizId));
   }
 
   @override
@@ -60,11 +66,7 @@ class _QuizesListCardState extends State<QuizesListCard> {
         title: Text(widget.quizName),
         subtitle: Text('Questions: ${widget.quizLength}'),
         trailing: IconButton(
-          onPressed: () {
-            context
-                .read<OngoingQuizBloc>()
-                .add(OngoingQuizLocalSelected(quizId: widget.quizId));
-          },
+          onPressed: _startQuiz,
           icon: Icon(
             Icons.start_rounded,
             color: Theme.of(context).colorScheme.primary,
@@ -75,7 +77,10 @@ class _QuizesListCardState extends State<QuizesListCard> {
             builder: (context, state) {
               if (state is QuizStatisticLoadInProgress) {
                 return Skeletonizer(
-                  child: _Statistic(QuizStatisticModel.fake(), -1),
+                  child: QuizCardStatistic(
+                    statistic: QuizStatisticModel.fake(),
+                    quizId: -1,
+                  ),
                 );
               }
               if (state is QuizStatisticLoadSuccess) {
@@ -90,78 +95,16 @@ class _QuizesListCardState extends State<QuizesListCard> {
                   );
                 }
 
-                return _Statistic(state.statistic!, widget.quizId);
+                return QuizCardStatistic(
+                  statistic: state.statistic!,
+                  quizId: widget.quizId,
+                );
               } else {
                 return Text('Failure');
               }
             },
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _Statistic extends StatelessWidget {
-  final int quizId;
-  final QuizStatisticModel statistic;
-
-  const _Statistic(this.statistic, this.quizId);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            _StatisticChip('Attempts: ${statistic.playCount}'),
-            _StatisticChip('Average: ${statistic.avgScore.toStringAsFixed(1)}'),
-            _StatisticChip('Max: ${statistic.highestScore}'),
-            _StatisticChip('Min: ${statistic.lowestScore}'),
-          ],
-        ),
-        SizedBox(height: 8),
-        SizedBox(
-          height: 120,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: statistic.quizes.length,
-            itemBuilder: (BuildContext context, int index) {
-              return StatisticPlayChartBar(statistic.quizes[index]);
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(width: 16);
-            },
-          ),
-        ),
-        SizedBox(height: 8),
-        Align(
-          alignment: Alignment.centerRight,
-          child: QuizCardDeleteIcon(quizId: quizId),
-        ),
-      ],
-    );
-  }
-}
-
-class _StatisticChip extends StatelessWidget {
-  final String text;
-
-  const _StatisticChip(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Skeleton.shade(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(text, style: TextStyle(fontSize: 12)),
       ),
     );
   }
