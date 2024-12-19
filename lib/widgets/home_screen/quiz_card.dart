@@ -8,12 +8,12 @@ import '../../models/quiz_statistic_model.dart';
 import 'quiz_card_delete_icon.dart';
 import 'quiz_card_statistic.dart';
 
-class QuizesListCard extends StatefulWidget {
+class QuizCard extends StatefulWidget {
   final int quizId;
   final String quizName;
   final int quizLength;
 
-  const QuizesListCard({
+  const QuizCard({
     super.key,
     required this.quizId,
     required this.quizName,
@@ -21,10 +21,10 @@ class QuizesListCard extends StatefulWidget {
   });
 
   @override
-  State<QuizesListCard> createState() => _QuizesListCardState();
+  State<QuizCard> createState() => _QuizCardState();
 }
 
-class _QuizesListCardState extends State<QuizesListCard> {
+class _QuizCardState extends State<QuizCard> {
   bool _hasStatisticLoaded = false;
 
   void _getStatistic() {
