@@ -21,7 +21,7 @@ class AttemptInfo extends StatelessWidget {
           _Header(quiz.playedAt),
           SizedBox(height: 16),
           Card(
-            elevation: 5,
+            elevation: 3,
             margin: EdgeInsets.zero,
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 8),
