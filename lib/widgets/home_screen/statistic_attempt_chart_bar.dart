@@ -4,21 +4,47 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../models/completed_quiz_model.dart';
 import 'attempt_info.dart';
 
-class StatisticAttemptChartBar extends StatelessWidget {
+class StatisticAttemptChartBar extends StatefulWidget {
   final CompletedQuizModel quiz;
 
   const StatisticAttemptChartBar(this.quiz, {super.key});
 
+  @override
+  State<StatisticAttemptChartBar> createState() =>
+      _StatisticAttemptChartBarState();
+}
+
+class _StatisticAttemptChartBarState extends State<StatisticAttemptChartBar>
+    with SingleTickerProviderStateMixin {
+  late final _animationController = AnimationController(
+    duration: const Duration(milliseconds: 300),
+    vsync: this,
+  );
+
   void _openPlayInfoBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => AttemptInfo(quiz),
+      builder: (context) => AttemptInfo(widget.quiz),
     );
   }
 
   @override
+  void initState() {
+    _animationController.addListener(() => setState(() {}));
+    _animationController.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final score = (quiz.rightQuestionCount * 100) / quiz.questionCount;
+    final score =
+        (widget.quiz.rightQuestionCount * 100) / widget.quiz.questionCount;
     final width = 20.0;
 
     return InkWell(
@@ -32,6 +58,7 @@ class StatisticAttemptChartBar extends StatelessWidget {
               child: CustomPaint(
                 size: Size(width, constraints.maxHeight),
                 painter: _BarChartWithoutBgPainter(
+                  animation: _animationController,
                   score: score.round(),
                   height: constraints.maxHeight,
                   width: width,
@@ -48,6 +75,7 @@ class StatisticAttemptChartBar extends StatelessWidget {
 }
 
 class _BarChartWithBgPainter extends CustomPainter {
+  final Animation<double> animation;
   final int score;
   final double height;
   final double width;
@@ -55,6 +83,7 @@ class _BarChartWithBgPainter extends CustomPainter {
   final Color fgColor;
 
   _BarChartWithBgPainter({
+    required this.animation,
     required this.score,
     required this.height,
     required this.width,
@@ -86,13 +115,14 @@ class _BarChartWithBgPainter extends CustomPainter {
     final top = textPainter.height + 4;
     final barHeight = height - top;
     final filledHeight = (score / 100) * barHeight;
+    final animatedBarHeight = animation.value * filledHeight;
 
     final backgroundRect = Rect.fromLTWH(0, top, width, barHeight);
     final foregroundRect = Rect.fromLTWH(
       0,
-      height - filledHeight,
+      height - animatedBarHeight,
       width,
-      filledHeight,
+      animatedBarHeight,
     );
 
     final radius = Radius.circular(8);
@@ -114,6 +144,7 @@ class _BarChartWithBgPainter extends CustomPainter {
 }
 
 class _BarChartWithoutBgPainter extends CustomPainter {
+  final Animation<double> animation;
   final int score;
   final double height;
   final double width;
@@ -121,6 +152,7 @@ class _BarChartWithoutBgPainter extends CustomPainter {
   final Color fgColor;
 
   _BarChartWithoutBgPainter({
+    required this.animation,
     required this.score,
     required this.height,
     required this.width,
@@ -147,11 +179,12 @@ class _BarChartWithoutBgPainter extends CustomPainter {
 
     final availableHeight = height - textPainter.height;
     final barHeight = (score / 100) * availableHeight;
+    final animatedBarHeight = animation.value * barHeight;
     final foregroundRect = Rect.fromLTWH(
       0,
-      height - barHeight,
+      height - animatedBarHeight,
       width,
-      barHeight,
+      animatedBarHeight,
     );
 
     final radius = Radius.circular(8);
@@ -167,5 +200,5 @@ class _BarChartWithoutBgPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
