@@ -8,7 +8,7 @@ import '../core/constants.dart';
 import '../core/failure.dart';
 import '../util/show_snackbar.dart';
 import '../widgets/home_screen/quizes_list.dart';
-import '../widgets/home_screen/settings.dart';
+import 'settings.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

@@ -2,37 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../services/settings_service.dart';
 
-class Settings extends StatelessWidget {
-  const Settings({super.key});
+class QuestionLimitSlider extends StatefulWidget {
+  const QuestionLimitSlider({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            'Settings',
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          _QuestionLimitSlider(),
-        ],
-      ),
-    );
-  }
+  State<QuestionLimitSlider> createState() => _QuestionLimitSliderState();
 }
 
-class _QuestionLimitSlider extends StatefulWidget {
-  const _QuestionLimitSlider();
-
-  @override
-  State<_QuestionLimitSlider> createState() => __QuestionLimitSliderState();
-}
-
-class __QuestionLimitSliderState extends State<_QuestionLimitSlider> {
+class _QuestionLimitSliderState extends State<QuestionLimitSlider> {
   final settingsService = SettingsService();
   late double _questionLimitValue = settingsService.questionLimit;
 
