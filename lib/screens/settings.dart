@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/settings_bottom_sheet/attempt_bar_type_radio.dart';
 import '../widgets/settings_bottom_sheet/question_limit_slider.dart';
 
 class Settings extends StatelessWidget {
@@ -19,6 +20,8 @@ class Settings extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           QuestionLimitSlider(),
+          const SizedBox(height: 16),
+          AttemptBarTypeRadio(),
         ],
       ),
     );
