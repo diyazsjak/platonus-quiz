@@ -24,4 +24,12 @@ class SettingsService {
   Future<void> setQuestionLimit(double value) async {
     await _prefs.setDouble(Constants.questionLimitKey, value);
   }
+
+  bool get attemptBarType {
+    return _prefs.getBool(Constants.attemptBarTypeKey) ?? false;
+  }
+
+  Future<void> setAttemptBarType(bool barType) async {
+    await _prefs.setBool(Constants.attemptBarTypeKey, barType);
+  }
 }
