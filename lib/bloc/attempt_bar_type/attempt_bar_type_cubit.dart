@@ -16,12 +16,15 @@ final class AttemptBarTypeLoadSuccess extends AttemptBarTypeState {
 
 class AttemptBarTypeCubit extends Cubit<AttemptBarTypeState> {
   final _settingsService = SettingsService();
+  late AttemptBarType? currentType;
 
   AttemptBarTypeCubit() : super(AttemptBarTypeInitial());
 
   void changeType(AttemptBarType type) async {
     await _settingsService
         .setAttemptBarType(type == AttemptBarType.withBackground);
+
+    currentType = type;
     emit(AttemptBarTypeLoadSuccess(type));
   }
 
@@ -29,6 +32,8 @@ class AttemptBarTypeCubit extends Cubit<AttemptBarTypeState> {
     final type = (_settingsService.attemptBarType)
         ? AttemptBarType.withBackground
         : AttemptBarType.withoutBackground;
+
+    currentType = type;
     emit(AttemptBarTypeLoadSuccess(type));
   }
 }
