@@ -16,6 +16,7 @@ class _AttemptBarTypeRadioState extends State<AttemptBarTypeRadio> {
       context.read<AttemptBarTypeCubit>().currentType!;
 
   void _onTypeChanged(AttemptBarType? type) {
+    if (_selectedType == type) return;
     setState(() => _selectedType = type!);
     context.read<AttemptBarTypeCubit>().changeType(type!);
   }
