@@ -72,54 +72,52 @@ class _RadioContainer extends StatelessWidget {
       onTap: () => onChanged(value),
       child: Card(
         elevation: (value == groupValue) ? 3 : 1,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: Radio<AttemptBarType>(
-                  value: value,
-                  groupValue: groupValue,
-                  onChanged: onChanged,
-                ),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Radio<AttemptBarType>(
+                value: value,
+                groupValue: groupValue,
+                onChanged: onChanged,
               ),
-              SizedBox(
-                height: fullBarHeight,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  physics: NeverScrollableScrollPhysics(),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(5, (index) {
-                      final score = 20 * (index + 1);
+            ),
+            SizedBox(
+              height: fullBarHeight,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: NeverScrollableScrollPhysics(),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(5, (index) {
+                    final score = 20 * (index + 1);
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: CustomPaint(
-                          size: Size(barWidth, 100),
-                          painter: (value == AttemptBarType.withoutBackground)
-                              ? BarChartWithoutBgPainter(
-                                  score: score,
-                                  height: fullBarHeight,
-                                  width: barWidth,
-                                  fgColor: barColor,
-                                )
-                              : BarChartWithBgPainter(
-                                  score: score,
-                                  height: fullBarHeight,
-                                  width: barWidth,
-                                  bgColor: barBgColor,
-                                  fgColor: barColor,
-                                ),
-                        ),
-                      );
-                    }),
-                  ),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: CustomPaint(
+                        size: Size(barWidth, fullBarHeight),
+                        painter: (value == AttemptBarType.withoutBackground)
+                            ? BarChartWithoutBgPainter(
+                                score: score,
+                                height: fullBarHeight,
+                                width: barWidth,
+                                fgColor: barColor,
+                              )
+                            : BarChartWithBgPainter(
+                                score: score,
+                                height: fullBarHeight,
+                                width: barWidth,
+                                bgColor: barBgColor,
+                                fgColor: barColor,
+                              ),
+                      ),
+                    );
+                  }),
                 ),
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 8),
+          ],
         ),
       ),
     );
