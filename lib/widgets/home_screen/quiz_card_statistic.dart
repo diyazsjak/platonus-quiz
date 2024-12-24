@@ -30,7 +30,7 @@ class QuizCardStatistic extends StatelessWidget {
             _StatisticChip('Min: ${statistic.lowestScore}'),
           ],
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 16),
         SizedBox(
           height: 120,
           child: ListView.builder(
