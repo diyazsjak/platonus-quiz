@@ -41,8 +41,6 @@ class BarChartWithBgPainter extends CustomPainter {
     final top = textPainter.height + 4;
     final barHeight = height - top;
     final filledHeight = (score / 100) * barHeight;
-    // final animatedBarHeight = animation.value * filledHeight;
-
     final backgroundRect = Rect.fromLTWH(0, top, width, barHeight);
     final foregroundRect = (animation != null)
         ? Rect.fromLTWH(
@@ -108,9 +106,8 @@ class BarChartWithoutBgPainter extends CustomPainter {
     );
     textPainter.layout();
 
-    final availableHeight = height - textPainter.height;
+    final availableHeight = height - textPainter.height - 4;
     final barHeight = (score / 100) * availableHeight;
-    // final animatedBarHeight = animation.value * barHeight;
     final foregroundRect = (animation != null)
         ? Rect.fromLTWH(
             0,
