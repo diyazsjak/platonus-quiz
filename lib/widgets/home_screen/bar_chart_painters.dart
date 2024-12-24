@@ -81,7 +81,6 @@ class BarChartWithoutBgPainter extends CustomPainter {
   final int score;
   final double height;
   final double width;
-  final Color bgColor;
   final Color fgColor;
 
   BarChartWithoutBgPainter({
@@ -89,7 +88,6 @@ class BarChartWithoutBgPainter extends CustomPainter {
     required this.score,
     required this.height,
     required this.width,
-    required this.bgColor,
     required this.fgColor,
   });
 

@@ -63,12 +63,17 @@ class _RadioContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final barWidth = 20.0;
+    final fullBarHeight = 100.0;
+    final barColor = Theme.of(context).colorScheme.primary;
+    final barBgColor = Theme.of(context).colorScheme.primaryContainer;
+
     return GestureDetector(
       onTap: () => onChanged(value),
       child: Card(
         elevation: (value == groupValue) ? 3 : 1,
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
           child: Column(
             children: [
               Align(
@@ -80,84 +85,42 @@ class _RadioContainer extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 100,
+                height: fullBarHeight,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: NeverScrollableScrollPhysics(),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(
-                      5,
-                      (index) {
-                        return (value == AttemptBarType.withoutBackground)
-                            ? _BarWithoutBackground(20 * (index + 1))
-                            : _BarWithBackground(20 * (index + 1));
-                      },
-                    ),
+                    children: List.generate(5, (index) {
+                      final score = 20 * (index + 1);
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: CustomPaint(
+                          size: Size(barWidth, 100),
+                          painter: (value == AttemptBarType.withoutBackground)
+                              ? BarChartWithoutBgPainter(
+                                  score: score,
+                                  height: fullBarHeight,
+                                  width: barWidth,
+                                  fgColor: barColor,
+                                )
+                              : BarChartWithBgPainter(
+                                  score: score,
+                                  height: fullBarHeight,
+                                  width: barWidth,
+                                  bgColor: barBgColor,
+                                  fgColor: barColor,
+                                ),
+                        ),
+                      );
+                    }),
                   ),
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _BarWithBackground extends StatelessWidget {
-  final int score;
-
-  const _BarWithBackground(this.score);
-
-  @override
-  Widget build(BuildContext context) {
-    final width = 20.0;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return CustomPaint(
-            size: Size(width, constraints.maxHeight),
-            painter: BarChartWithBgPainter(
-              score: score,
-              height: constraints.maxHeight,
-              width: width,
-              bgColor: Theme.of(context).colorScheme.primaryContainer,
-              fgColor: Theme.of(context).colorScheme.primary,
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _BarWithoutBackground extends StatelessWidget {
-  final int score;
-
-  const _BarWithoutBackground(this.score);
-
-  @override
-  Widget build(BuildContext context) {
-    final width = 20.0;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return CustomPaint(
-            size: Size(width, constraints.maxHeight),
-            painter: BarChartWithoutBgPainter(
-              score: score,
-              height: constraints.maxHeight,
-              width: width,
-              bgColor: Theme.of(context).colorScheme.primaryContainer,
-              fgColor: Theme.of(context).colorScheme.primary,
-            ),
-          );
-        },
       ),
     );
   }

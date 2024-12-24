@@ -87,7 +87,6 @@ class __AnimatedBarWithoutBackgroundState
                   score: widget.score.round(),
                   height: constraints.maxHeight,
                   width: width,
-                  bgColor: Theme.of(context).colorScheme.primaryContainer,
                   fgColor: Theme.of(context).colorScheme.primary,
                 ),
               ),
