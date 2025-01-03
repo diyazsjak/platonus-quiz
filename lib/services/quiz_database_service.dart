@@ -22,14 +22,6 @@ class QuizDatabaseService {
     return quiz != null;
   }
 
-  Future updateQuestionAmount(int id, int length) async {
-    await (_database.update(_database.quiz)
-          ..where(
-            (f) => f.id.equals(id),
-          ))
-        .write(QuizCompanion(length: Value(length)));
-  }
-
   Future<List<QuizData>> getAll() async {
     return await _database.managers.quiz.get();
   }
@@ -38,9 +30,13 @@ class QuizDatabaseService {
     return await _database.managers.quiz.filter((f) => f.id(id)).getSingle();
   }
 
-  Future<int> insert(String quizName) async {
+  Future<int> insert({
+    required String quizName,
+    required String fileContent,
+    required int length,
+  }) async {
     return await _database.into(_database.quiz).insert(
-          QuizCompanion.insert(name: quizName),
+          QuizCompanion.insert(name: quizName, length: Value(length)),
         );
   }
 

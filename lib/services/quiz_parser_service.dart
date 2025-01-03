@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:docx_to_text/docx_to_text.dart';
 import 'package:path/path.dart' as path;
 
+import '../core/database_singleton.dart';
 import '../core/exceptions.dart';
 import 'question_database_service.dart';
 import 'quiz_database_service.dart';
@@ -24,7 +25,9 @@ final _variantRE = RegExp(
 );
 
 class QuizParserService {
-  static Future<String> _extractString(String filePath) async {
+  final _database = DatabaseSingleton().database;
+
+  Future<String> _extractString(String filePath) async {
     final String extension = path.extension(filePath);
 
     if (extension == '.docx') {
@@ -35,31 +38,43 @@ class QuizParserService {
     }
   }
 
-  static Future<void> saveQuiz(String filePath) async {
+  Future<void> saveQuiz(String filePath) async {
     final quizManager = QuizDatabaseService();
-    final fileContent = await _extractString(filePath);
+    final questionManager = QuestionDatabaseService();
 
-    if (!fileContent.contains('<question>')) {
-      throw WrongQuizFormatException();
-    }
+    await _database.transaction(() async {
+      final fileContent = await _extractString(filePath);
 
-    final quizName = getBasenameWithoutExt(filePath);
-    if (await quizManager.isExists(quizName)) {
-      throw QuizAlreadyExistsException();
-    }
+      if (!fileContent.contains('<question>')) {
+        throw WrongQuizFormatException();
+      }
 
-    final id = await quizManager.insert(quizName);
-    final questionLength = await _saveQuestions(fileContent, id);
-    await quizManager.updateQuestionAmount(id, questionLength);
+      final quizName = getBasenameWithoutExt(filePath);
+      if (await quizManager.isExists(quizName)) {
+        throw QuizAlreadyExistsException();
+      }
+
+      final questions = await _parseQuestions(fileContent);
+      final id = await quizManager.insert(
+        quizName: quizName,
+        fileContent: fileContent,
+        length: questions.length,
+      );
+      for (final question in questions) {
+        await questionManager.insert(
+          quizId: id,
+          question: question['question']!,
+          variants: question['variants']!,
+        );
+      }
+    });
   }
 
-  static Future<int> _saveQuestions(
+  Future<List<Map<String, String>>> _parseQuestions(
     String fileContent,
-    int quizId,
   ) async {
-    final questionManager = QuestionDatabaseService();
     final questionMatches = _wholeQuestionRE.allMatches(fileContent);
-    int questionsLength = 0;
+    final questions = <Map<String, String>>[];
 
     for (final questionMatch in questionMatches) {
       final wholeQuestionText = questionMatch.group(0)!.trim();
@@ -77,15 +92,10 @@ class QuizParserService {
         variantsText += variantMatch.group(0)!.trim();
       }
 
-      await questionManager.insert(
-        quizId: quizId,
-        question: questionText,
-        variants: variantsText,
-      );
-      questionsLength++;
+      questions.add({'question': questionText, 'variants': variantsText});
     }
 
-    return questionsLength;
+    return questions;
   }
 
   static Map<int, String> getShuffledVariantsMapFromString(String variants) {
@@ -109,9 +119,9 @@ class QuizParserService {
     return shuffledVariantsMap;
   }
 
-  static String getBasename(String filePath) => path.basename(filePath);
+  String getBasename(String filePath) => path.basename(filePath);
 
-  static String getBasenameWithoutExt(String filePath) {
+  String getBasenameWithoutExt(String filePath) {
     return path.basenameWithoutExtension(filePath);
   }
 }
