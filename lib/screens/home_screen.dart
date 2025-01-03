@@ -63,9 +63,9 @@ class HomeScreen extends StatelessWidget {
         ),
         BlocListener<FileQuizBloc, FileQuizState>(
           listener: (BuildContext context, state) {
-            if (state is FileQuizLoadInProgress) {
+            if (state is FileQuizSaveInProgress) {
               Loading.show(context);
-            } else if (state is FileQuizLoadFailure) {
+            } else if (state is FileQuizSaveFailure) {
               Loading.remove(context);
 
               String failure = 'Couldn\'t save quiz';
@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                 failure = 'Quiz with this name already exists';
               }
               showErrorSnackbar(context, failure);
-            } else if (state is FileQuizLoadSuccess) {
+            } else if (state is FileQuizSaveSuccess) {
               context.read<QuizesListBloc>().add(QuizesListStarted());
               Loading.remove(context);
             }

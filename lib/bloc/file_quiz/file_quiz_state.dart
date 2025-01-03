@@ -4,12 +4,12 @@ sealed class FileQuizState {}
 
 final class FileQuizInitial extends FileQuizState {}
 
-final class FileQuizLoadInProgress extends FileQuizState {}
+final class FileQuizSaveInProgress extends FileQuizState {}
 
-final class FileQuizLoadSuccess extends FileQuizState {}
+final class FileQuizSaveSuccess extends FileQuizState {}
 
-final class FileQuizLoadFailure extends FileQuizState {
+final class FileQuizSaveFailure extends FileQuizState {
   final Failure failure;
 
-  FileQuizLoadFailure(this.failure);
+  FileQuizSaveFailure(this.failure);
 }

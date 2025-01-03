@@ -14,18 +14,18 @@ class FileQuizBloc extends Bloc<FileQuizEvent, FileQuizState> {
     on<FileQuizSelected>(
       (event, map) async {
         try {
-          map(FileQuizLoadInProgress());
+          map(FileQuizSaveInProgress());
           await quizParserService.saveQuiz(event.filePath);
-          map(FileQuizLoadSuccess());
+          map(FileQuizSaveSuccess());
         } on Exception catch (e) {
           if (e is WrongFileFormatException) {
-            map(FileQuizLoadFailure(WrongFileFormatFailure()));
+            map(FileQuizSaveFailure(WrongFileFormatFailure()));
           } else if (e is WrongQuizFormatException) {
-            map(FileQuizLoadFailure(WrongQuizFormatFailure()));
+            map(FileQuizSaveFailure(WrongQuizFormatFailure()));
           } else if (e is QuizAlreadyExistsException) {
-            map(FileQuizLoadFailure(QuizAlreadyExistsFailure()));
+            map(FileQuizSaveFailure(QuizAlreadyExistsFailure()));
           } else {
-            map(FileQuizLoadFailure(UnknownDatabaseFailure()));
+            map(FileQuizSaveFailure(UnknownDatabaseFailure()));
           }
         }
       },
