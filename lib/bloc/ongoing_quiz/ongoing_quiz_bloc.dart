@@ -22,7 +22,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
   int _currentlyAnsweredQuestions = 0;
 
   OngoingQuizBloc() : super(OngoingQuizInitial()) {
-    on<OngoingQuizLocalSelected>(
+    on<OngoingQuizSelected>(
       (event, map) async {
         try {
           map(OngoingQuizLoadInProgress());

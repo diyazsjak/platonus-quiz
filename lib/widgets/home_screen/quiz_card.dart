@@ -36,7 +36,7 @@ class _QuizCardState extends State<QuizCard> {
   void _startQuiz() {
     context
         .read<OngoingQuizBloc>()
-        .add(OngoingQuizLocalSelected(quizId: widget.quizId));
+        .add(OngoingQuizSelected(quizId: widget.quizId));
   }
 
   @override

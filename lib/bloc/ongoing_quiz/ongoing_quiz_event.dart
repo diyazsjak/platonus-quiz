@@ -2,10 +2,10 @@ part of 'ongoing_quiz_bloc.dart';
 
 sealed class OngoingQuizEvent {}
 
-final class OngoingQuizLocalSelected extends OngoingQuizEvent {
+final class OngoingQuizSelected extends OngoingQuizEvent {
   final int quizId;
 
-  OngoingQuizLocalSelected({required this.quizId});
+  OngoingQuizSelected({required this.quizId});
 }
 
 final class OngoingQuizRestarted extends OngoingQuizEvent {}
