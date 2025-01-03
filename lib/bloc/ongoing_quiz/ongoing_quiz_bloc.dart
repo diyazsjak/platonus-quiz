@@ -13,9 +13,9 @@ part 'ongoing_quiz_state.dart';
 
 class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
   final _settingsService = SettingsService();
-  final quizManager = QuizDatabaseService();
-  final questionManager = QuestionDatabaseService();
-  final statisticDatabaseService = StatisticDatabaseService();
+  final _quizService = QuizDatabaseService();
+  final _questionService = QuestionDatabaseService();
+  final _statisticDatabaseService = StatisticDatabaseService();
 
   late QuizModel? currentQuiz;
   late int? currentQuizId;
@@ -26,8 +26,8 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
       (event, map) async {
         try {
           map(OngoingQuizLoadInProgress());
-          final quiz = await quizManager.getSingle(event.quizId);
-          final shuffledQuestions = await questionManager.getAll(event.quizId)
+          final quiz = await _quizService.getSingle(event.quizId);
+          final shuffledQuestions = await _questionService.getAll(event.quizId)
             ..shuffle();
 
           final questionLimit = _settingsService.questionLimit.toInt();
@@ -49,9 +49,10 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
       (event, map) async {
         try {
           map(OngoingQuizLoadInProgress(isRestarted: true));
-          final quiz = await quizManager.getSingle(currentQuizId!);
-          final shuffledQuestions = await questionManager.getAll(currentQuizId!)
-            ..shuffle();
+          final quiz = await _quizService.getSingle(currentQuizId!);
+          final shuffledQuestions =
+              await _questionService.getAll(currentQuizId!)
+                ..shuffle();
 
           final questionLimit = _settingsService.questionLimit.toInt();
           final questions = shuffledQuestions.getRange(0, questionLimit);
@@ -78,7 +79,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
           final rightQuestionsCount = currentQuiz!.getRightAnsweredQuestions();
           final score = ((rightQuestionsCount * 100) / quizLength).round();
 
-          await statisticDatabaseService.update(
+          await _statisticDatabaseService.update(
             currentQuizId!,
             score,
             quizLength,
