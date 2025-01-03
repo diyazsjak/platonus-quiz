@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
+import '../../bloc/quiz/quiz_bloc.dart';
 import '../../bloc/quiz_statistic/quiz_statistic_bloc.dart';
 import '../../models/quiz_statistic_model.dart';
 import 'quiz_card_delete_icon.dart';
@@ -34,9 +34,7 @@ class _QuizCardState extends State<QuizCard> {
   }
 
   void _startQuiz() {
-    context
-        .read<OngoingQuizBloc>()
-        .add(OngoingQuizSelected(quizId: widget.quizId));
+    context.read<QuizBloc>().add(QuizSelected(quizId: widget.quizId));
   }
 
   @override
@@ -46,9 +44,9 @@ class _QuizCardState extends State<QuizCard> {
     );
     final expandedColor = Theme.of(context).colorScheme.surfaceContainerLow;
 
-    return BlocListener<OngoingQuizBloc, OngoingQuizState>(
-      listener: (BuildContext context, OngoingQuizState state) {
-        if (state is OngoingQuizComplete) {
+    return BlocListener<QuizBloc, QuizState>(
+      listener: (BuildContext context, QuizState state) {
+        if (state is QuizComplete) {
           if (state.quizId == widget.quizId) _getStatistic();
         }
       },

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
+import '../bloc/quiz/quiz_bloc.dart';
 import '../core/constants.dart';
 import '../models/question_model.dart';
 import '../models/quiz_model.dart';
@@ -18,18 +18,17 @@ class QuizScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<OngoingQuizBloc, OngoingQuizState>(
-      listener: (BuildContext context, OngoingQuizState state) {
-        if (state is OngoingQuizComplete) {
+    return BlocConsumer<QuizBloc, QuizState>(
+      listener: (BuildContext context, QuizState state) {
+        if (state is QuizComplete) {
           showSuccessSnackbar(context, 'You\'ve completed this quiz');
         }
       },
       buildWhen: (previous, current) {
-        return (current is OngoingQuizLoadInProgress ||
-            current is OngoingQuizLoadSuccess);
+        return (current is QuizLoadInProgress || current is QuizLoadSuccess);
       },
-      builder: (BuildContext context, OngoingQuizState state) {
-        if (state is OngoingQuizLoadInProgress) {
+      builder: (BuildContext context, QuizState state) {
+        if (state is QuizLoadInProgress) {
           final fakeQuestions = List.filled(
             3,
             QuestionModel(
@@ -47,7 +46,7 @@ class QuizScreen extends StatelessWidget {
             questions: fakeQuestions,
           );
           return Skeletonizer(child: _Quiz(fakeQuiz));
-        } else if (state is OngoingQuizLoadSuccess) {
+        } else if (state is QuizLoadSuccess) {
           return _Quiz(state.quiz);
         } else {
           return const SizedBox();
@@ -87,8 +86,7 @@ class _QuizState extends State<_Quiz> {
   }
 
   void _showQuizCompletedModal(BuildContext context, int rightQuestionsCount) {
-    final quizLength =
-        context.read<OngoingQuizBloc>().currentQuiz!.questions.length;
+    final quizLength = context.read<QuizBloc>().currentQuiz!.questions.length;
 
     showDialog(
       context: context,
@@ -160,10 +158,10 @@ class _QuizState extends State<_Quiz> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: BlocBuilder<OngoingQuizBloc, OngoingQuizState>(
-          buildWhen: (previous, current) => current is OngoingQuizComplete,
-          builder: (BuildContext context, OngoingQuizState state) {
-            return (state is OngoingQuizComplete)
+        floatingActionButton: BlocBuilder<QuizBloc, QuizState>(
+          buildWhen: (previous, current) => current is QuizComplete,
+          builder: (BuildContext context, QuizState state) {
+            return (state is QuizComplete)
                 ? FloatingActionButton.extended(
                     onPressed: () {
                       _showQuizCompletedModal(

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/attempt_bar_type/attempt_bar_type_cubit.dart';
 import '../bloc/file_quiz/file_quiz_bloc.dart';
-import '../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
+import '../bloc/quiz/quiz_bloc.dart';
 import '../bloc/quizes_list/quizes_list_bloc.dart';
 import '../core/constants.dart';
 import '../core/failure.dart';
@@ -44,19 +44,19 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<OngoingQuizBloc, OngoingQuizState>(
+        BlocListener<QuizBloc, QuizState>(
           listener: (BuildContext context, state) {
-            if (state is OngoingQuizLoadInProgress) {
+            if (state is QuizLoadInProgress) {
               if (!state.isRestarted) {
                 Navigator.of(context).pushNamed(Constants.quizRoute);
               }
-            } else if (state is OngoingQuizLoadFailure) {
+            } else if (state is QuizLoadFailure) {
               Navigator.popUntil(
                 context,
                 ModalRoute.withName(Constants.homeRoute),
               );
               showErrorSnackbar(context, 'Couldn\'t load quiz');
-            } else if (state is OngoingQuizLoadSuccess) {
+            } else if (state is QuizLoadSuccess) {
               context.read<QuizesListBloc>().add(QuizesListStarted());
             }
           },

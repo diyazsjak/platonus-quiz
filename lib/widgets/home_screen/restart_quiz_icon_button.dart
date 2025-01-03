@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
+import '../../bloc/quiz/quiz_bloc.dart';
 
 class RestartQuizIconButton extends StatelessWidget {
   const RestartQuizIconButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OngoingQuizBloc, OngoingQuizState>(
-      builder: (BuildContext context, OngoingQuizState state) {
+    return BlocBuilder<QuizBloc, QuizState>(
+      builder: (BuildContext context, QuizState state) {
         return IconButton(
           onPressed: () {
-            if (state is! OngoingQuizUpdateStatInProgress) {
-              context.read<OngoingQuizBloc>().add(OngoingQuizRestarted());
+            if (state is! QuizUpdateStatInProgress) {
+              context.read<QuizBloc>().add(QuizRestarted());
             }
           },
           icon: Skeleton.keep(

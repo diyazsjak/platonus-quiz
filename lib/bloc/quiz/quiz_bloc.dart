@@ -8,10 +8,10 @@ import '../../models/quiz_model.dart';
 import '../../services/settings_service.dart';
 import '../../services/statistic_database_service.dart';
 
-part 'ongoing_quiz_event.dart';
-part 'ongoing_quiz_state.dart';
+part 'quiz_event.dart';
+part 'quiz_state.dart';
 
-class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
+class QuizBloc extends Bloc<QuizEvent, QuizState> {
   final _settingsService = SettingsService();
   final _quizService = QuizDatabaseService();
   final _questionService = QuestionDatabaseService();
@@ -21,11 +21,11 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
   late int? currentQuizId;
   int _currentlyAnsweredQuestions = 0;
 
-  OngoingQuizBloc() : super(OngoingQuizInitial()) {
-    on<OngoingQuizSelected>(
+  QuizBloc() : super(QuizInitial()) {
+    on<QuizSelected>(
       (event, map) async {
         try {
-          map(OngoingQuizLoadInProgress());
+          map(QuizLoadInProgress());
           final quiz = await _quizService.getSingle(event.quizId);
           final shuffledQuestions = await _questionService.getAll(event.quizId)
             ..shuffle();
@@ -38,17 +38,17 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
           currentQuiz = quizModel;
           currentQuizId = event.quizId;
           _currentlyAnsweredQuestions = 0;
-          map(OngoingQuizLoadSuccess(quiz: quizModel));
+          map(QuizLoadSuccess(quiz: quizModel));
         } catch (e) {
-          map(OngoingQuizLoadFailure(failure: UnknownDatabaseFailure()));
+          map(QuizLoadFailure(failure: UnknownDatabaseFailure()));
         }
       },
     );
 
-    on<OngoingQuizRestarted>(
+    on<QuizRestarted>(
       (event, map) async {
         try {
-          map(OngoingQuizLoadInProgress(isRestarted: true));
+          map(QuizLoadInProgress(isRestarted: true));
           final quiz = await _quizService.getSingle(currentQuizId!);
           final shuffledQuestions =
               await _questionService.getAll(currentQuizId!)
@@ -61,20 +61,20 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
 
           currentQuiz = quizModel;
           _currentlyAnsweredQuestions = 0;
-          map(OngoingQuizLoadSuccess(quiz: quizModel));
+          map(QuizLoadSuccess(quiz: quizModel));
         } catch (e) {
-          map(OngoingQuizLoadFailure(failure: UnknownDatabaseFailure()));
+          map(QuizLoadFailure(failure: UnknownDatabaseFailure()));
         }
       },
     );
 
-    on<OngoingQuizQuestionAnswered>(
+    on<QuizQuestionAnswered>(
       (event, map) async {
         _currentlyAnsweredQuestions++;
         event.question.isQuestionAnswered = true;
 
         if (_currentlyAnsweredQuestions == currentQuiz!.questions.length) {
-          map(OngoingQuizUpdateStatInProgress());
+          map(QuizUpdateStatInProgress());
           final quizLength = currentQuiz!.questions.length;
           final rightQuestionsCount = currentQuiz!.getRightAnsweredQuestions();
           final score = ((rightQuestionsCount * 100) / quizLength).round();
@@ -86,7 +86,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
             rightQuestionsCount,
           );
 
-          map(OngoingQuizComplete(
+          map(QuizComplete(
             quizId: currentQuizId!,
             rightQuestionsCount: rightQuestionsCount,
           ));
@@ -95,7 +95,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
       },
     );
 
-    on<OngoingQuizVariantSelected>(
+    on<QuizVariantSelected>(
       (event, map) => event.question.selectedVariant = event.variantPos,
     );
   }

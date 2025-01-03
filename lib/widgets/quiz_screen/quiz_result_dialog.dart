@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
+import '../../bloc/quiz/quiz_bloc.dart';
 import '../../core/constants.dart';
 
 class QuizResult extends StatelessWidget {
@@ -83,7 +83,7 @@ class QuizResult extends StatelessWidget {
         ),
         FilledButton(
           onPressed: () {
-            context.read<OngoingQuizBloc>().add(OngoingQuizRestarted());
+            context.read<QuizBloc>().add(QuizRestarted());
             Navigator.pop(context);
           },
           child: const Text('Try again'),

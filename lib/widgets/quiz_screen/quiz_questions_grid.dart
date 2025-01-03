@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/ongoing_quiz/ongoing_quiz_bloc.dart';
+import '../../bloc/quiz/quiz_bloc.dart';
 import '../../models/question_model.dart';
 
 class QuizQuestionsGrid extends StatefulWidget {
@@ -14,7 +14,7 @@ class QuizQuestionsGrid extends StatefulWidget {
 }
 
 class _QuizQuestionsGridState extends State<QuizQuestionsGrid> {
-  late final questions = context.read<OngoingQuizBloc>().currentQuiz!.questions;
+  late final questions = context.read<QuizBloc>().currentQuiz!.questions;
 
   Color getQuestionColor(BuildContext context, QuestionModel question) {
     if (!question.isQuestionAnswered) {
