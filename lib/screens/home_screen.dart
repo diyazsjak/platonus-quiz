@@ -52,10 +52,10 @@ class HomeScreen extends StatelessWidget {
               }
             } else if (state is OngoingQuizLoadFailure) {
               Navigator.popUntil(
-                  context, ModalRoute.withName(Constants.homeRoute));
-              (state.failure is WrongQuizFormatFailure)
-                  ? showErrorSnackbar(context, 'Wrong quiz format')
-                  : showErrorSnackbar(context, 'Couldn\'t load quiz');
+                context,
+                ModalRoute.withName(Constants.homeRoute),
+              );
+              showErrorSnackbar(context, 'Couldn\'t load quiz');
             } else if (state is OngoingQuizLoadSuccess) {
               context.read<QuizesListBloc>().add(QuizesListStarted());
             }
