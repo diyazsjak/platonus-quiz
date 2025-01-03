@@ -6,7 +6,7 @@ void showErrorSnackbar(BuildContext context, String message) {
     SnackBar(
       content: Text(message),
       backgroundColor: Colors.redAccent,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2),
     ),
   );
 }
