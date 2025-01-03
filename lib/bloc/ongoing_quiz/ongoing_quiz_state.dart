@@ -11,10 +11,9 @@ final class OngoingQuizLoadInProgress extends OngoingQuizState {
 }
 
 final class OngoingQuizLoadSuccess extends OngoingQuizState {
-  final bool isQuizSaved;
   final QuizModel quiz;
 
-  OngoingQuizLoadSuccess({required this.quiz, required this.isQuizSaved});
+  OngoingQuizLoadSuccess({required this.quiz});
 }
 
 final class OngoingQuizLoadFailure extends OngoingQuizState {

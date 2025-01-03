@@ -2,12 +2,6 @@ part of 'ongoing_quiz_bloc.dart';
 
 sealed class OngoingQuizEvent {}
 
-final class OngoingQuizFileSelected extends OngoingQuizEvent {
-  final String filePath;
-
-  OngoingQuizFileSelected({required this.filePath});
-}
-
 final class OngoingQuizLocalSelected extends OngoingQuizEvent {
   final int quizId;
 

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/failure.dart';
 import '../../services/question_database_service.dart';
 import '../../services/quiz_database_service.dart';
-import '../../services/quiz_parser_service.dart';
 import '../../models/question_model.dart';
 import '../../models/quiz_model.dart';
 import '../../services/settings_service.dart';
@@ -23,35 +22,6 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
   int _currentlyAnsweredQuestions = 0;
 
   OngoingQuizBloc() : super(OngoingQuizInitial()) {
-    on<OngoingQuizFileSelected>(
-      (event, map) async {
-        try {
-          map(OngoingQuizLoadInProgress());
-          await Future.delayed(const Duration(milliseconds: 200));
-          final wholeQuiz =
-              await QuizParserService.parseFileToQuiz(event.filePath);
-
-          final questionLimit = _settingsService.questionLimit.toInt();
-          final shuffledQuestions = wholeQuiz.questions..shuffle();
-          final questions = shuffledQuestions.getRange(0, questionLimit);
-
-          final quiz = QuizModel(
-            quizName: wholeQuiz.quizName,
-            questions: questions.toList(),
-          );
-
-          final savedQuizId = await quizManager.getIdByName(wholeQuiz.quizName);
-
-          currentQuiz = quiz;
-          currentQuizId = savedQuizId!;
-          _currentlyAnsweredQuestions = 0;
-          map(OngoingQuizLoadSuccess(quiz: quiz, isQuizSaved: true));
-        } catch (e) {
-          map(OngoingQuizLoadFailure(failure: WrongQuizFormatFailure()));
-        }
-      },
-    );
-
     on<OngoingQuizLocalSelected>(
       (event, map) async {
         try {
@@ -68,7 +38,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
           currentQuiz = quizModel;
           currentQuizId = event.quizId;
           _currentlyAnsweredQuestions = 0;
-          map(OngoingQuizLoadSuccess(quiz: quizModel, isQuizSaved: false));
+          map(OngoingQuizLoadSuccess(quiz: quizModel));
         } catch (e) {
           map(OngoingQuizLoadFailure(failure: UnknownDatabaseFailure()));
         }
@@ -90,7 +60,7 @@ class OngoingQuizBloc extends Bloc<OngoingQuizEvent, OngoingQuizState> {
 
           currentQuiz = quizModel;
           _currentlyAnsweredQuestions = 0;
-          map(OngoingQuizLoadSuccess(quiz: quizModel, isQuizSaved: false));
+          map(OngoingQuizLoadSuccess(quiz: quizModel));
         } catch (e) {
           map(OngoingQuizLoadFailure(failure: UnknownDatabaseFailure()));
         }
