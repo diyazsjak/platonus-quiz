@@ -46,18 +46,14 @@ class HomeScreen extends StatelessWidget {
       listeners: [
         BlocListener<QuizBloc, QuizState>(
           listener: (BuildContext context, state) {
-            if (state is QuizLoadInProgress) {
-              if (!state.isRestarted) {
-                Navigator.of(context).pushNamed(Constants.quizRoute);
-              }
+            if (state is QuizLoadInProgress && !state.isRestarted) {
+              Navigator.of(context).pushNamed(Constants.quizRoute);
             } else if (state is QuizLoadFailure) {
               Navigator.popUntil(
                 context,
                 ModalRoute.withName(Constants.homeRoute),
               );
               showErrorSnackbar(context, 'Couldn\'t load quiz');
-            } else if (state is QuizLoadSuccess) {
-              context.read<QuizesListBloc>().add(QuizesListStarted());
             }
           },
         ),
