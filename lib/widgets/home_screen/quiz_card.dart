@@ -5,6 +5,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../bloc/quiz/quiz_bloc.dart';
 import '../../bloc/quiz_statistic/quiz_statistic_bloc.dart';
 import '../../models/quiz_statistic_model.dart';
+import '../../util/show_snackbar.dart';
 import 'quiz_card_delete_icon.dart';
 import 'quiz_card_statistic.dart';
 
@@ -71,7 +72,18 @@ class _QuizCardState extends State<QuizCard> {
           ),
         ),
         children: [
-          BlocBuilder<QuizStatisticBloc, QuizStatisticState>(
+          BlocConsumer<QuizStatisticBloc, QuizStatisticState>(
+            listener: (BuildContext context, QuizStatisticState state) {
+              if (state is QuizStatisticClearFailure) {
+                showErrorSnackbar(context, 'Couldn\'t clear statistic');
+              }
+            },
+            buildWhen: (previous, current) {
+              return (current is QuizStatisticLoadInProgress ||
+                  current is QuizStatisticLoadSuccess ||
+                  current is QuizStatisticLoadFailure ||
+                  current is QuizStatisticClearSuccess);
+            },
             builder: (context, state) {
               if (state is QuizStatisticLoadInProgress) {
                 return Skeletonizer(
@@ -80,23 +92,16 @@ class _QuizCardState extends State<QuizCard> {
                     quizId: -1,
                   ),
                 );
-              }
-              if (state is QuizStatisticLoadSuccess) {
+              } else if (state is QuizStatisticLoadSuccess) {
                 _hasStatisticLoaded = true;
-                if (state.statistic == null) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('No statistics yet'),
-                      QuizCardDeleteIcon(quizId: widget.quizId),
-                    ],
-                  );
-                }
+                if (state.statistic == null) return _NoStatistic(widget.quizId);
 
                 return QuizCardStatistic(
                   statistic: state.statistic!,
                   quizId: widget.quizId,
                 );
+              } else if (state is QuizStatisticClearSuccess) {
+                return _NoStatistic(widget.quizId);
               } else {
                 return Text('Failure');
               }
@@ -104,6 +109,23 @@ class _QuizCardState extends State<QuizCard> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _NoStatistic extends StatelessWidget {
+  final int quizId;
+
+  const _NoStatistic(this.quizId);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text('No statistics yet'),
+        QuizCardDeleteIcon(quizId: quizId),
+      ],
     );
   }
 }

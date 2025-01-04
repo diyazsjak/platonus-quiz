@@ -3,6 +3,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../models/quiz_statistic_model.dart';
 import 'quiz_card_delete_icon.dart';
+import 'quiz_statistic_clear_button.dart';
 import 'statistic_attempt_chart_bar.dart';
 
 class QuizCardStatistic extends StatelessWidget {
@@ -42,9 +43,12 @@ class QuizCardStatistic extends StatelessWidget {
           ),
         ),
         SizedBox(height: 8),
-        Align(
-          alignment: Alignment.centerRight,
-          child: QuizCardDeleteIcon(quizId: quizId),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            QuizStatisticClearButton(quizId: quizId),
+            QuizCardDeleteIcon(quizId: quizId),
+          ],
         ),
       ],
     );
