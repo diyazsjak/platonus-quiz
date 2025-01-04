@@ -10,10 +10,6 @@ class AttemptInfo extends StatelessWidget {
 
   const AttemptInfo(this.attempt, {super.key});
 
-  void _onReplayPressed(BuildContext context) {
-    context.read<QuizBloc>().add(QuizAttemptRetrySelected(attempt: attempt));
-  }
-
   @override
   Widget build(BuildContext context) {
     final score = (attempt.rightQuestionCount * 100) / attempt.questionCount;
@@ -21,7 +17,6 @@ class AttemptInfo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
           _Header(attempt.playedAt),
@@ -63,12 +58,57 @@ class AttemptInfo extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 32),
-          FilledButton(
-            onPressed: () => _onReplayPressed(context),
-            child: Text('Replay'),
-          ),
+          SizedBox(height: 16),
+          _ReplayButton(attempt),
         ],
+      ),
+    );
+  }
+}
+
+class _ReplayButton extends StatefulWidget {
+  final AttemptModel attempt;
+
+  const _ReplayButton(this.attempt);
+
+  @override
+  State<_ReplayButton> createState() => __ReplayButtonState();
+}
+
+class __ReplayButtonState extends State<_ReplayButton> {
+  bool _shuffleQuestions = true;
+
+  void _onReplayPressed(BuildContext context) {
+    context.read<QuizBloc>().add(QuizAttemptRetrySelected(
+          attempt: widget.attempt,
+          shuffle: _shuffleQuestions,
+        ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SwitchListTile(
+              value: _shuffleQuestions,
+              title: Text('Shuffle questions'),
+              onChanged: (value) {
+                setState(() => _shuffleQuestions = value);
+              },
+              secondary: Icon(Icons.shuffle_rounded),
+            ),
+            SizedBox(height: 8),
+            FilledButton.tonal(
+              onPressed: () => _onReplayPressed(context),
+              child: Text('Replay'),
+            ),
+          ],
+        ),
       ),
     );
   }

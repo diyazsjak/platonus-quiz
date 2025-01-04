@@ -10,8 +10,9 @@ final class QuizSelected extends QuizEvent {
 
 final class QuizAttemptRetrySelected extends QuizEvent {
   final AttemptModel attempt;
+  final bool shuffle;
 
-  QuizAttemptRetrySelected({required this.attempt});
+  QuizAttemptRetrySelected({required this.attempt, required this.shuffle});
 }
 
 final class QuizRestarted extends QuizEvent {}

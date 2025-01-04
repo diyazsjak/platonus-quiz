@@ -61,6 +61,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
           final questions = await _questionService.getQuestions(
             questionsJson.map((question) => question['id'] as int).toList(),
           );
+          if (event.shuffle) questions.shuffle();
 
           final quiz = await _quizService.getSingle(event.attempt.quizId);
           final quizModel = QuizModel.fromDatabase(
