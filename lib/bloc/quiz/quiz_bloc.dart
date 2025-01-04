@@ -22,6 +22,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
 
   late QuizModel? currentQuiz;
   late int? currentQuizId;
+  bool _isAttemptQuiz = false;
   int _currentlyAnsweredQuestions = 0;
 
   QuizBloc() : super(QuizInitial()) {
@@ -29,6 +30,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       (event, map) async {
         try {
           map(QuizLoadInProgress());
+          _isAttemptQuiz = false;
           final quiz = await _quizService.getSingle(event.quizId);
           final shuffledQuestions = await _questionService.getAll(event.quizId)
             ..shuffle();
@@ -52,6 +54,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       (event, map) async {
         try {
           map(QuizLoadInProgress());
+          _isAttemptQuiz = true;
           final attemptQuestions = await _questionService
               .getAttemptQuestions(event.attempt.questionsId);
 
@@ -83,6 +86,16 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       (event, map) async {
         try {
           map(QuizLoadInProgress(isRestarted: true));
+          if (_isAttemptQuiz) {
+            final questions = currentQuiz!.questions..shuffle();
+            final quiz = QuizModel(
+              questions: questions,
+              quizName: currentQuiz!.quizName,
+            );
+            map(QuizLoadSuccess(quiz: quiz));
+            return;
+          }
+
           final quiz = await _quizService.getSingle(currentQuizId!);
           final shuffledQuestions =
               await _questionService.getAll(currentQuizId!)
