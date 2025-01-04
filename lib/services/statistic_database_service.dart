@@ -6,12 +6,12 @@ import '../core/database_singleton.dart';
 class StatisticDatabaseService {
   final _database = DatabaseSingleton().database;
 
-  Future<(StatisticData?, List<CompletedQuizData>)> get(int quizId) async {
+  Future<(StatisticData?, List<AttemptData>)> get(int quizId) async {
     return await _database.transaction(() async {
       final statisticData = await _database.managers.statistic
           .filter((f) => f.quizId.id(quizId))
           .getSingleOrNull();
-      final quizesData = await _database.managers.completedQuiz
+      final quizesData = await _database.managers.attempt
           .filter((f) => f.quizId.id(quizId))
           .get();
 
@@ -24,9 +24,22 @@ class StatisticDatabaseService {
     int score,
     int questionCount,
     int rightQuestions,
+    String questions,
   ) async {
     return await _database.transaction(() async {
-      await _insertCompletedQuiz(quizId, questionCount, rightQuestions);
+      final questionsId = await _database
+          .into(_database.attemptQuestions)
+          .insert(AttemptQuestionsCompanion.insert(
+            questions: questions,
+            quizId: quizId,
+          ));
+
+      await _insertAttempt(
+        quizId,
+        questionsId,
+        questionCount,
+        rightQuestions,
+      );
 
       final statistic = await _database.managers.statistic
           .filter((f) => f.quizId.id(quizId))
@@ -76,13 +89,15 @@ class StatisticDatabaseService {
         .write(statisticCompanion);
   }
 
-  Future<int> _insertCompletedQuiz(
+  Future<void> _insertAttempt(
     int quizId,
+    int questionsId,
     int questionCount,
     int rightQuestions,
   ) async {
-    return await _database.into(_database.completedQuiz).insert(
-          CompletedQuizCompanion.insert(
+    await _database.into(_database.attempt).insert(
+          AttemptCompanion.insert(
+            questionsId: questionsId,
             quizId: quizId,
             questionCount: questionCount,
             rightQuestions: rightQuestions,

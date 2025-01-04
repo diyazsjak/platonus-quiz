@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../core/database.dart';
 import 'question_model.dart';
 
@@ -27,5 +29,18 @@ class QuizModel {
     }
 
     return QuizModel(quizName: quiz.name, questions: questionModels);
+  }
+
+  String questionsToJson() {
+    return jsonEncode(
+      questions.map(
+        (question) {
+          return {
+            'id': question.id,
+            'selectedVariant': question.selectedVariant,
+          };
+        },
+      ).toList(),
+    );
   }
 }

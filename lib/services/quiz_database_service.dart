@@ -47,7 +47,8 @@ class QuizDatabaseService {
       await _database.managers.statistic
           .filter((f) => f.quizId.id(id))
           .delete();
-      await _database.managers.completedQuiz
+      await _database.managers.attempt.filter((f) => f.quizId.id(id)).delete();
+      await _database.managers.attemptQuestions
           .filter((f) => f.quizId.id(id))
           .delete();
     });

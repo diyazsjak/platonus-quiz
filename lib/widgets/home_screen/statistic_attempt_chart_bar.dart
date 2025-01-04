@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../bloc/attempt_bar_type/attempt_bar_type_cubit.dart';
-import '../../models/completed_quiz_model.dart';
+import '../../models/attempt_model.dart';
 import 'attempt_info.dart';
 import 'bar_chart_painters.dart';
 
 class StatisticAttemptChartBar extends StatelessWidget {
-  final CompletedQuizModel quiz;
+  final AttemptModel quiz;
 
   const StatisticAttemptChartBar(this.quiz, {super.key});
 

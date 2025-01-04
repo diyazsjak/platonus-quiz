@@ -10,6 +10,25 @@ class QuestionDatabaseService {
         .get();
   }
 
+  Future<List<QuestionData>> getQuestions(List<int> questionIds) async {
+    final questions = <QuestionData>[];
+
+    for (final questionId in questionIds) {
+      final question = await _database.managers.question
+          .filter((f) => f.id(questionId))
+          .getSingle();
+      questions.add(question);
+    }
+
+    return questions;
+  }
+
+  Future<AttemptQuestion> getAttemptQuestions(int attemptQuestionsId) async {
+    return await _database.managers.attemptQuestions
+        .filter((f) => f.id(attemptQuestionsId))
+        .getSingle();
+  }
+
   Future<int> insert({
     required int quizId,
     required String question,

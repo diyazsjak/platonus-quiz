@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/failure.dart';
+import '../../models/attempt_model.dart';
 import '../../services/question_database_service.dart';
 import '../../services/quiz_database_service.dart';
 import '../../models/question_model.dart';
@@ -15,7 +18,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
   final _settingsService = SettingsService();
   final _quizService = QuizDatabaseService();
   final _questionService = QuestionDatabaseService();
-  final _statisticDatabaseService = StatisticDatabaseService();
+  final _statisticService = StatisticDatabaseService();
 
   late QuizModel? currentQuiz;
   late int? currentQuizId;
@@ -37,6 +40,36 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
 
           currentQuiz = quizModel;
           currentQuizId = event.quizId;
+          _currentlyAnsweredQuestions = 0;
+          map(QuizLoadSuccess(quiz: quizModel));
+        } catch (e) {
+          map(QuizLoadFailure(failure: UnknownDatabaseFailure()));
+        }
+      },
+    );
+
+    on<QuizAttemptRetrySelected>(
+      (event, map) async {
+        try {
+          map(QuizLoadInProgress());
+          final attemptQuestions = await _questionService
+              .getAttemptQuestions(event.attempt.questionsId);
+
+          final questionsJson =
+              jsonDecode(attemptQuestions.questions) as List<dynamic>;
+
+          final questions = await _questionService.getQuestions(
+            questionsJson.map((question) => question['id'] as int).toList(),
+          );
+
+          final quiz = await _quizService.getSingle(event.attempt.quizId);
+          final quizModel = QuizModel.fromDatabase(
+            quiz,
+            questions.toList(),
+          );
+
+          currentQuiz = quizModel;
+          currentQuizId = event.attempt.quizId;
           _currentlyAnsweredQuestions = 0;
           map(QuizLoadSuccess(quiz: quizModel));
         } catch (e) {
@@ -79,11 +112,12 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
           final rightQuestionsCount = currentQuiz!.getRightAnsweredQuestions();
           final score = ((rightQuestionsCount * 100) / quizLength).round();
 
-          await _statisticDatabaseService.update(
+          await _statisticService.update(
             currentQuizId!,
             score,
             quizLength,
             rightQuestionsCount,
+            currentQuiz!.questionsToJson(),
           );
 
           map(QuizComplete(

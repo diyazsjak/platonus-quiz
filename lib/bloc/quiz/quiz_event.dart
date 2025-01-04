@@ -8,6 +8,12 @@ final class QuizSelected extends QuizEvent {
   QuizSelected({required this.quizId});
 }
 
+final class QuizAttemptRetrySelected extends QuizEvent {
+  final AttemptModel attempt;
+
+  QuizAttemptRetrySelected({required this.attempt});
+}
+
 final class QuizRestarted extends QuizEvent {}
 
 final class QuizQuestionAnswered extends QuizEvent {

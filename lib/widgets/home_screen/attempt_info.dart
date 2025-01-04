@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/completed_quiz_model.dart';
+import '../../bloc/quiz/quiz_bloc.dart';
+import '../../models/attempt_model.dart';
 
 class AttemptInfo extends StatelessWidget {
-  final CompletedQuizModel quiz;
+  final AttemptModel attempt;
 
-  const AttemptInfo(this.quiz, {super.key});
+  const AttemptInfo(this.attempt, {super.key});
+
+  void _onReplayPressed(BuildContext context) {
+    context.read<QuizBloc>().add(QuizAttemptRetrySelected(attempt: attempt));
+  }
 
   @override
   Widget build(BuildContext context) {
-    final score = (quiz.rightQuestionCount * 100) / quiz.questionCount;
+    final score = (attempt.rightQuestionCount * 100) / attempt.questionCount;
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -18,7 +24,7 @@ class AttemptInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
-          _Header(quiz.playedAt),
+          _Header(attempt.playedAt),
           SizedBox(height: 16),
           Card(
             elevation: 3,
@@ -42,14 +48,14 @@ class AttemptInfo extends StatelessWidget {
                     Expanded(
                       child: _AttemptData(
                         label: 'Correct',
-                        value: '${quiz.rightQuestionCount}',
+                        value: '${attempt.rightQuestionCount}',
                       ),
                     ),
                     VerticalDivider(indent: 4, endIndent: 4),
                     Expanded(
                       child: _AttemptData(
                         label: 'Total',
-                        value: '${quiz.questionCount}',
+                        value: '${attempt.questionCount}',
                       ),
                     ),
                   ],
@@ -58,6 +64,10 @@ class AttemptInfo extends StatelessWidget {
             ),
           ),
           SizedBox(height: 32),
+          FilledButton(
+            onPressed: () => _onReplayPressed(context),
+            child: Text('Replay'),
+          ),
         ],
       ),
     );

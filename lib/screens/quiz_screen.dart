@@ -32,6 +32,7 @@ class QuizScreen extends StatelessWidget {
           final fakeQuestions = List.filled(
             3,
             QuestionModel(
+              id: -1,
               question: BoneMock.paragraph,
               variants: {
                 1: BoneMock.words(6),

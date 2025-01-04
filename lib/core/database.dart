@@ -35,8 +35,14 @@ class Statistic extends Table {
   RealColumn get avgScore => real()();
 }
 
-class CompletedQuiz extends Table {
+class Attempt extends Table {
   IntColumn get id => integer().autoIncrement()();
+  IntColumn get questionsId => integer().references(
+        AttemptQuestions,
+        #id,
+        onDelete: KeyAction.cascade,
+        onUpdate: KeyAction.cascade,
+      )();
   IntColumn get quizId => integer().references(
         Quiz,
         #id,
@@ -48,7 +54,18 @@ class CompletedQuiz extends Table {
   DateTimeColumn get playedAt => dateTime().withDefault(currentDateAndTime)();
 }
 
-@DriftDatabase(tables: [Quiz, Question, Statistic, CompletedQuiz])
+class AttemptQuestions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get quizId => integer().references(
+        Quiz,
+        #id,
+        onDelete: KeyAction.cascade,
+        onUpdate: KeyAction.cascade,
+      )();
+  TextColumn get questions => text()();
+}
+
+@DriftDatabase(tables: [Quiz, Question, Statistic, Attempt, AttemptQuestions])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
