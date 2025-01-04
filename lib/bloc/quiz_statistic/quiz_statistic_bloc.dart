@@ -34,5 +34,17 @@ class QuizStatisticBloc extends Bloc<QuizStatisticEvent, QuizStatisticState> {
         }
       },
     );
+
+    on<QuizStatisticClearPressed>(
+      (event, map) async {
+        try {
+          map(QuizStatisticClearInProgress(event.quizId));
+          await _statisticDatabaseService.delete(event.quizId);
+          map(QuizStatisticClearSuccess());
+        } catch (e) {
+          map(QuizStatisticClearFailure());
+        }
+      },
+    );
   }
 }

@@ -7,3 +7,9 @@ final class QuizStatisticLoadPressed extends QuizStatisticEvent {
 
   QuizStatisticLoadPressed(this.quizId);
 }
+
+final class QuizStatisticClearPressed extends QuizStatisticEvent {
+  final int quizId;
+
+  QuizStatisticClearPressed(this.quizId);
+}

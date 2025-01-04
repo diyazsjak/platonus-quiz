@@ -13,3 +13,13 @@ final class QuizStatisticLoadSuccess extends QuizStatisticState {
 }
 
 final class QuizStatisticLoadFailure extends QuizStatisticState {}
+
+final class QuizStatisticClearInProgress extends QuizStatisticState {
+  final int quizId;
+
+  QuizStatisticClearInProgress(this.quizId);
+}
+
+final class QuizStatisticClearSuccess extends QuizStatisticState {}
+
+final class QuizStatisticClearFailure extends QuizStatisticState {}

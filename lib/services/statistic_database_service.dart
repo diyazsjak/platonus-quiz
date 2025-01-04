@@ -19,6 +19,20 @@ class StatisticDatabaseService {
     });
   }
 
+  Future<void> delete(int quizId) async {
+    return await _database.transaction(() async {
+      await _database.managers.statistic
+          .filter((f) => f.quizId.id(quizId))
+          .delete();
+      await _database.managers.attempt
+          .filter((f) => f.quizId.id(quizId))
+          .delete();
+      await _database.managers.attemptQuestions
+          .filter((f) => f.quizId.id(quizId))
+          .delete();
+    });
+  }
+
   Future<void> update(
     int quizId,
     int score,
