@@ -130,7 +130,9 @@ class BarChartWithoutBgPainter extends CustomPainter {
     );
 
     final textX = (width - textPainter.width) / 2;
-    final textY = height - barHeight - textPainter.height - 4;
+    final textY = (animation == null)
+        ? (height - barHeight - textPainter.height - 4)
+        : (height - textPainter.height - 4) - (animation!.value * barHeight);
     textPainter.paint(canvas, Offset(textX, textY));
   }
 
