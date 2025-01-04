@@ -32,4 +32,12 @@ class SettingsService {
   Future<void> setAttemptBarType(bool barType) async {
     await _prefs.setBool(Constants.attemptBarTypeKey, barType);
   }
+
+  bool get shuffleAttemptQuestions {
+    return _prefs.getBool(Constants.shuffleAttemptQuestionsKey) ?? true;
+  }
+
+  Future<void> setshuffleAttemptQuestions(bool shuffle) async {
+    await _prefs.setBool(Constants.shuffleAttemptQuestionsKey, shuffle);
+  }
 }

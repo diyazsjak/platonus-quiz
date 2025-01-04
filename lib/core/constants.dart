@@ -4,4 +4,5 @@ class Constants {
 
   static const questionLimitKey = 'question_limit';
   static const attemptBarTypeKey = 'attempt_bar_type';
+  static const shuffleAttemptQuestionsKey = 'shuffle_attempt';
 }

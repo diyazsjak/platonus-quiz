@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../bloc/quiz/quiz_bloc.dart';
 import '../../models/attempt_model.dart';
+import '../../services/settings_service.dart';
 
 class AttemptInfo extends StatelessWidget {
   final AttemptModel attempt;
@@ -71,7 +72,13 @@ class _ReplayButton extends StatefulWidget {
 }
 
 class __ReplayButtonState extends State<_ReplayButton> {
-  bool _shuffleQuestions = true;
+  final _settingsService = SettingsService();
+  late bool _shuffleQuestions = _settingsService.shuffleAttemptQuestions;
+
+  void _onShuffleChanged(bool value) async {
+    setState(() => _shuffleQuestions = value);
+    await _settingsService.setshuffleAttemptQuestions(value);
+  }
 
   void _onReplayPressed(BuildContext context) {
     context.read<QuizBloc>().add(QuizAttemptRetrySelected(
@@ -93,9 +100,7 @@ class __ReplayButtonState extends State<_ReplayButton> {
             SwitchListTile(
               value: _shuffleQuestions,
               title: Text('Shuffle questions'),
-              onChanged: (value) {
-                setState(() => _shuffleQuestions = value);
-              },
+              onChanged: _onShuffleChanged,
               secondary: Icon(Icons.shuffle_rounded),
             ),
             SizedBox(height: 8),
