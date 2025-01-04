@@ -20,16 +20,11 @@ class AttemptInfo extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _Header(attempt.playedAt),
-          SizedBox(height: 16),
+          SizedBox(height: 8),
           Card(
-            elevation: 3,
             margin: EdgeInsets.zero,
-            child: Container(
+            child: Padding(
               padding: EdgeInsets.symmetric(vertical: 8),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondaryContainer,
-                borderRadius: BorderRadius.circular(12),
-              ),
               child: IntrinsicHeight(
                 child: Row(
                   children: [
@@ -89,6 +84,7 @@ class __ReplayButtonState extends State<_ReplayButton> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
+      margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -103,9 +99,10 @@ class __ReplayButtonState extends State<_ReplayButton> {
               secondary: Icon(Icons.shuffle_rounded),
             ),
             SizedBox(height: 8),
-            FilledButton.tonal(
+            FilledButton.icon(
               onPressed: () => _onReplayPressed(context),
-              child: Text('Replay'),
+              label: Text('Start quiz'),
+              icon: Icon(Icons.start_outlined, size: 22),
             ),
           ],
         ),
