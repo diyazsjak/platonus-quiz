@@ -44,7 +44,7 @@ class QuizCardStatistic extends StatelessWidget {
         ),
         SizedBox(height: 8),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             QuizStatisticClearButton(quizId: quizId),
             QuizCardDeleteIcon(quizId: quizId),
