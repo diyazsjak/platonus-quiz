@@ -10,7 +10,30 @@ class QuizCardDeleteIcon extends StatelessWidget {
   const QuizCardDeleteIcon({super.key, required this.quizId});
 
   void _onDeleteTap(BuildContext context) {
-    context.read<QuizesListBloc>().add(QuizesListQuizDeletePressed(quizId));
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Delete quiz'),
+          content: Text('Quiz and it\'s statistic will be deleted'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                context
+                    .read<QuizesListBloc>()
+                    .add(QuizesListQuizDeletePressed(quizId));
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

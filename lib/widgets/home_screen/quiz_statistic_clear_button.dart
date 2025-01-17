@@ -10,7 +10,30 @@ class QuizStatisticClearButton extends StatelessWidget {
   const QuizStatisticClearButton({super.key, required this.quizId});
 
   void _onClearTap(BuildContext context) {
-    context.read<QuizStatisticBloc>().add(QuizStatisticClearPressed(quizId));
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('Clear statistic'),
+          content: Text('All statistic will be cleared'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                context
+                    .read<QuizStatisticBloc>()
+                    .add(QuizStatisticClearPressed(quizId));
+              },
+              child: Text('Clear'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
