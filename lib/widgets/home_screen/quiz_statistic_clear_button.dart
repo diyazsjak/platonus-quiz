@@ -15,7 +15,7 @@ class QuizStatisticClearButton extends StatelessWidget {
       builder: (_) {
         return AlertDialog(
           title: Text('Clear statistic'),
-          content: Text('All statistic will be cleared'),
+          content: Text('Only statistic will be deleted'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -60,7 +60,7 @@ class QuizStatisticClearButton extends StatelessWidget {
                     ),
                   )
                 : Icon(Icons.clear_rounded),
-            label: Text('Clear statistic'),
+            label: Text('Clear'),
           ),
         );
       },

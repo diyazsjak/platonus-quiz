@@ -64,7 +64,7 @@ class QuizCardDeleteIcon extends StatelessWidget {
                     color: Theme.of(context).colorScheme.error,
                   ),
             label: Text(
-              'Delete quiz',
+              'Delete',
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
