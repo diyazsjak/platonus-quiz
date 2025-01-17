@@ -6,7 +6,7 @@ import '../../bloc/quiz/quiz_bloc.dart';
 import '../../bloc/quiz_statistic/quiz_statistic_bloc.dart';
 import '../../models/quiz_statistic_model.dart';
 import '../../util/show_snackbar.dart';
-import 'quiz_card_delete_icon.dart';
+import 'quiz_card_delete_button.dart';
 import 'quiz_card_statistic.dart';
 
 class QuizCard extends StatefulWidget {
@@ -124,7 +124,7 @@ class _NoStatistic extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text('No statistics yet'),
-        QuizCardDeleteIcon(quizId: quizId),
+        QuizCardDeleteButton(quizId: quizId),
       ],
     );
   }

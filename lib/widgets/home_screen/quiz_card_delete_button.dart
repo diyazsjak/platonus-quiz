@@ -4,10 +4,10 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../bloc/quizes_list/quizes_list_bloc.dart';
 
-class QuizCardDeleteIcon extends StatelessWidget {
+class QuizCardDeleteButton extends StatelessWidget {
   final int quizId;
 
-  const QuizCardDeleteIcon({super.key, required this.quizId});
+  const QuizCardDeleteButton({super.key, required this.quizId});
 
   void _onDeleteTap(BuildContext context) {
     showDialog(

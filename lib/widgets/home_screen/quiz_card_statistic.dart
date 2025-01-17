@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../models/quiz_statistic_model.dart';
-import 'quiz_card_delete_icon.dart';
+import 'quiz_card_delete_button.dart';
 import 'quiz_statistic_clear_button.dart';
 import 'statistic_attempt_chart_bar.dart';
 
@@ -47,7 +47,7 @@ class QuizCardStatistic extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             QuizStatisticClearButton(quizId: quizId),
-            QuizCardDeleteIcon(quizId: quizId),
+            QuizCardDeleteButton(quizId: quizId),
           ],
         ),
       ],
