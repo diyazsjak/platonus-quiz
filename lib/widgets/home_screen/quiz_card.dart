@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../bloc/quiz/quiz_bloc.dart';
+import '../../bloc/quiz_rename/quiz_rename_bloc.dart';
 import '../../bloc/quiz_statistic/quiz_statistic_bloc.dart';
 import '../../models/quiz_statistic_model.dart';
 import '../../util/show_snackbar.dart';
 import 'quiz_card_delete_button.dart';
+import 'quiz_card_rename_button.dart';
 import 'quiz_card_statistic.dart';
 
 class QuizCard extends StatefulWidget {
@@ -62,7 +64,7 @@ class _QuizCardState extends State<QuizCard> {
         collapsedBackgroundColor: expandedColor,
         shape: shape,
         collapsedShape: shape,
-        title: Text(widget.quizName),
+        title: _QuizName(widget.quizName),
         subtitle: Text('Questions: ${widget.quizLength}'),
         trailing: IconButton(
           onPressed: _startQuiz,
@@ -120,12 +122,39 @@ class _NoStatistic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('No statistics yet'),
-        QuizCardDeleteButton(quizId: quizId),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            QuizCardRenameButton(quizId: quizId),
+            QuizCardDeleteButton(quizId: quizId),
+          ],
+        ),
       ],
+    );
+  }
+}
+
+class _QuizName extends StatelessWidget {
+  final String name;
+
+  const _QuizName(this.name);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<QuizRenameBloc, QuizRenameState>(
+      builder: (context, state) {
+        if (state is QuizRenameSuccess) {
+          return Text(state.newName);
+        } else if (state is QuizRenameInProgress) {
+          return Skeletonizer(child: Bone.text());
+        }
+
+        return Text(name);
+      },
     );
   }
 }

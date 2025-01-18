@@ -3,6 +3,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../models/quiz_statistic_model.dart';
 import 'quiz_card_delete_button.dart';
+import 'quiz_card_rename_button.dart';
 import 'quiz_statistic_clear_button.dart';
 import 'statistic_attempt_chart_bar.dart';
 
@@ -46,6 +47,7 @@ class QuizCardStatistic extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            QuizCardRenameButton(quizId: quizId),
             QuizStatisticClearButton(quizId: quizId),
             QuizCardDeleteButton(quizId: quizId),
           ],

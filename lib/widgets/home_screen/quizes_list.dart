@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../bloc/quiz_rename/quiz_rename_bloc.dart';
 import '../../bloc/quiz_statistic/quiz_statistic_bloc.dart';
 import '../../bloc/quizes_list/quizes_list_bloc.dart';
 import '../../models/quiz_card_model.dart';
@@ -87,8 +88,11 @@ class _QuizesState extends State<_Quizes> {
           final quizName = quizes[index].name;
           final quizLength = quizes[index].length;
 
-          return BlocProvider(
-            create: (context) => QuizStatisticBloc(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => QuizStatisticBloc()),
+              BlocProvider(create: (context) => QuizRenameBloc()),
+            ],
             child: QuizCard(
               key: ValueKey(quizId),
               quizId: quizId,
