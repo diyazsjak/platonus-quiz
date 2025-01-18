@@ -22,7 +22,7 @@ class QuizCardRenameButton extends StatelessWidget {
             curve: Curves.easeOut,
             child: Padding(
               padding: EdgeInsets.fromLTRB(16, 20, 16, 16),
-              child: QuizRenameTextField(quizId: quizId),
+              child: _QuizRenameTextField(quizId: quizId),
             ),
           ),
         );
@@ -40,48 +40,71 @@ class QuizCardRenameButton extends StatelessWidget {
   }
 }
 
-class QuizRenameTextField extends StatefulWidget {
+class _QuizRenameTextField extends StatefulWidget {
   final int quizId;
 
-  const QuizRenameTextField({super.key, required this.quizId});
+  const _QuizRenameTextField({required this.quizId});
 
   @override
-  State<QuizRenameTextField> createState() => _QuizRenameTextFieldState();
+  State<_QuizRenameTextField> createState() => _QuizRenameTextFieldState();
 }
 
-class _QuizRenameTextFieldState extends State<QuizRenameTextField> {
+class _QuizRenameTextFieldState extends State<_QuizRenameTextField> {
   final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _textController,
-      autofocus: true,
-      textAlignVertical: TextAlignVertical.center,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        contentPadding: EdgeInsets.all(16),
-        label: Text('New name'),
-        suffixIcon: IconButton(
-          onPressed: () {
-            if (_textController.text.isNotEmpty) {
-              context.read<QuizRenameBloc>().add(
-                    QuizRenamePressed(
-                      quizId: widget.quizId,
-                      name: _textController.text.trim(),
-                    ),
-                  );
-            }
-          },
-          icon: Icon(
-            Icons.done,
-            color: Theme.of(context).colorScheme.primary,
-            size: 28,
-          ),
-        ),
-      ),
+    return BlocConsumer<QuizRenameBloc, QuizRenameState>(
+      listener: (context, state) {
+        if (state is QuizRenameFailure || state is QuizRenameSuccess) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
+      builder: (BuildContext context, QuizRenameState state) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _textController,
+              autofocus: true,
+              textAlignVertical: TextAlignVertical.center,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                contentPadding: EdgeInsets.all(16),
+                label: Text('New name'),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    if (_textController.text.isNotEmpty) {
+                      context.read<QuizRenameBloc>().add(
+                            QuizRenamePressed(
+                              quizId: widget.quizId,
+                              name: _textController.text.trim(),
+                            ),
+                          );
+                    }
+                  },
+                  icon: Icon(
+                    Icons.done,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 28,
+                  ),
+                ),
+              ),
+            ),
+            if (state is QuizRenameFailure)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 8, 0, 0),
+                child: Text(
+                  'Couldn\'t rename quiz',
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }
