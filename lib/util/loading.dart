@@ -6,7 +6,7 @@ class Loading {
       context: context,
       builder: (context) {
         return Container(
-          color: Theme.of(context).colorScheme.surface.withOpacity(0.4),
+          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.4),
           child: Center(
             child: Container(
               padding: const EdgeInsets.all(24),
