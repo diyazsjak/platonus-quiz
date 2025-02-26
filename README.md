@@ -1,3 +1,3 @@
 # platonus_quiz
 
-A new Flutter project.
+An app for test preparation. Tests must be in the format <question><variant> in a .docx file.
