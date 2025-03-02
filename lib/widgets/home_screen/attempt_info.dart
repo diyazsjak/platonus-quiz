@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../bloc/quiz/quiz_bloc.dart';
 import '../../models/attempt_model.dart';
-import '../../services/settings_service.dart';
+import 'attempt_replay_button.dart';
 
 class AttemptInfo extends StatelessWidget {
   final AttemptModel attempt;
@@ -55,62 +53,8 @@ class AttemptInfo extends StatelessWidget {
             ),
           ),
           SizedBox(height: 16),
-          _ReplayButton(attempt),
+          AttemptReplayButton(attempt),
         ],
-      ),
-    );
-  }
-}
-
-class _ReplayButton extends StatefulWidget {
-  final AttemptModel attempt;
-
-  const _ReplayButton(this.attempt);
-
-  @override
-  State<_ReplayButton> createState() => __ReplayButtonState();
-}
-
-class __ReplayButtonState extends State<_ReplayButton> {
-  final _settingsService = SettingsService();
-  late bool _shuffleQuestions = _settingsService.shuffleAttemptQuestions;
-
-  void _onShuffleChanged(bool value) async {
-    setState(() => _shuffleQuestions = value);
-    await _settingsService.setshuffleAttemptQuestions(value);
-  }
-
-  void _onReplayPressed(BuildContext context) {
-    context.read<QuizBloc>().add(QuizAttemptRetrySelected(
-          attempt: widget.attempt,
-          shuffle: _shuffleQuestions,
-        ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SwitchListTile(
-              value: _shuffleQuestions,
-              title: Text('Shuffle questions'),
-              onChanged: _onShuffleChanged,
-              secondary: Icon(Icons.shuffle_rounded),
-            ),
-            SizedBox(height: 8),
-            FilledButton.icon(
-              onPressed: () => _onReplayPressed(context),
-              label: Text('Start quiz'),
-              icon: Icon(Icons.start_outlined, size: 22),
-            ),
-          ],
-        ),
       ),
     );
   }
