@@ -98,6 +98,18 @@ class QuizParserService {
     return questions;
   }
 
+  static Map<int, String> getVariantsMapFromString(String variants) {
+    final variantMatches = _variantRE.allMatches(variants);
+
+    Map<int, String> variantsMap = {};
+    for (int i = 0; i < variantMatches.length; i++) {
+      final variantMatch = variantMatches.elementAt(i);
+      variantsMap.addAll({i + 1: variantMatch.group(1)!.trim()});
+    }
+
+    return variantsMap;
+  }
+
   static Map<int, String> getShuffledVariantsMapFromString(String variants) {
     final variantMatches = _variantRE.allMatches(variants);
 
