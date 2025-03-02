@@ -33,7 +33,6 @@ class _AttemptReplayButtonState extends State<AttemptReplayButton> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
       margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
