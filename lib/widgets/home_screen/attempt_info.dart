@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/attempt_model.dart';
+import 'attempt_info_questions.dart';
 import 'attempt_replay_button.dart';
 
 class AttemptInfo extends StatelessWidget {
@@ -16,7 +17,6 @@ class AttemptInfo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           _Header(attempt.playedAt),
           SizedBox(height: 8),
@@ -52,6 +52,8 @@ class AttemptInfo extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 16),
+          AttemptInfoQuestions(attemptQuestionsId: attempt.questionsId),
           SizedBox(height: 16),
           AttemptReplayButton(attempt),
         ],

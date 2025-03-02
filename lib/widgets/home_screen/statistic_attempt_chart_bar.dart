@@ -15,7 +15,12 @@ class StatisticAttemptChartBar extends StatelessWidget {
   void _openPlayInfoBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => AttemptInfo(quiz),
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => SizedBox(
+        height: MediaQuery.sizeOf(context).height * 0.7,
+        child: AttemptInfo(quiz),
+      ),
     );
   }
 
