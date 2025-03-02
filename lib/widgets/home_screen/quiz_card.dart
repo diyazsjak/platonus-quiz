@@ -5,7 +5,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../bloc/quiz/quiz_bloc.dart';
 import '../../bloc/quiz_rename/quiz_rename_bloc.dart';
 import '../../bloc/quiz_statistic/quiz_statistic_bloc.dart';
-import '../../models/quiz_statistic_model.dart';
 import '../../util/show_snackbar.dart';
 import 'quiz_card_delete_button.dart';
 import 'quiz_card_rename_button.dart';
@@ -88,10 +87,11 @@ class _QuizCardState extends State<QuizCard> {
             },
             builder: (context, state) {
               if (state is QuizStatisticLoadInProgress) {
-                return Skeletonizer(
-                  child: QuizCardStatistic(
-                    statistic: QuizStatisticModel.fake(),
-                    quizId: -1,
+                return Center(
+                  child: SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 3),
                   ),
                 );
               } else if (state is QuizStatisticLoadSuccess) {
