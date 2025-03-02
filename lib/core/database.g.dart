@@ -1507,7 +1507,7 @@ final class $$QuizTableReferences
 
   $$QuestionTableProcessedTableManager get questionRefs {
     final manager = $$QuestionTableTableManager($_db, $_db.question)
-        .filter((f) => f.quizId.id($_item.id));
+        .filter((f) => f.quizId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_questionRefsTable($_db));
     return ProcessedTableManager(
@@ -1521,7 +1521,7 @@ final class $$QuizTableReferences
 
   $$StatisticTableProcessedTableManager get statisticRefs {
     final manager = $$StatisticTableTableManager($_db, $_db.statistic)
-        .filter((f) => f.quizId.id($_item.id));
+        .filter((f) => f.quizId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_statisticRefsTable($_db));
     return ProcessedTableManager(
@@ -1537,7 +1537,7 @@ final class $$QuizTableReferences
   $$AttemptQuestionsTableProcessedTableManager get attemptQuestionsRefs {
     final manager =
         $$AttemptQuestionsTableTableManager($_db, $_db.attemptQuestions)
-            .filter((f) => f.quizId.id($_item.id));
+            .filter((f) => f.quizId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_attemptQuestionsRefsTable($_db));
@@ -1552,7 +1552,7 @@ final class $$QuizTableReferences
 
   $$AttemptTableProcessedTableManager get attemptRefs {
     final manager = $$AttemptTableTableManager($_db, $_db.attempt)
-        .filter((f) => f.quizId.id($_item.id));
+        .filter((f) => f.quizId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_attemptRefsTable($_db));
     return ProcessedTableManager(
@@ -1850,7 +1850,8 @@ class $$QuizTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (questionRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<QuizData, $QuizTable,
+                            QuestionData>(
                         currentTable: table,
                         referencedTable:
                             $$QuizTableReferences._questionRefsTable(db),
@@ -1861,7 +1862,8 @@ class $$QuizTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.quizId == item.id),
                         typedResults: items),
                   if (statisticRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<QuizData, $QuizTable,
+                            StatisticData>(
                         currentTable: table,
                         referencedTable:
                             $$QuizTableReferences._statisticRefsTable(db),
@@ -1872,7 +1874,8 @@ class $$QuizTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.quizId == item.id),
                         typedResults: items),
                   if (attemptQuestionsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<QuizData, $QuizTable,
+                            AttemptQuestion>(
                         currentTable: table,
                         referencedTable: $$QuizTableReferences
                             ._attemptQuestionsRefsTable(db),
@@ -1884,7 +1887,8 @@ class $$QuizTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.quizId == item.id),
                         typedResults: items),
                   if (attemptRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<QuizData, $QuizTable,
+                            AttemptData>(
                         currentTable: table,
                         referencedTable:
                             $$QuizTableReferences._attemptRefsTable(db),
@@ -1938,8 +1942,10 @@ final class $$QuestionTableReferences
       db.quiz.createAlias($_aliasNameGenerator(db.question.quizId, db.quiz.id));
 
   $$QuizTableProcessedTableManager get quizId {
+    final $_column = $_itemColumn<int>('quiz_id')!;
+
     final manager = $$QuizTableTableManager($_db, $_db.quiz)
-        .filter((f) => f.id($_item.quizId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_quizIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -2188,8 +2194,10 @@ final class $$StatisticTableReferences
       .createAlias($_aliasNameGenerator(db.statistic.quizId, db.quiz.id));
 
   $$QuizTableProcessedTableManager get quizId {
+    final $_column = $_itemColumn<int>('quiz_id')!;
+
     final manager = $$QuizTableTableManager($_db, $_db.quiz)
-        .filter((f) => f.id($_item.quizId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_quizIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -2465,8 +2473,10 @@ final class $$AttemptQuestionsTableReferences extends BaseReferences<
       $_aliasNameGenerator(db.attemptQuestions.quizId, db.quiz.id));
 
   $$QuizTableProcessedTableManager get quizId {
+    final $_column = $_itemColumn<int>('quiz_id')!;
+
     final manager = $$QuizTableTableManager($_db, $_db.quiz)
-        .filter((f) => f.id($_item.quizId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_quizIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -2481,7 +2491,7 @@ final class $$AttemptQuestionsTableReferences extends BaseReferences<
 
   $$AttemptTableProcessedTableManager get attemptRefs {
     final manager = $$AttemptTableTableManager($_db, $_db.attempt)
-        .filter((f) => f.questionsId.id($_item.id));
+        .filter((f) => f.questionsId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_attemptRefsTable($_db));
     return ProcessedTableManager(
@@ -2721,7 +2731,8 @@ class $$AttemptQuestionsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (attemptRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<AttemptQuestion,
+                            $AttemptQuestionsTable, AttemptData>(
                         currentTable: table,
                         referencedTable: $$AttemptQuestionsTableReferences
                             ._attemptRefsTable(db),
@@ -2777,9 +2788,11 @@ final class $$AttemptTableReferences
           $_aliasNameGenerator(db.attempt.questionsId, db.attemptQuestions.id));
 
   $$AttemptQuestionsTableProcessedTableManager get questionsId {
+    final $_column = $_itemColumn<int>('questions_id')!;
+
     final manager =
         $$AttemptQuestionsTableTableManager($_db, $_db.attemptQuestions)
-            .filter((f) => f.id($_item.questionsId!));
+            .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_questionsIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -2790,8 +2803,10 @@ final class $$AttemptTableReferences
       db.quiz.createAlias($_aliasNameGenerator(db.attempt.quizId, db.quiz.id));
 
   $$QuizTableProcessedTableManager get quizId {
+    final $_column = $_itemColumn<int>('quiz_id')!;
+
     final manager = $$QuizTableTableManager($_db, $_db.quiz)
-        .filter((f) => f.id($_item.quizId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_quizIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
