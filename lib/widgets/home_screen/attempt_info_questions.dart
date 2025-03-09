@@ -9,52 +9,44 @@ import '../../models/question_model.dart';
 
 final _fakeVariant = 'Fake variant';
 
-class AttemptInfoQuestions extends StatefulWidget {
+class AttemptInfoQuestions extends StatelessWidget {
   const AttemptInfoQuestions({super.key, required this.attemptQuestionsId});
 
   final int attemptQuestionsId;
 
   @override
-  State<AttemptInfoQuestions> createState() => _AttemptInfoQuestionsState();
-}
-
-class _AttemptInfoQuestionsState extends State<AttemptInfoQuestions> {
-  final _bloc = AttemptQuestionsBloc();
-
-  @override
-  void initState() {
-    super.initState();
-    _bloc.add(AttemptQuestionsStarted(widget.attemptQuestionsId));
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AttemptQuestionsBloc, AttemptQuestionsState>(
-      bloc: _bloc,
-      builder: (context, state) {
-        if (state is AttemptQuestionsLoadInProgress) {
-          final fakeQuestions0 = List.filled(
-            10,
-            QuestionModel(
-              id: -1,
-              question: 'Fake question',
-              variants: {
-                1: _fakeVariant * (Random().nextInt(2) + 3),
-                2: _fakeVariant * (Random().nextInt(2) + 3),
-                3: _fakeVariant * (Random().nextInt(2) + 3),
-                4: _fakeVariant * (Random().nextInt(2) + 3),
-              },
-            ),
-          );
-          return Flexible(
-            child: Skeletonizer(child: _AttemptQuestions(fakeQuestions0)),
-          );
-        } else if (state is AttemptQuestionsLoadSuccess) {
-          return Flexible(child: _AttemptQuestions(state.questions));
-        } else {
-          return Text('Couldn\'t load your answers');
-        }
+    return BlocProvider<AttemptQuestionsBloc>(
+      create: (BuildContext context) {
+        return AttemptQuestionsBloc()
+          ..add(AttemptQuestionsStarted(attemptQuestionsId));
       },
+      child: BlocBuilder<AttemptQuestionsBloc, AttemptQuestionsState>(
+        builder: (context, state) {
+          if (state is AttemptQuestionsLoadInProgress) {
+            final fakeQuestions0 = List.filled(
+              10,
+              QuestionModel(
+                id: -1,
+                question: 'Fake question',
+                variants: {
+                  1: _fakeVariant * (Random().nextInt(2) + 3),
+                  2: _fakeVariant * (Random().nextInt(2) + 3),
+                  3: _fakeVariant * (Random().nextInt(2) + 3),
+                  4: _fakeVariant * (Random().nextInt(2) + 3),
+                },
+              ),
+            );
+            return Flexible(
+              child: Skeletonizer(child: _AttemptQuestions(fakeQuestions0)),
+            );
+          } else if (state is AttemptQuestionsLoadSuccess) {
+            return Flexible(child: _AttemptQuestions(state.questions));
+          } else {
+            return Text('Couldn\'t load your answers');
+          }
+        },
+      ),
     );
   }
 }
