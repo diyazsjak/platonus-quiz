@@ -17,6 +17,7 @@ class AttemptResultCard extends StatelessWidget {
 
     return Skeleton.keep(
       child: Card(
+        color: Theme.of(context).colorScheme.surface,
         margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 8),
