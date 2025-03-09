@@ -12,52 +12,25 @@ class AttemptInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final score = (attempt.rightQuestionCount * 100) / attempt.questionCount;
-
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          _Header(attempt.playedAt),
-          SizedBox(height: 8),
-          Card(
-            margin: EdgeInsets.zero,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: IntrinsicHeight(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _AttemptData(
-                        label: 'Score',
-                        value: score.toStringAsFixed(1),
-                      ),
-                    ),
-                    VerticalDivider(indent: 4, endIndent: 4),
-                    Expanded(
-                      child: _AttemptData(
-                        label: 'Correct',
-                        value: '${attempt.rightQuestionCount}',
-                      ),
-                    ),
-                    VerticalDivider(indent: 4, endIndent: 4),
-                    Expanded(
-                      child: _AttemptData(
-                        label: 'Total',
-                        value: '${attempt.questionCount}',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    return Stack(
+      children: [
+        Column(
+          children: [
+            _Header(attempt.playedAt),
+            AttemptInfoQuestions(attempt: attempt),
+            Visibility.maintain(
+              visible: false,
+              child: AttemptReplayButton(attempt),
             ),
-          ),
-          SizedBox(height: 16),
-          AttemptInfoQuestions(attemptQuestionsId: attempt.questionsId),
-          SizedBox(height: 16),
-          AttemptReplayButton(attempt),
-        ],
-      ),
+          ],
+        ),
+        Positioned(
+          bottom: 16,
+          right: 8,
+          left: 8,
+          child: AttemptReplayButton(attempt),
+        ),
+      ],
     );
   }
 }
@@ -69,23 +42,23 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Spacer(),
-        Expanded(
-          child: Text(
-            '${DateFormat.yMMMd().format(date)} ',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.onSurface,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      child: Row(
+        children: [
+          Spacer(),
+          Expanded(
+            child: Text(
+              '${DateFormat.yMMMd().format(date)} ',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(right: 8),
+          Expanded(
             child: Text(
               DateFormat.jm().format(date),
               textAlign: TextAlign.right,
@@ -96,29 +69,8 @@ class _Header extends StatelessWidget {
               ),
             ),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class _AttemptData extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _AttemptData({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(label),
-        SizedBox(height: 8),
-        Text(
-          value,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

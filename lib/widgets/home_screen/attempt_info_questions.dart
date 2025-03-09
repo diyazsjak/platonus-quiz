@@ -5,26 +5,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../bloc/attempt_questions/attempt_questions_bloc.dart';
+import '../../models/attempt_model.dart';
 import '../../models/question_model.dart';
+import 'attempt_result_card.dart';
 
 final _fakeVariant = 'Fake variant';
 
 class AttemptInfoQuestions extends StatelessWidget {
-  const AttemptInfoQuestions({super.key, required this.attemptQuestionsId});
+  const AttemptInfoQuestions({super.key, required this.attempt});
 
-  final int attemptQuestionsId;
+  final AttemptModel attempt;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AttemptQuestionsBloc>(
       create: (BuildContext context) {
         return AttemptQuestionsBloc()
-          ..add(AttemptQuestionsStarted(attemptQuestionsId));
+          ..add(AttemptQuestionsStarted(attempt.questionsId));
       },
       child: BlocBuilder<AttemptQuestionsBloc, AttemptQuestionsState>(
         builder: (context, state) {
           if (state is AttemptQuestionsLoadInProgress) {
-            final fakeQuestions0 = List.filled(
+            final fakeQuestions = List.filled(
               10,
               QuestionModel(
                 id: -1,
@@ -38,10 +40,22 @@ class AttemptInfoQuestions extends StatelessWidget {
               ),
             );
             return Flexible(
-              child: Skeletonizer(child: _AttemptQuestions(fakeQuestions0)),
+              child: Skeletonizer(
+                child: _AttemptQuestions(
+                  attempt.rightQuestionCount,
+                  attempt.questionCount,
+                  fakeQuestions,
+                ),
+              ),
             );
           } else if (state is AttemptQuestionsLoadSuccess) {
-            return Flexible(child: _AttemptQuestions(state.questions));
+            return Flexible(
+              child: _AttemptQuestions(
+                attempt.rightQuestionCount,
+                attempt.questionCount,
+                state.questions,
+              ),
+            );
           } else {
             return Text('Couldn\'t load your answers');
           }
@@ -52,19 +66,34 @@ class AttemptInfoQuestions extends StatelessWidget {
 }
 
 class _AttemptQuestions extends StatelessWidget {
-  const _AttemptQuestions(this.questions);
+  const _AttemptQuestions(
+    this.rightQuestionCount,
+    this.totalQuestionCount,
+    this.questions,
+  );
 
+  final int rightQuestionCount;
+  final int totalQuestionCount;
   final List<QuestionModel> questions;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: questions.length,
+      itemCount: questions.length + 1,
       itemBuilder: (context, index) {
-        return _Question(question: questions[index], position: index + 1);
+        if (index == 0) {
+          return AttemptResultCard(
+            rightQuestionCount: rightQuestionCount,
+            totalQuestionCount: totalQuestionCount,
+          );
+        }
+
+        return _Question(question: questions[index - 1], position: index);
       },
       separatorBuilder: (context, index) {
-        return Divider(height: 24);
+        return (index == 0)
+            ? SizedBox(height: 16)
+            : Divider(height: 24, indent: 12, endIndent: 12);
       },
     );
   }
@@ -78,25 +107,28 @@ class _Question extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('$position) ${question.question}'),
-        SizedBox(height: 8),
-        for (final variant in question.variants.entries)
-          if (variant.key == 1)
-            Text(
-              variant.value,
-              style: TextStyle(color: Colors.green),
-            )
-          else if (variant.key == question.selectedVariant)
-            Text(
-              variant.value,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            )
-          else
-            Text(variant.value)
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('$position) ${question.question}'),
+          SizedBox(height: 8),
+          for (final variant in question.variants.entries)
+            if (variant.key == 1)
+              Text(
+                variant.value,
+                style: TextStyle(color: Colors.green),
+              )
+            else if (variant.key == question.selectedVariant)
+              Text(
+                variant.value,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              )
+            else
+              Text(variant.value)
+        ],
+      ),
     );
   }
 }
