@@ -93,7 +93,7 @@ class _AttemptQuestions extends StatelessWidget {
       separatorBuilder: (context, index) {
         return (index == 0)
             ? SizedBox(height: 16)
-            : Divider(height: 24, indent: 12, endIndent: 12);
+            : Divider(thickness: 0.5, height: 24, indent: 12, endIndent: 12);
       },
     );
   }
