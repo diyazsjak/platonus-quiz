@@ -4,7 +4,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../bloc/attempt_bar_type/attempt_bar_type_cubit.dart';
 import '../../models/attempt_model.dart';
-import 'attempt_info.dart';
+import '../attempt_bottom_sheet/attempt_info.dart';
 import 'bar_chart_painters.dart';
 
 class StatisticAttemptChartBar extends StatelessWidget {
