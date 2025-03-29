@@ -11,7 +11,7 @@ import '../util/show_snackbar.dart';
 import '../widgets/quiz_screen/question_card.dart';
 import '../widgets/quiz_screen/quiz_questions_grid.dart';
 import '../widgets/quiz_screen/quiz_result_dialog.dart';
-import '../widgets/home_screen/restart_quiz_icon_button.dart';
+import '../widgets/quiz_screen/restart_quiz_icon_button.dart';
 
 class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});
