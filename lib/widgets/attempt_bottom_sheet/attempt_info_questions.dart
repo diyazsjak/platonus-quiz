@@ -92,89 +92,68 @@ class _AttemptQuestions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const maxQuestions = 10;
+    final moreThanMaxQuestions = questions.length > maxQuestions;
 
-    if (questions.length > maxQuestions) {
-      return ListView.separated(
-        itemCount: maxQuestions + 2,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return AttemptResultCard(
-              rightQuestionCount: rightQuestionCount,
-              totalQuestionCount: totalQuestionCount,
-            );
-          }
-          if (index == 1) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Your answers',
-                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-                  ),
-                  TextButton(
-                    onPressed: () => _pushAttemptQuestionsScreen(context),
+    return ListView.separated(
+      itemCount: maxQuestions + 2,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return AttemptResultCard(
+            rightQuestionCount: rightQuestionCount,
+            totalQuestionCount: totalQuestionCount,
+          );
+        }
+        if (index == 1) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Your answers',
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+                ),
+                Visibility.maintain(
+                  visible: moreThanMaxQuestions,
+                  child: TextButton(
+                    onPressed: () => (moreThanMaxQuestions)
+                        ? _pushAttemptQuestionsScreen(context)
+                        : null,
                     child: Text('See all'),
                   ),
-                ],
-              ),
-            );
-          }
-
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: AnsweredQuestion(
-              question: questions[index - 2],
-              position: index - 1,
+                ),
+              ],
             ),
           );
-        },
-        separatorBuilder: (context, index) {
-          if (index == 0) {
-            return SizedBox(height: 16);
-          } else if (index == 1) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: SizedBox(
-                height: .8,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                  ),
+        }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: AnsweredQuestion(
+            question: questions[index - 2],
+            position: index - 1,
+          ),
+        );
+      },
+      separatorBuilder: (context, index) {
+        if (index == 0) {
+          return SizedBox(height: 16);
+        } else if (index == 1) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: SizedBox(
+              height: .8,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.outlineVariant,
                 ),
               ),
-            );
-          }
-
-          return Divider(thickness: .8, height: 24, indent: 12, endIndent: 12);
-        },
-      );
-    } else {
-      return ListView.separated(
-        itemCount: questions.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return AttemptResultCard(
-              rightQuestionCount: rightQuestionCount,
-              totalQuestionCount: totalQuestionCount,
-            );
-          }
-
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: AnsweredQuestion(
-              question: questions[index - 1],
-              position: index,
             ),
           );
-        },
-        separatorBuilder: (context, index) {
-          return (index == 0)
-              ? SizedBox(height: 16)
-              : Divider(thickness: .8, height: 24, indent: 12, endIndent: 12);
-        },
-      );
-    }
+        }
+
+        return Divider(thickness: .8, height: 24, indent: 12, endIndent: 12);
+      },
+    );
   }
 }
