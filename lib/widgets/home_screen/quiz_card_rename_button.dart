@@ -56,8 +56,9 @@ class _QuizRenameTextFieldState extends State<_QuizRenameTextField> {
   Widget build(BuildContext context) {
     return BlocConsumer<QuizRenameBloc, QuizRenameState>(
       listener: (context, state) {
-        if (state is QuizRenameFailure || state is QuizRenameSuccess) {
+        if (state is QuizRenameSuccess) {
           FocusManager.instance.primaryFocus?.unfocus();
+          Navigator.pop(context);
         }
       },
       builder: (BuildContext context, QuizRenameState state) {
