@@ -7,6 +7,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../bloc/attempt_questions/attempt_questions_bloc.dart';
 import '../../models/attempt_model.dart';
 import '../../models/question_model.dart';
+import '../../screens/attempt_questions_screen.dart';
+import 'answered_question.dart';
 import 'attempt_result_card.dart';
 
 final _fakeVariant = 'Fake variant';
@@ -76,6 +78,17 @@ class _AttemptQuestions extends StatelessWidget {
   final int totalQuestionCount;
   final List<QuestionModel> questions;
 
+  void _pushAttemptQuestionsScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return AttemptQuestionsScreen(questions: questions);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     const maxQuestions = 10;
@@ -101,7 +114,7 @@ class _AttemptQuestions extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () => _pushAttemptQuestionsScreen(context),
                     child: Text('See all'),
                   ),
                 ],
@@ -109,7 +122,13 @@ class _AttemptQuestions extends StatelessWidget {
             );
           }
 
-          return _Question(question: questions[index - 2], position: index - 1);
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: AnsweredQuestion(
+              question: questions[index - 2],
+              position: index - 1,
+            ),
+          );
         },
         separatorBuilder: (context, index) {
           if (index == 0) {
@@ -142,7 +161,13 @@ class _AttemptQuestions extends StatelessWidget {
             );
           }
 
-          return _Question(question: questions[index - 1], position: index);
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: AnsweredQuestion(
+              question: questions[index - 1],
+              position: index,
+            ),
+          );
         },
         separatorBuilder: (context, index) {
           return (index == 0)
@@ -151,39 +176,5 @@ class _AttemptQuestions extends StatelessWidget {
         },
       );
     }
-  }
-}
-
-class _Question extends StatelessWidget {
-  const _Question({required this.question, required this.position});
-
-  final QuestionModel question;
-  final int position;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('$position) ${question.question}'),
-          SizedBox(height: 8),
-          for (final variant in question.variants.entries)
-            if (variant.key == 1)
-              Text(
-                variant.value,
-                style: TextStyle(color: Colors.green),
-              )
-            else if (variant.key == question.selectedVariant)
-              Text(
-                variant.value,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              )
-            else
-              Text(variant.value)
-        ],
-      ),
-    );
   }
 }
