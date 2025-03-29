@@ -83,7 +83,11 @@ class _AttemptQuestions extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return AttemptQuestionsScreen(questions: questions);
+          return AttemptQuestionsScreen(
+            questions: questions,
+            totalQuestions: totalQuestionCount,
+            rightQuestions: rightQuestionCount,
+          );
         },
       ),
     );
